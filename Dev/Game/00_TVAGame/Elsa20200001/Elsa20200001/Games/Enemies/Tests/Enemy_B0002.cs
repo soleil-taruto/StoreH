@@ -118,7 +118,6 @@ namespace Charlotte.Games.Enemies.Tests
 
 		protected override void P_Damaged(Shot shot, int damagePoint)
 		{
-			// 難読化のため #if の入れ子ができない。
 #if true
 			// 後退は不要
 #elif true

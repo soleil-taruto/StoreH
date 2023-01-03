@@ -7,11 +7,9 @@ namespace Charlotte.GameCommons
 {
 	public class DDError : Exception
 	{
-		public DDError()
-			: this("エラーが発生しました。")
-		{ }
+		private const string DEFAULT_MESSAGE = "エラーが発生しました。";
 
-		public DDError(string message) // 難読化のため、デフォルト引数をオーバーロードの引数に指定する。
+		public DDError(string message = DEFAULT_MESSAGE)
 			: base(message)
 		{ }
 	}

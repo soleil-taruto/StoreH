@@ -19,14 +19,7 @@ namespace Charlotte.Utilities
 			: this(file, append, SCommon.ENCODING_SJIS)
 		{ }
 
-		public CsvFileWriter(string file, bool append, Encoding encoding)
-			: this(file, append, encoding, DELIMITER_COMMA)
-		{ }
-
-		// memo: 難読化により DELIMITER_COMMA の const は static readonly に置き換えられて定数ではなくなるのでデフォルト引数に書けない。
-		// -- デフォルト引数が使えないというわけではない。
-
-		public CsvFileWriter(string file, bool append, Encoding encoding, char delimiter) // 難読化のため、デフォルト引数をオーバーロードの引数に指定する。
+		public CsvFileWriter(string file, bool append, Encoding encoding, char delimiter = DELIMITER_COMMA)
 			: this(new StreamWriter(file, append, encoding))
 		{
 			this.Delimiter = delimiter;
