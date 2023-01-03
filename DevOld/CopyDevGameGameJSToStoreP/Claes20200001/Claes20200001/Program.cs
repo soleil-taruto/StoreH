@@ -36,9 +36,7 @@ namespace Charlotte
 		{
 			// -- choose one --
 
-			//Main4(new ArgsReader(new string[] { "C" }));
-			//Main4(new ArgsReader(new string[] { "P" }));
-			Main4(new ArgsReader(new string[] { "E" }));
+			Main4(new ArgsReader(new string[] { "H" }));
 			//new Test0001().Test01();
 			//new Test0002().Test01();
 			//new Test0003().Test01();
@@ -81,8 +79,8 @@ namespace Charlotte
 
 			WRootDir = string.Format(Consts.W_ROOT_DIR_FORMAT, alpha);
 
-			Console.WriteLine("< " + Consts.R_ROOT_DIR);
-			Console.WriteLine("> " + WRootDir);
+			ProcMain.WriteLog("< " + Consts.R_ROOT_DIR);
+			ProcMain.WriteLog("> " + WRootDir);
 
 			if (!Directory.Exists(Consts.R_ROOT_DIR))
 				throw new Exception("no R_ROOT_DIR");
@@ -139,6 +137,10 @@ namespace Charlotte
 
 					// ----
 
+					CopyBatchFile(projectDir, "Clean.bat");
+					CopyBatchFile(projectDir, "Debug.bat");
+					CopyBatchFile(projectDir, "Release.bat");
+
 					CopyResourceDir(projectDir, "doc", true); // ドキュメント etc.
 
 					if (srcLocalDir[0] == 'E') // Game
@@ -151,6 +153,20 @@ namespace Charlotte
 						CopyResourceDir(projectDir, "res", true); // 画像・音楽 etc.
 					}
 				}
+			}
+		}
+
+		private void CopyBatchFile(string projectDir, string batchLocalName)
+		{
+			string rFile = Path.Combine(projectDir, batchLocalName);
+			string wFile = SCommon.ChangeRoot(rFile, Consts.R_ROOT_DIR, WRootDir);
+
+			if (File.Exists(rFile))
+			{
+				ProcMain.WriteLog("< " + rFile);
+				ProcMain.WriteLog("> " + wFile);
+
+				File.Copy(rFile, wFile);
 			}
 		}
 

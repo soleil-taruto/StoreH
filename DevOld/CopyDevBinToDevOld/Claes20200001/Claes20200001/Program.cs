@@ -201,6 +201,10 @@ namespace Charlotte
 
 				// ----
 
+				CopyBatchFile(rDir, wDir, "Clean.bat");
+				CopyBatchFile(rDir, wDir, "Debug.bat");
+				CopyBatchFile(rDir, wDir, "Release.bat");
+
 				CopyResourceDir(rDir, wDir, "dat", true);
 				CopyResourceDir(rDir, wDir, "res", true);
 				CopyResourceDir(rDir, wDir, "doc", false);
@@ -211,13 +215,18 @@ namespace Charlotte
 			ProcMain.WriteLog("COPY-ED");
 		}
 
-		private IDisposable WriteLogSection(Action<object, Action<object>> routine)
+		private void CopyBatchFile(string rDir, string wDir, string batchLocalName)
 		{
-			Action<object> writeLogOrig = ProcMain.WriteLog;
+			string rFile = Path.Combine(Path.GetDirectoryName(rDir), batchLocalName);
+			string wFile = Path.Combine(Path.GetDirectoryName(wDir), batchLocalName);
 
-			ProcMain.WriteLog = message => routine(message, writeLogOrig);
+			if (File.Exists(rFile))
+			{
+				ProcMain.WriteLog("< " + rFile);
+				ProcMain.WriteLog("> " + wFile);
 
-			return SCommon.GetAnonyDisposable(() => ProcMain.WriteLog = writeLogOrig);
+				File.Copy(rFile, wFile);
+			}
 		}
 
 		private void CopyResourceDir(string rDir, string wDir, string resourceRelDir, bool outputFileListMode)
