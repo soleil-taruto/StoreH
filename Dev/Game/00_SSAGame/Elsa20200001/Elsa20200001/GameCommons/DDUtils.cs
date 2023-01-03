@@ -67,6 +67,15 @@ namespace Charlotte.GameCommons
 			return defval;
 		}
 
+		public static T FirstOrDie<T>(IEnumerable<T> src, Predicate<T> match, Func<Exception> getError)
+		{
+			foreach (T element in src)
+				if (match(element))
+					return element;
+
+			throw getError();
+		}
+
 		public static bool CountDown(ref int count)
 		{
 			if (count < 0)

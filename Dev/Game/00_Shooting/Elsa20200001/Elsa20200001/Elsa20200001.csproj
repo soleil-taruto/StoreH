@@ -87,6 +87,7 @@
     <Compile Include="Commons\SCommon.cs" />
     <Compile Include="Commons\WorkingDir.cs" />
     <Compile Include="Consts.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="GameCommons\DDActionList.cs" />
     <Compile Include="GameCommons\DDCCResource.cs" />
     <Compile Include="GameCommons\DDCoffeeBreak.cs" />

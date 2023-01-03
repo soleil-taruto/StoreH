@@ -15,10 +15,6 @@ using Charlotte.GameCommons;
 
 namespace Charlotte.LevelEditors
 {
-	// memo:
-	// xxxxxxxxxx // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-	// という行は xxxxxxxxxx の部分について難読化による単語の置き換えを行わない。(xxxxxxxxxx は任意の文字列)
-
 	public partial class LevelEditorDlg : Form
 	{
 		#region ALT_F4 抑止
@@ -73,13 +69,10 @@ namespace Charlotte.LevelEditors
 
 			this.SetMode(LevelEditor.Mode_e.TILE);
 
-			this.TileEnemySw
-				.Focus(); // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
+			this.TileEnemySw.Focus();
 		}
 
-		private void P_PostSetItems(
-			ComboBox // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				combo)
+		private void P_PostSetItems(ComboBox combo)
 		{
 			combo.SelectedIndex = 0;
 			combo.MaxDropDownItems = Math.Min(combo.Items.Count, 100);
@@ -186,32 +179,22 @@ namespace Charlotte.LevelEditors
 
 		private void SetMode(LevelEditor.Mode_e mode)
 		{
-			Color COLOR_SELECTED = Color
-				.Blue; // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-			Color COLOR_UNSELECTED = Color
-				.Gray; // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
+			Color COLOR_SELECTED = Color.Blue;
+			Color COLOR_UNSELECTED = Color.Gray;
 
 			if (mode == LevelEditor.Mode_e.TILE)
 			{
 				this.TileEnemySw.Text = TEXT_MODE_TILE;
 
-				this.GroupTile
-					.ForeColor = // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						COLOR_SELECTED;
-				this.GroupEnemy
-					.ForeColor = // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						COLOR_UNSELECTED;
+				this.GroupTile.ForeColor = COLOR_SELECTED;
+				this.GroupEnemy.ForeColor = COLOR_UNSELECTED;
 			}
 			else
 			{
 				this.TileEnemySw.Text = TEXT_MODE_ENEMY;
 
-				this.GroupTile
-					.ForeColor = // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						COLOR_UNSELECTED;
-				this.GroupEnemy
-					.ForeColor = // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						COLOR_SELECTED;
+				this.GroupTile.ForeColor = COLOR_UNSELECTED;
+				this.GroupEnemy.ForeColor = COLOR_SELECTED;
 			}
 		}
 

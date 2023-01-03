@@ -149,7 +149,7 @@ namespace Charlotte.Games.Enemies
 			X = x;
 			Y = y;
 
-			return SCommon.FirstOrDie(Enemies, enemy => enemy.Name == name, () => new DDError(name)).Creator();
+			return DDUtils.FirstOrDie(Enemies, enemy => enemy.Name == name, () => new DDError(name)).Creator();
 		}
 	}
 }

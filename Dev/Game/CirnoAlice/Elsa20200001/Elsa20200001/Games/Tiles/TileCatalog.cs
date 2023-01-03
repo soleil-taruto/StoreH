@@ -127,7 +127,7 @@ namespace Charlotte.Games.Tiles
 
 		public static Tile Create(string name)
 		{
-			return SCommon.FirstOrDie(Tiles, tile => tile.Name == name, () => new DDError(name)).Creator();
+			return DDUtils.FirstOrDie(Tiles, tile => tile.Name == name, () => new DDError(name)).Creator();
 		}
 	}
 }

@@ -15,10 +15,6 @@ using Charlotte.GameCommons;
 
 namespace Charlotte.LevelEditors
 {
-	// memo:
-	// xxxxxxxxxx // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-	// という行は xxxxxxxxxx の部分について難読化による単語の置き換えを行わない。(xxxxxxxxxx は任意の文字列)
-
 	public partial class LevelEditorDlg : Form
 	{
 		#region ALT_F4 抑止
@@ -70,9 +66,7 @@ namespace Charlotte.LevelEditors
 			this.TileEnemySw.Text = TEXT_MODE_TILE;
 		}
 
-		private void P_PostSetItems(
-			ComboBox // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				combo)
+		private void P_PostSetItems(ComboBox combo)
 		{
 			combo.SelectedIndex = 0;
 			combo.MaxDropDownItems = Math.Min(combo.Items.Count, 100);
