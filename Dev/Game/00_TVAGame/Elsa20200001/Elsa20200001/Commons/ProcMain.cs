@@ -340,9 +340,7 @@ namespace Charlotte.Commons
 
 		private static int F_ReadByte(FileStream reader)
 		{
-			int bChr = reader.
-				ReadByte // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				();
+			int bChr = reader.ReadByte();
 
 			if (bChr == -1) // ? EOF
 				throw new Exception("Read EOF");

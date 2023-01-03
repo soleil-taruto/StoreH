@@ -364,9 +364,7 @@ namespace Charlotte.Commons
 			if (double.IsNaN(value))
 				throw new Exception("NaN");
 
-			if (double.
-				IsInfinity // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				(value))
+			if (double.IsInfinity(value))
 				throw new Exception("Infinity");
 		}
 
@@ -411,85 +409,6 @@ namespace Charlotte.Commons
 				foreach (T element in part)
 					yield return element;
 		}
-
-		public static IEnumerable<T> ForEach<T>(IEnumerable<T> src, Action<T> action)
-		{
-			List<T> list = src.ToList();
-
-			foreach (T element in list)
-				action(element);
-
-			return list;
-		}
-
-		public static IEnumerable<T> OrderBy<T>(IEnumerable<T> src, Comparison<T> comp)
-		{
-			List<T> list = src.ToList();
-			list.
-				Sort // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				(comp);
-			return list;
-		}
-
-		/// <summary>
-		/// 列挙の重複を除去する。
-		/// 入力する列挙はソート済みであること！
-		/// </summary>
-		/// <typeparam name="T">任意の型</typeparam>
-		/// <param name="src">列挙</param>
-		/// <param name="match">比較メソッド(一致の判定)</param>
-		/// <returns>重複を除去した列挙</returns>
-		public static IEnumerable<T> OrderedDistinct<T>(IEnumerable<T> src, Func<T, T, bool> match)
-		{
-			IEnumerator<T> reader = src.GetEnumerator();
-
-			if (reader.MoveNext())
-			{
-				T last = reader.Current;
-
-				yield return last;
-
-				while (reader.MoveNext())
-				{
-					if (!match(reader.Current, last))
-					{
-						last = reader.Current;
-						yield return last;
-					}
-				}
-			}
-		}
-
-		/// <summary>
-		/// 列挙の重複を除去する。
-		/// </summary>
-		/// <typeparam name="T">任意の型</typeparam>
-		/// <param name="src">列挙</param>
-		/// <param name="comp">比較メソッド</param>
-		/// <returns>重複を除去した列挙</returns>
-		public static IEnumerable<T> DistinctOrderBy<T>(IEnumerable<T> src, Comparison<T> comp)
-		{
-			return OrderedDistinct(OrderBy(src, comp), (a, b) => comp(a, b) == 0);
-		}
-
-		public static T FirstOrDie<T>(IEnumerable<T> src, Predicate<T> match, Func<Exception> getError)
-		{
-			foreach (T element in src)
-				if (match(element))
-					return element;
-
-			throw getError();
-		}
-
-		// memo: 2022.6.27
-		//
-		// 列挙の入れ子：
-		// foreach (var relay in 内部の列挙メソッド()) yield return relay;
-		// という記述で対応する。
-		//
-		// 待ち：
-		// foreach (var relay in Enumerable.Repeat(true, 待ちフレーム数)) yield return relay;
-		// という記述で対応する。
 
 		/// <summary>
 		/// 列挙をゲッターメソッドでラップします。
@@ -624,47 +543,6 @@ namespace Charlotte.Commons
 			public static T[] AddRange<T>(T[] arr, T[] arrForAdd)
 			{
 				return InsertRange(arr, arr.Length, arrForAdd);
-			}
-		}
-
-		public static class Lists
-		{
-			public static List<T> GetRange<T>(List<T> list, int index, int count)
-			{
-				return list.
-					GetRange // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-					(index, count);
-			}
-
-			public static List<T> GetTrail<T>(List<T> list, int index)
-			{
-				return GetRange(list, index, list.Count - index);
-			}
-
-			public static void RemoveRange<T>(List<T> list, int index, int count)
-			{
-				list.
-					RemoveRange // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-					(index, count);
-			}
-
-			public static void RemoveTrail<T>(List<T> list, int index)
-			{
-				RemoveRange(list, index, list.Count - index);
-			}
-
-			public static void InsertRange<T>(List<T> list, int index, IEnumerable<T> listForInsert)
-			{
-				list.
-					InsertRange // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-					(index, listForInsert);
-			}
-
-			public static void AddRange<T>(List<T> list, IEnumerable<T> listForAdd)
-			{
-				list.
-					AddRange // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-					(listForAdd);
 			}
 		}
 
@@ -1670,15 +1548,9 @@ namespace Charlotte.Commons
 		{
 			using (SHA512 sha512 = SHA512.Create())
 			{
-				execute((buff, offset, count) => sha512.
-					TransformBlock // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-					(buff, offset, count, null, 0));
-				sha512.
-					TransformFinalBlock // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-					(EMPTY_BYTES, 0, 0);
-				return sha512.
-					Hash // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-					;
+				execute((buff, offset, count) => sha512.TransformBlock(buff, offset, count, null, 0));
+				sha512.TransformFinalBlock(EMPTY_BYTES, 0, 0);
+				return sha512.Hash;
 			}
 		}
 
@@ -2131,9 +2003,7 @@ namespace Charlotte.Commons
 
 				File.WriteAllLines(batFile, commands, ENCODING_SJIS);
 
-				StartProcess("cmd", "/c " + batFile, workingDir, winStyle).
-					WaitForExit // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-					();
+				StartProcess("cmd", "/c " + batFile, workingDir, winStyle).WaitForExit();
 			}
 		}
 
@@ -2146,46 +2016,23 @@ namespace Charlotte.Commons
 
 		public static Process StartProcess(string file, string args, string workingDir = "", StartProcessWindowStyle_e winStyle = StartProcessWindowStyle_e.INVISIBLE)
 		{
-			ProcessStartInfo // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				psi = new
-					ProcessStartInfo // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-					();
+			ProcessStartInfo psi = new ProcessStartInfo();
 
-			psi.
-				FileName // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				= file;
-			psi.
-				Arguments // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				= args;
-			psi.
-				WorkingDirectory // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				= workingDir; // 既定値 == ""
+			psi.FileName = file;
+			psi.Arguments = args;
+			psi.WorkingDirectory = workingDir; // 既定値 == ""
 
 			switch (winStyle)
 			{
 				case StartProcessWindowStyle_e.INVISIBLE:
-					psi.
-						CreateNoWindow // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						= true;
-					psi.
-						UseShellExecute // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						= false;
+					psi.CreateNoWindow = true;
+					psi.UseShellExecute = false;
 					break;
 
 				case StartProcessWindowStyle_e.MINIMIZED:
-					psi.
-						CreateNoWindow // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						= false;
-					psi.
-						UseShellExecute // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						= true;
-					psi.
-						WindowStyle // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						=
-						ProcessWindowStyle // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						.
-						Minimized // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						;
+					psi.CreateNoWindow = false;
+					psi.UseShellExecute = true;
+					psi.WindowStyle = ProcessWindowStyle.Minimized;
 					break;
 
 				case StartProcessWindowStyle_e.NORMAL:
@@ -2513,24 +2360,12 @@ namespace Charlotte.Commons
 			public static long ToTimeStamp(DateTime dateTime)
 			{
 				return
-					10000000000L * dateTime.
-						Year // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						+
-					100000000L * dateTime.
-						Month // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						+
-					1000000L * dateTime.
-						Day // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						+
-					10000L * dateTime.
-						Hour // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						+
-					100L * dateTime.
-						Minute // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						+
-					dateTime.
-						Second // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-						;
+					10000000000L * dateTime.Year +
+					100000000L * dateTime.Month +
+					1000000L * dateTime.Day +
+					10000L * dateTime.Hour +
+					100L * dateTime.Minute +
+					dateTime.Second;
 			}
 		}
 
@@ -2738,9 +2573,7 @@ namespace Charlotte.Commons
 			}
 			else if (list is List<T>)
 			{
-				((List<T>)list).
-					Sort // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-					(comp);
+				((List<T>)list).Sort(comp);
 			}
 			else
 			{

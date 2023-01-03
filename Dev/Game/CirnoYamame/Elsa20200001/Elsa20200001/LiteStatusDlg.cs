@@ -94,32 +94,12 @@ namespace Charlotte
 
 			const int MARGIN = 30;
 
-			this.
-				Width // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				= DDGround.MonitorRect.W;
-			this.
-				Height // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				= MARGIN + this.StatusMessage.
-				Height // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				+ MARGIN;
-			this.
-				Left // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				= DDGround.MonitorRect.L;
-			this.
-				Top // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				= (DDGround.MonitorRect.H - this.
-				Height // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				) / 2;
-			this.StatusMessage.
-				Left // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				= (this.
-				Width // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				- this.StatusMessage.
-				Width // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				) / 2;
-			this.StatusMessage.
-				Top // KeepComment:@^_ConfuserForElsa // NoRename:@^_ConfuserForElsa
-				= MARGIN;
+			this.Width = DDGround.MonitorRect.W;
+			this.Height = MARGIN + this.StatusMessage.Height + MARGIN;
+			this.Left = DDGround.MonitorRect.L;
+			this.Top = (DDGround.MonitorRect.H - this.Height) / 2;
+			this.StatusMessage.Left = (this.Width - this.StatusMessage.Width) / 2;
+			this.StatusMessage.Top = MARGIN;
 		}
 
 		private void LiteStatusDlg_FormClosing(object sender, FormClosingEventArgs e)
