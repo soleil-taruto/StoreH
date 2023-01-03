@@ -1,0 +1,36 @@
+﻿DovaSyndrome
+	-> Directory
+DovaSyndrome\Midnight_Street.mp3
+	-> File 2022/11/27 (日) 04:19:18 / 2022/07/28 (木) 05:02:22 / 4,492,016
+DovaSyndrome\_source.txt
+	-> File 2022/11/27 (日) 04:19:18 / 2022/07/27 (水) 15:47:22 / 35
+General
+	-> Directory
+General\Dummy.png
+	-> File 2022/11/27 (日) 01:01:49 / 2021/01/13 (水) 13:32:40 / 188
+General\WhiteBox.png
+	-> File 2022/11/27 (日) 01:01:49 / 2021/01/13 (水) 13:32:40 / 124
+General\WhiteCircle.png
+	-> File 2022/11/27 (日) 01:01:49 / 2021/01/13 (水) 13:32:41 / 1,448
+General\muon.mp3
+	-> File 2022/11/27 (日) 01:01:49 / 2022/07/28 (木) 22:03:57 / 61,127
+Picture
+	-> Directory
+Picture\GameStartButton.png
+	-> File 2022/11/27 (日) 01:01:49 / 2022/10/02 (日) 05:41:53 / 24,483
+Trump
+	-> Directory
+Trump\Back01.png
+	-> File 2022/11/27 (日) 01:01:49 / 2022/09/11 (日) 21:17:34 / 40,397
+Trump\Frame.png
+	-> File 2022/11/27 (日) 01:01:49 / 2022/09/11 (日) 21:40:28 / 4,774
+Trump\Joker.png
+	-> File 2022/11/27 (日) 01:01:49 / 2022/09/11 (日) 21:17:57 / 24,285
+_memo.txt
+	-> File 2022/11/27 (日) 01:01:49 / 2022/02/25 (金) 01:38:04 / 97
+小森平
+	-> Directory
+小森平\_source.txt
+	-> File 2022/11/27 (日) 03:56:47 / 2022/07/12 (火) 16:54:16 / 39
+小森平\coin04.mp3
+	-> File 2022/11/27 (日) 03:56:26 / 2021/01/13 (水) 13:32:43 / 10,417
