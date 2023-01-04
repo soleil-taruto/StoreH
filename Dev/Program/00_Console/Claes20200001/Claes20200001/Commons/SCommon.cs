@@ -479,6 +479,11 @@ namespace Charlotte.Commons
 
 		public static class Arrays
 		{
+			public static T[] GetRange<T>(T[] arr, int index)
+			{
+				return GetRange(arr, index, arr.Length - index);
+			}
+
 			public static T[] GetRange<T>(T[] arr, int index, int count)
 			{
 				if (
@@ -495,9 +500,9 @@ namespace Charlotte.Commons
 				return dest;
 			}
 
-			public static T[] GetTrail<T>(T[] arr, int index)
+			public static T[] RemoveRange<T>(T[] arr, int index)
 			{
-				return GetRange(arr, index, arr.Length - index);
+				return RemoveRange(arr, index, arr.Length - index);
 			}
 
 			public static T[] RemoveRange<T>(T[] arr, int index, int count)
@@ -515,11 +520,6 @@ namespace Charlotte.Commons
 				Array.Copy(arr, index + count, dest, index, arr.Length - (index + count));
 
 				return dest;
-			}
-
-			public static T[] RemoveTrail<T>(T[] arr, int index)
-			{
-				return RemoveRange(arr, index, arr.Length - index);
 			}
 
 			public static T[] InsertRange<T>(T[] arr, int index, T[] arrForInsert)
