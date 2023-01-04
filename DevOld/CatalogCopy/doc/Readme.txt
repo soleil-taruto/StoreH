@@ -59,3 +59,9 @@ CatalogCopy.exe /B C:\Input C:\temp\Catalog.cata C:\temp\Difference.diff
 
 CatalogCopy.exe /C C:\temp\Difference.diff C:\Output
 
+
+----
+補足
+
+パスの大文字・小文字の違いも差分と見なす。
+

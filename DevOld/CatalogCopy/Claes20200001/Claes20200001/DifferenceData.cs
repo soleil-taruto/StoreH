@@ -64,6 +64,10 @@ namespace Charlotte
 
 			DifferenceData difference = new DifferenceData();
 
+			// memo:
+			// パスの大文字・小文字の違いも差分と見なすため、
+			// パス同士の比較には Case-sensitive な SCommon.Comp を使用する。
+
 			// ディレクトリ
 			{
 				List<string> only1 = new List<string>();

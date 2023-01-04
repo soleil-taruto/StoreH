@@ -88,6 +88,8 @@ namespace Charlotte
 			if (!Directory.Exists(WRootDir))
 				throw new Exception("no WRootDir");
 
+			ProcMain.WriteLog("start!");
+
 			// 出力先クリア
 			SCommon.DeletePath(WRootDir);
 			SCommon.CreateDir(WRootDir);
@@ -110,7 +112,7 @@ namespace Charlotte
 					}
 				}
 			}
-			Console.WriteLine("done!");
+			ProcMain.WriteLog("done!");
 		}
 
 		private bool IsProjectDir(string dir)
