@@ -266,6 +266,9 @@ C:\Dev\GameJS\00_Adventure\Gattonero20200001\Games\Actors\Actor.js(7) : Actor_t 
 C:\Dev\GameJS\00_Adventure\Gattonero20200001\Games\Actors\Actor.js(31) : DrawActor // ŠÖ”
 C:\Dev\GameJS\00_Adventure\Gattonero20200001\Games\Actors\Actor_BDummy.js(7) : CreateActor_BDummy // ŠÖ”
 C:\Dev\GameJS\00_Adventure\Gattonero20200001\Games\Actors\Actor_BDummy.js(5) : ActorKind_BDummy // •Ï”
+C:\Dev\GameJS\00_Adventure\Gattonero20200001\Games\Actors\Actor_BDummy2.js(9) : BDummy2OfActor_t // ’è‹`
+C:\Dev\GameJS\00_Adventure\Gattonero20200001\Games\Actors\Actor_BDummy2.js(7) : CreateActor_BDummy2 // ŠÖ”
+C:\Dev\GameJS\00_Adventure\Gattonero20200001\Games\Actors\Actor_BDummy2.js(5) : ActorKind_BDummy2 // •Ï”
 C:\Dev\GameJS\00_Adventure\Gattonero20200001\Games\Actors\Actor_Trump.js(9) : Trump_t // ’è‹`
 C:\Dev\GameJS\00_Adventure\Gattonero20200001\Games\Actors\Actor_Trump.js(7) : CreateActor_Trump // ŠÖ”
 C:\Dev\GameJS\00_Adventure\Gattonero20200001\Games\Actors\Actor_Trump.js(61) : SetTrumpDest // ŠÖ”

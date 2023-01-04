@@ -253,6 +253,9 @@ C:\Dev\GameJS\00_Plain\Gattonero20200001\Games\Actors\Actor.js(7) : Actor_t // í
 C:\Dev\GameJS\00_Plain\Gattonero20200001\Games\Actors\Actor.js(31) : DrawActor // ä÷êî
 C:\Dev\GameJS\00_Plain\Gattonero20200001\Games\Actors\Actor_BDummy.js(7) : CreateActor_BDummy // ä÷êî
 C:\Dev\GameJS\00_Plain\Gattonero20200001\Games\Actors\Actor_BDummy.js(5) : ActorKind_BDummy // ïœêî
+C:\Dev\GameJS\00_Plain\Gattonero20200001\Games\Actors\Actor_BDummy2.js(9) : BDummy2OfActor_t // íËã`
+C:\Dev\GameJS\00_Plain\Gattonero20200001\Games\Actors\Actor_BDummy2.js(7) : CreateActor_BDummy2 // ä÷êî
+C:\Dev\GameJS\00_Plain\Gattonero20200001\Games\Actors\Actor_BDummy2.js(5) : ActorKind_BDummy2 // ïœêî
 C:\Dev\GameJS\00_Plain\Gattonero20200001\Games\Actors\Actor_Trump.js(7) : CreateActor_Trump // ä÷êî
 C:\Dev\GameJS\00_Plain\Gattonero20200001\Games\Actors\Actor_Trump.js(60) : SetTrumpDest // ä÷êî
 C:\Dev\GameJS\00_Plain\Gattonero20200001\Games\Actors\Actor_Trump.js(66) : IsTrumpReversed // ä÷êî
