@@ -20,7 +20,7 @@ var<Picture_t> P_WhiteCircle = @@_Load(RESOURCE_General__WhiteCircle_png);
 
 var<Picture_t> P_GameStartButton = @@_Load(RESOURCE_Picture__GameStartButton_png);
 
-var<Picture_t> P_Background = @@_Load(RESOURCE_Picture__IMG_20160000_001374_jpg);
+var<Picture_t> P_Background = @@_Load(RESOURCE_‚Ï‚­‚½‚»__Wall_png);
 
 var<Picture_t> P_Bar     = @@_Load(RESOURCE_tˆê”Ô‚ÌƒtƒŠ[‘fŞH–[__Bar_png);
 var<Picture_t> P_Bell    = @@_Load(RESOURCE_tˆê”Ô‚ÌƒtƒŠ[‘fŞH–[__Bell_png);
