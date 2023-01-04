@@ -57,11 +57,12 @@ namespace Charlotte
 			//new Test0001().Test01();
 			//new Test0002().Test01();
 			//new Test0003().Test01();
+			//MaskPictures_01();
+			UtsurikomiChecker_01();
 			//Main_20210421();
 			//Main_20210422();
 			//Main_20221001();
-			//MaskPictures_01();
-			Main_20221226();
+			//Main_20221226();
 
 			// --
 		}
@@ -98,11 +99,6 @@ namespace Charlotte
 			MakePictures.MakeButton(scale, w, h, color, fontSize, "チー", text_x);
 			color = new I4Color(255, 0, 160, 255);
 			MakePictures.MakeButton(scale, w, h, color, fontSize, "カン", text_x);
-		}
-
-		private void MaskPictures_01()
-		{
-			EditPictures.MaskPictures(@"C:\temp");
 		}
 
 		private void Main_20221001()
@@ -155,6 +151,20 @@ namespace Charlotte
 			MakePictures.MakeButton(12, 2400, 480, color, 180, "コンテニュー", 180);
 			MakePictures.MakeButton(12, 2400, 480, color, 180, "設定", 675);
 			MakePictures.MakeButton(12, 2400, 480, color, 180, "終了", 675);
+		}
+
+		// ====
+		// ====
+		// ====
+
+		private void MaskPictures_01()
+		{
+			EditPictures.MaskPictures(@"C:\temp");
+		}
+
+		private void UtsurikomiChecker_01()
+		{
+			UtsurikomiChecker.CheckDir(@"C:\temp");
 		}
 	}
 }
