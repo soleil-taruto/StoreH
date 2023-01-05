@@ -747,6 +747,16 @@ namespace Charlotte.Commons
 			return path;
 		}
 
+		public static string ToParentPath(string path)
+		{
+			path = Path.GetDirectoryName(path);
+
+			if (string.IsNullOrEmpty(path))
+				throw new Exception("パスから親パスに変換できません。");
+
+			return path;
+		}
+
 		#region ToFairLocalPath, ToFairRelPath
 
 		/// <summary>
