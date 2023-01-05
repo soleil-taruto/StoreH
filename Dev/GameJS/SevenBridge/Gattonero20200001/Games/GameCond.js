@@ -10,14 +10,18 @@
 */
 function <int[]> GetChowIndexes(<Deck_t> deck, <Trump_t> lastWastedCard)
 {
-	// HACK: 複数マッチする場合を考慮していない。
+	// HACK: 複数マッチする場合、評価ポイントで判断 -> 選べるようにすべきか。
+
+	var<int[][]> ret = [];
+
+	// ----
 
 	var<int> i = IndexOf(deck.Cards, card => card.Suit == lastWastedCard.Suit && card.Number == lastWastedCard.Number + 1);
 	var<int> j = IndexOf(deck.Cards, card => card.Suit == lastWastedCard.Suit && card.Number == lastWastedCard.Number + 2);
 
 	if (i != -1 && j != -1)
 	{
-		return [ i, j ];
+		ret.push([ i, j ]);
 	}
 
 	i = IndexOf(deck.Cards, card => card.Suit == lastWastedCard.Suit && card.Number == lastWastedCard.Number - 1);
@@ -25,7 +29,7 @@ function <int[]> GetChowIndexes(<Deck_t> deck, <Trump_t> lastWastedCard)
 
 	if (i != -1 && j != -1)
 	{
-		return [ i, j ];
+		ret.push([ i, j ]);
 	}
 
 	i = IndexOf(deck.Cards, card => card.Suit == lastWastedCard.Suit && card.Number == lastWastedCard.Number - 2);
@@ -33,9 +37,38 @@ function <int[]> GetChowIndexes(<Deck_t> deck, <Trump_t> lastWastedCard)
 
 	if (i != -1 && j != -1)
 	{
-		return [ i, j ];
+		ret.push([ i, j ]);
 	}
 
+	// ----
+
+	if (1 <= ret.length)
+	{
+		var<int[]> b = null;
+		var<double> bp = -IMAX;
+
+		for (var<int> i = 0; i < ret.length; i++)
+		{
+			var<int[]> nb = ret[i];
+			var<double> nbp = GetHyoukaPointCR(deck, nb);
+
+console.log("nb: " + nb); // test
+console.log("nbp: " + nbp); // test
+
+			if (bp < nbp)
+			{
+				b = nb;
+				bp = nbp;
+			}
+		}
+
+		if (b == null) // 2bs
+		{
+			error();
+		}
+
+		return b;
+	}
 	return null;
 }
 
@@ -48,7 +81,7 @@ function <int[]> GetChowIndexes(<Deck_t> deck, <Trump_t> lastWastedCard)
 */
 function <int[]> GetPongIndexes(<Deck_t> deck, <Trump_t> lastWastedCard)
 {
-	// HACK: 複数マッチする場合を考慮していない。
+	// HACK: 複数マッチする場合、評価ポイントで判断 -> 選べるようにすべきか。
 
 	var<int[]> ret = [];
 
@@ -162,7 +195,10 @@ function <int[]> GetKongIndexes(<Deck_t> deck)
 
 				if (ret.length == 4)
 				{
-					return ret;
+					if (deck.Cards[deck.Cards.length - 1].Number == n) // ? ツモったカードを含むか -- ツモったカードは右端に配置されている想定
+					{
+						return ret;
+					}
 				}
 			}
 		}

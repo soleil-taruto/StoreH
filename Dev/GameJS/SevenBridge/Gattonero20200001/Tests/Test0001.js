@@ -35,6 +35,8 @@ function* <generatorForTask> Test03()
 
 function* <generatorForTask> Test04()
 {
+	// -- Pong
+
 	{
 		var<Deck_t> deck = CreateDeck(0.0, 0.0);
 
@@ -74,4 +76,50 @@ function* <generatorForTask> Test04()
 
 		console.log(GetPongIndexes(deck, CreateActor_Trump(0.0, 0.0, Suit_e_CLUB, 7, false))); // accept == [ 3, 4 ]
 	}
+
+	// -- Chow
+
+	{
+		var<Deck_t> deck = CreateDeck(0.0, 0.0);
+
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 5, false)); // Chow <- 除外される想定
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 6, false)); // Chow
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 8, false)); // Chow
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 9, false)); // Chow <- 除外される想定
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_HEART, 5, false));
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_DIA,   9, false));
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 9, false));
+
+		console.log(GetChowIndexes(deck, CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 7, false))); // accept == [ 1, 2 ]
+	}
+
+	{
+		var<Deck_t> deck = CreateDeck(0.0, 0.0);
+
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_HEART, 8, false));
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_DIA,   9, false));
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 9, false));
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 5, false)); // Chow
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 6, false)); // Chow
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 8, false)); // Chow <- 除外される想定
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 9, false)); // Chow <- 除外される想定
+
+		console.log(GetChowIndexes(deck, CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 7, false))); // accept == [ 3, 4 ]
+	}
+
+	{
+		var<Deck_t> deck = CreateDeck(0.0, 0.0);
+
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_HEART, 5, false));
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_DIA,   6, false));
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 6, false));
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 5, false)); // Chow <- 除外される想定
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 6, false)); // Chow <- 除外される想定
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 8, false)); // Chow
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 9, false)); // Chow
+
+		console.log(GetChowIndexes(deck, CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 7, false))); // accept == [ 5, 6 ]
+	}
+
+	// --
 }

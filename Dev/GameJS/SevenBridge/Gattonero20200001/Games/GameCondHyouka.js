@@ -33,11 +33,26 @@ function <int> GetWasteIndex(<Deck_t> deck)
 /*
 	デッキを評価する。
 
+	deck: 対象デッキ
+
 	ret: 評価値
 */
 function <double> GetHyoukaPoint(<Deck_t> deck)
 {
 	return @@_GetHyoukaPoint_CR(deck.Cards, []);
+}
+
+/*
+	デッキを評価する。
+
+	deck: 対象デッキ
+	rmIdxs: 評価する前に取り除くカードのインデックス・リスト
+
+	ret: 評価値
+*/
+function <double> GetHyoukaPointCR(<Deck_t> deck, <int[]> rmIdxs)
+{
+	return @@_GetHyoukaPoint_CR(deck.Cards, rmIdxs);
 }
 
 function <double> @@_GetHyoukaPoint_CR(<Trump_t[]> cards, <int[]> rmIdxs)
