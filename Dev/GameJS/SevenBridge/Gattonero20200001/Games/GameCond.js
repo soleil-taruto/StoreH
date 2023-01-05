@@ -192,6 +192,11 @@ function <int[]> GetKongIndexes(<Deck_t> deck)
 
 				if (ret.length == 4)
 				{
+
+	// HACK: 配牌の時点で4枚揃っていた場合、カンできない問題あり。
+	// -> その後鳴くとカン選択が出てくる問題もある。
+	// -- 鳴きは手番のとき常にできるようにしておくべきか。
+
 					if (deck.Cards[deck.Cards.length - 1].Number == n) // ? ツモったカードを含むか -- ツモったカードは右端に配置されている想定
 					{
 						return ret;
