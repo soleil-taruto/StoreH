@@ -328,8 +328,6 @@ battleLoop:
 				var<int[]> idxsKong    = GetKongIndexes( PlayerDeck);
 				var<boolean> agariFlag = IsCanAgari(     PlayerDeck);
 
-agariFlag = true; // test test test test test
-
 				{
 					var<string> items = [];
 
@@ -1012,13 +1010,15 @@ function* <generatorForTask> @@_EffectYouWin()
 		}());
 	}
 
+	// ÕŒ‚ >>>
+
 	SE(S_Dooooon);
 
 	AddEffect(function* <generatorForTask> ()
 	{
-		for (var<Scene_t> scene of CreateScene(40))
+		for (var<Scene_t> scene of CreateScene(45))
 		{
-			var<double> r = scene.RemRate * 60.0;
+			var<double> r = scene.RemRate * 70.0;
 
 			DrawSlide_X = GetRand2() * r;
 			DrawSlide_Y = GetRand2() * r;
@@ -1029,6 +1029,8 @@ function* <generatorForTask> @@_EffectYouWin()
 		DrawSlide_X = 0.0;
 		DrawSlide_Y = 0.0;
 	}());
+
+	// <<< ÕŒ‚
 
 	while (@@_ShowResultOn)
 	{
