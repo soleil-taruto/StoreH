@@ -52,9 +52,6 @@ function <int[]> GetChowIndexes(<Deck_t> deck, <Trump_t> lastWastedCard)
 			var<int[]> nb = ret[i];
 			var<double> nbp = GetHyoukaPointCR(deck, nb);
 
-console.log("nb: " + nb); // test
-console.log("nbp: " + nbp); // test
-
 			if (bp < nbp)
 			{
 				b = nb;
