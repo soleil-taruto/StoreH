@@ -22,3 +22,4 @@ var S_YouLose = @@_Load(RESOURCE_è¨êXïΩ__powerdown07_mp3);
 var S_Pong    = @@_Load(RESOURCE_è¨êXïΩ__crrect_answer1_mp3);
 var S_Chow    = @@_Load(RESOURCE_è¨êXïΩ__Budda_small_bell_mp3);
 var S_Kong    = @@_Load(RESOURCE_è¨êXïΩ__Budda_large_bell_mp3);
+var S_Dooooon = @@_Load(RESOURCE_è¨êXïΩ__game_explosion5_mp3);
