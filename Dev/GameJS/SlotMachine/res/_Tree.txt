@@ -16,6 +16,14 @@ Picture\GameStartButton.png
 	-> File 2022/12/29 (木) 09:05:51 / 2022/10/02 (日) 05:41:53 / 24,483
 Picture\Game\DrumMask.png
 	-> File 2023/01/02 (月) 20:42:35 / 2023/01/02 (月) 20:42:35 / 1,663
+Picture\Game\Lane01Button.png
+	-> File 2023/01/05 (木) 15:11:50 / 2023/01/05 (木) 15:11:50 / 4,487
+Picture\Game\Lane02Button.png
+	-> File 2023/01/05 (木) 15:11:51 / 2023/01/05 (木) 15:11:51 / 4,677
+Picture\Game\Lane03Button.png
+	-> File 2023/01/05 (木) 15:11:52 / 2023/01/05 (木) 15:11:52 / 4,723
+Picture\Game\LaneXXButton.png
+	-> File 2023/01/05 (木) 15:11:53 / 2023/01/05 (木) 15:11:53 / 4,841
 _memo.txt
 	-> File 2022/12/29 (木) 09:05:51 / 2022/02/25 (金) 01:38:04 / 97
 ぱくたそ

@@ -58,13 +58,33 @@ namespace Charlotte
 			//new Test0002().Test01();
 			//new Test0003().Test01();
 			//MaskPictures_01();
-			UtsurikomiChecker_01();
+			//UtsurikomiChecker_01();
 			//Main_20210421();
 			//Main_20210422();
 			//Main_20221001();
 			//Main_20221226();
+			Main_20230105();
 
 			// --
+		}
+
+		private void Main_20230105()
+		{
+			int scale = 4;
+			int w = scale * 440;
+			int h = scale * 100;
+			I4Color color;
+			int fontSize = 140;
+			int text_x = 60;
+
+			color = new I4Color(255, 150, 0, 255);
+			MakePictures.MakeButton(scale, w, h, color, fontSize, "Lane01Button:第 1 のレーン", text_x);
+			color = new I4Color(255, 100, 50, 255);
+			MakePictures.MakeButton(scale, w, h, color, fontSize, "Lane02Button:第 2 のレーン", text_x);
+			color = new I4Color(255, 50, 100, 255);
+			MakePictures.MakeButton(scale, w, h, color, fontSize, "Lane03Button:第 3 のレーン", text_x);
+			color = new I4Color(255, 0, 150, 255);
+			MakePictures.MakeButton(scale, w, h, color, fontSize, "LaneXXButton:第 X のレーン", text_x);
 		}
 
 		private void Main_20221226()

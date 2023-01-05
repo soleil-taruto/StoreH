@@ -43,3 +43,8 @@ var<Picture_t> P_SuicaB  = @@_Load(RESOURCE_tˆê”Ô‚ÌƒtƒŠ[‘fŞH–[__SuicaB_png);
 var<Picture_t> P_SuicaG  = @@_Load(RESOURCE_tˆê”Ô‚ÌƒtƒŠ[‘fŞH–[__SuicaG_png);
 
 var<Picture_t> P_DrumMask = @@_Load(RESOURCE_Picture__Game__DrumMask_png);
+
+var<Picture_t> P_Lane01Button = @@_Load(RESOURCE_Picture__Game__Lane01Button_png);
+var<Picture_t> P_Lane02Button = @@_Load(RESOURCE_Picture__Game__Lane02Button_png);
+var<Picture_t> P_Lane03Button = @@_Load(RESOURCE_Picture__Game__Lane03Button_png);
+var<Picture_t> P_LaneXXButton = @@_Load(RESOURCE_Picture__Game__LaneXXButton_png);
