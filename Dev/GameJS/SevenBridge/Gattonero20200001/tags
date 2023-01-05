@@ -142,9 +142,11 @@ C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\Crash.js(152) : DrawCras
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\Draw.js(6) : GetPicture_W // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\Draw.js(12) : GetPicture_H // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\Draw.js(18) : ClearScreen // ŠÖ”
-C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\Draw.js(38) : Draw // ŠÖ”
-C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\Draw.js(43) : Draw2 // ŠÖ”
-C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\Draw.js(70) : HoveredPicture // •Ï”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\Draw.js(41) : Draw // ŠÖ”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\Draw.js(46) : Draw2 // ŠÖ”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\Draw.js(23) : DrawSlide_X // •Ï”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\Draw.js(24) : DrawSlide_Y // •Ï”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\Draw.js(76) : HoveredPicture // •Ï”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\Effect.js(13) : AddEffect // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\Effect.js(18) : @ // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\Effect.js(38) : GetEffects // ŠÖ”
@@ -279,6 +281,7 @@ C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Effect.js(13) : Effect_Dummy /
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Effect.js(23) : AddEffect_Explode // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Game.js(14) : AddGameCredit // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Game.js(19) : GameMain // ŠÖ”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Game.js(1100) : GameJs_Test05 // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Game.js(6) : Camera // •Ï”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Game.js(9) : GameTasks // •Ï”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Game.js(184) : DealerDeck // •Ï”
@@ -293,7 +296,7 @@ C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCond.js(11) : GetChowIndex
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCond.js(79) : GetPongIndexes // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCond.js(160) : IsCanRon // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCond.js(177) : GetKongIndexes // ŠÖ”
-C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCond.js(211) : IsCanAgari // ŠÖ”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCond.js(216) : IsCanAgari // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCondHyouka.js(10) : GetWasteIndex // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCondHyouka.js(40) : GetHyoukaPoint // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCondHyouka.js(53) : GetHyoukaPointCR // ŠÖ”
@@ -331,3 +334,4 @@ C:\Dev\GameJS\SevenBridge\Gattonero20200001\Tests\Test0001.js(5) : Test01 // ŠÖ
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Tests\Test0001.js(16) : Test02 // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Tests\Test0001.js(31) : Test03 // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Tests\Test0001.js(36) : Test04 // ŠÖ”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\Tests\Test0001.js(127) : Test05 // ŠÖ”

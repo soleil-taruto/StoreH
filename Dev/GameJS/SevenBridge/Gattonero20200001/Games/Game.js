@@ -947,13 +947,13 @@ function* <generatorForTask> @@_E_ExecuteAgari(<Deck_t> deck, <Trump_t[]> ronCar
 	{
 		@@_DealerDamage++;
 
-		yield* @@_E_ShowResult(P_YouWin);
+		yield* @@_E_ShowResult("W");
 	}
 	else if (winner == "D")
 	{
 		@@_DealerDamage--;
 
-		yield* @@_E_ShowResult(P_YouLose);
+		yield* @@_E_ShowResult("L");
 	}
 	else
 	{
@@ -961,8 +961,212 @@ function* <generatorForTask> @@_E_ExecuteAgari(<Deck_t> deck, <Trump_t[]> ronCar
 	}
 }
 
-function* <generatorForTask> @@_E_ShowResult(<Picture_t> picture)
+var<boolean> @@_ShowResultOn = false;
+
+function* <generatorForTask> @@_EffectYouWin()
 {
+	{
+		var<double> x = Screen_W / 2.0;
+		var<double> y = Screen_H / 2.0;
+		var<double> r = GetRand3(230.0, 270.0);
+		var<double> z = GetRand3(5.0, 7.0);
+
+		for (var<Scene_t> scene of CreateScene(60))
+		{
+			r = Approach(r, 0.0, 0.9);
+			z = Approach(z, 1.0, 0.93);
+
+			Draw(P_YouWin, x, y, 1.0, r, z);
+
+			yield 1;
+		}
+	}
+
+	for (var<int> c = 0; c < 10; c++)
+	{
+		var<double> xAdd = GetRand3(-3.7, 3.7);
+		var<double> yAdd = GetRand3(-3.7, 3.7);
+		var<double> rAdd = GetRand3(-0.01, 0.01);
+		var<double> zAdd = GetRand3(0.01, 0.07);
+
+		AddEffect(function* <generatorForTask> ()
+		{
+			var<double> x = Screen_W / 2.0;
+			var<double> y = Screen_H / 2.0;
+			var<double> r = 0.0;
+			var<double> z = 1.0;
+
+			for (var<Scene_t> scene of CreateScene(60))
+			{
+				x += xAdd;
+				y += yAdd;
+				r += rAdd;
+				z += zAdd;
+
+				Draw(P_YouWin, x, y, 0.5 * scene.RemRate, r, z);
+
+				yield 1;
+			}
+		}());
+	}
+
+	AddEffect(function* <generatorForTask> ()
+	{
+		for (var<Scene_t> scene of CreateScene(40))
+		{
+			var<double> r = scene.RemRate * 30.0;
+
+			DrawSlide_X = GetRand2() * r;
+			DrawSlide_Y = GetRand2() * r;
+
+			yield 1;
+		}
+
+		DrawSlide_X = 0.0;
+		DrawSlide_Y = 0.0;
+	}());
+
+	while (@@_ShowResultOn)
+	{
+		Draw(P_YouWin, Screen_W / 2.0, Screen_H / 2.0, 1.0, 0.0, 1.0);
+
+		yield 1;
+	}
+
+	for (var<int> c = 0; c < 5; c++)
+	{
+		var<double> xAdd = GetRand3(-3.7, 3.7);
+		var<double> yAdd = GetRand3(-3.7, 3.7);
+		var<double> rAdd = GetRand3(-0.001, 0.001);
+		var<double> zAdd = GetRand3(0.01, 0.03);
+
+		AddEffect(function* <generatorForTask> ()
+		{
+			var<double> x = Screen_W / 2.0;
+			var<double> y = Screen_H / 2.0;
+			var<double> r = 0.0;
+			var<double> z = 1.0;
+
+			for (var<Scene_t> scene of CreateScene(60))
+			{
+				x += xAdd;
+				y += yAdd;
+				r += rAdd;
+				z += zAdd;
+
+				Draw(P_YouWin, x, y, 0.5 * scene.RemRate, r, z);
+
+				yield 1;
+			}
+		}());
+	}
+}
+
+function* <generatorForTask> @@_EffectYouLose()
+{
+	var<double> x = Screen_W * 2.0;
+	var<double> y = Screen_H * 0.5;
+	var<double> a = 0.0;
+	var<double> z = GetRand3(1.7, 2.0);
+
+	while (@@_ShowResultOn)
+	{
+		x = Approach(x, Screen_W / 2.0, 0.91);
+		y = Approach(y, Screen_H / 2.0, 0.92);
+		a = Approach(a, 1.0, 0.93);
+		z = Approach(z, 1.0, 0.94);
+
+		Draw(P_YouLose, x, y, a, 0.0, z);
+
+		yield 1;
+	}
+
+	for (var<Scene_t> scene of CreateScene(60))
+	{
+		x = Approach(x, Screen_W * -1.5, 0.99);
+		y = Approach(y, Screen_H /  2.0, 0.99);
+		a *= 0.95;
+		z *= 1.01;
+
+		Draw(P_YouLose, x, y, a, 0.0, z);
+
+		yield 1;
+	}
+}
+
+/*
+	strResult: "W" or "L"
+*/
+function* <generatorForTask> GameJs_Test05(<string> strResult)
+{
+	@@_ShowResultOn = true;
+
+	if (strResult == "W") // ? Win
+	{
+		AddEffect(@@_EffectYouWin());
+	}
+	else if (strResult == "L") // ? Lose
+	{
+		AddEffect(@@_EffectYouLose());
+	}
+	else
+	{
+		error();
+	}
+
+	FreezeInput();
+
+	for (; ; )
+	{
+		if (GetMouseDown() == -1)
+		{
+			break;
+		}
+
+		SetColor("#000000");
+		PrintRect(0.0, 0.0, Screen_W, Screen_H);
+
+		yield 1;
+	}
+	FreezeInput();
+
+	@@_ShowResultOn = false;
+
+	for (; ; )
+	{
+		if (GetMouseDown() == -1)
+		{
+			break;
+		}
+
+		SetColor("#000000");
+		PrintRect(0.0, 0.0, Screen_W, Screen_H);
+
+		yield 1;
+	}
+	FreezeInput();
+}
+
+/*
+	strResult: "W" or "L"
+*/
+function* <generatorForTask> @@_E_ShowResult(<string> strResult)
+{
+	@@_ShowResultOn = true;
+
+	if (strResult == "W") // ? Win
+	{
+		AddEffect(@@_EffectYouWin());
+	}
+	else if (strResult == "L") // ? Lose
+	{
+		AddEffect(@@_EffectYouLose());
+	}
+	else
+	{
+		error();
+	}
+
 	FreezeInput();
 
 	for (; ; )
@@ -978,11 +1182,11 @@ function* <generatorForTask> @@_E_ShowResult(<Picture_t> picture)
 		ExecuteAllActor();
 		ExecuteAllTask(GameTasks);
 
-		Draw(picture, Screen_W / 2, Screen_H / 2, 1.0, 0.0, 1.0);
-
 		yield 1;
 	}
 	FreezeInput();
+
+	@@_ShowResultOn = false;
 }
 
 /*

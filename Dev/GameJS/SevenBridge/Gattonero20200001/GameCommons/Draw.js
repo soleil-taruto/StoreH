@@ -20,6 +20,9 @@ function <void> ClearScreen()
 	Context.clearRect(0, 0, Screen_W, Screen_H);
 }
 
+var<double> DrawSlide_X = 0.0;
+var<double> DrawSlide_Y = 0.0;
+
 /*
 	•`‰æ
 
@@ -42,6 +45,9 @@ function <void> Draw(<Picture_t> picture, <double> x, <double> y, <double> a, <d
 
 function <void> Draw2(<Picture_t> picture, <double> x, <double> y, <double> a, <double> r, <double> zw, <double> zh)
 {
+	x += DrawSlide_X;
+	y += DrawSlide_Y;
+
 	var<int> w = GetPicture_W(picture);
 	var<int> h = GetPicture_H(picture);
 

@@ -123,3 +123,13 @@ function* <generatorForTask> Test04()
 
 	// --
 }
+
+function* <generatorForTask> Test05()
+{
+	// -- choose one --
+
+//	yield* GameJs_Test05("W");
+	yield* GameJs_Test05("L");
+
+	// --
+}
