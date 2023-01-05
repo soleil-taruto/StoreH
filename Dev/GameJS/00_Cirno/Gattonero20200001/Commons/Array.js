@@ -42,7 +42,7 @@ function <void> AddElements(<T[]> arr, <T[]> elements)
 	}
 }
 
-function <void> DesertElement(<T[]> arr, <int> index)
+function <T> DesertElement(<T[]> arr, <int> index)
 {
 	if (index < 0 || arr.length <= index)
 	{
