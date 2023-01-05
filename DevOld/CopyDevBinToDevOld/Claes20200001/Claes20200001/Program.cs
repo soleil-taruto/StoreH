@@ -217,8 +217,8 @@ namespace Charlotte
 
 		private void CopyBatchFile(string rDir, string wDir, string batchLocalName)
 		{
-			string rFile = Path.Combine(Path.GetDirectoryName(rDir), batchLocalName);
-			string wFile = Path.Combine(Path.GetDirectoryName(wDir), batchLocalName);
+			string rFile = Path.Combine(SCommon.ToParentPath(rDir), batchLocalName);
+			string wFile = Path.Combine(SCommon.ToParentPath(wDir), batchLocalName);
 
 			if (File.Exists(rFile))
 			{
@@ -231,8 +231,8 @@ namespace Charlotte
 
 		private void CopyResourceDir(string rDir, string wDir, string resourceRelDir, bool outputFileListMode)
 		{
-			rDir = Path.Combine(Path.GetDirectoryName(rDir), resourceRelDir);
-			wDir = Path.Combine(Path.GetDirectoryName(wDir), resourceRelDir);
+			rDir = Path.Combine(SCommon.ToParentPath(rDir), resourceRelDir);
+			wDir = Path.Combine(SCommon.ToParentPath(wDir), resourceRelDir);
 
 			if (Directory.Exists(rDir))
 			{
