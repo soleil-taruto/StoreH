@@ -32,3 +32,46 @@ function* <generatorForTask> Test03()
 {
 	yield* GohoubiMain();
 }
+
+function* <generatorForTask> Test04()
+{
+	{
+		var<Deck_t> deck = CreateDeck(0.0, 0.0);
+
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 6, false));
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 7, false)); // Pong <- 除外される想定
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_HEART, 7, false)); // Pong
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_DIA,   7, false)); // Pong
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 8, false));
+
+		console.log(GetPongIndexes(deck, CreateActor_Trump(0.0, 0.0, Suit_e_CLUB, 7, false))); // accept == [ 2, 3 ]
+	}
+
+	{
+		var<Deck_t> deck = CreateDeck(0.0, 0.0);
+
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 5, false));
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 9, false));
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 7, false)); // Pong
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_HEART, 7, false)); // Pong <- 除外される想定
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_DIA,   7, false)); // Pong
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_HEART, 8, false));
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_DIA,   9, false));
+
+		console.log(GetPongIndexes(deck, CreateActor_Trump(0.0, 0.0, Suit_e_CLUB, 7, false))); // accept == [ 2, 4 ]
+	}
+
+	{
+		var<Deck_t> deck = CreateDeck(0.0, 0.0);
+
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 5, false));
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 9, false));
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_DIA,   6, false));
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_SPADE, 7, false)); // Pong
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_HEART, 7, false)); // Pong
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_DIA,   7, false)); // Pong <- 除外される想定
+		deck.Cards.push(CreateActor_Trump(0.0, 0.0, Suit_e_HEART, 9, false));
+
+		console.log(GetPongIndexes(deck, CreateActor_Trump(0.0, 0.0, Suit_e_CLUB, 7, false))); // accept == [ 3, 4 ]
+	}
+}

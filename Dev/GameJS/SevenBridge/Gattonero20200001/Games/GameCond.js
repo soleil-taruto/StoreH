@@ -59,14 +59,76 @@ function <int[]> GetPongIndexes(<Deck_t> deck, <Trump_t> lastWastedCard)
 		if (card.Number == lastWastedCard.Number)
 		{
 			ret.push(i);
-
-			if (ret.length == 2)
-			{
-				return ret;
-			}
 		}
 	}
+	if (ret.length == 3)
+	{
+
+console.log("GPI ret1: " + ret); // test
+
+		var<double> p1 = @@_GPI_GetChowHyoukaPoint(deck, ret[0]);
+		var<double> p2 = @@_GPI_GetChowHyoukaPoint(deck, ret[1]);
+		var<double> p3 = @@_GPI_GetChowHyoukaPoint(deck, ret[2]);
+
+console.log("GPI p1: " + p1); // test
+console.log("GPI p2: " + p2); // test
+console.log("GPI p3: " + p3); // test
+
+		if (Math.max(p1, p2) < p3)
+		{
+			DesertElement(ret, 2);
+		}
+		else if (p1 < p2)
+		{
+			DesertElement(ret, 1);
+		}
+		else
+		{
+			DesertElement(ret, 0);
+		}
+
+console.log("GPI ret2: " + ret); // test
+
+		if (ret.length != 2) // 2bs
+		{
+			error();
+		}
+
+		return ret;
+	}
+	if (ret.length == 2)
+	{
+		return ret;
+	}
 	return null;
+}
+
+function <double> @@_GPI_GetChowHyoukaPoint(<Deck_t> deck, <int> cardIdx)
+{
+	var<double> ret = 0.0;
+
+	for (var<int> i = 0; i < deck.Cards.length; i++)
+	{
+		if (i == cardIdx)
+		{
+			// noop
+		}
+		else if (
+			deck.Cards[i].Suit == deck.Cards[cardIdx].Suit &&
+			Math.abs(deck.Cards[i].Number - deck.Cards[cardIdx].Number) == 1
+			)
+		{
+			ret += 1.0;
+		}
+		else if (
+			deck.Cards[i].Suit == deck.Cards[cardIdx].Suit &&
+			Math.abs(deck.Cards[i].Number - deck.Cards[cardIdx].Number) == 2
+			)
+		{
+			ret += 0.01;
+		}
+	}
+	return ret;
 }
 
 /*

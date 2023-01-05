@@ -291,9 +291,9 @@ C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Game.js(193) : WCards_X // •Ï
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Game.js(194) : WCards_Y // •Ï”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCond.js(11) : GetChowIndexes // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCond.js(49) : GetPongIndexes // ŠÖ”
-C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCond.js(77) : IsCanRon // ŠÖ”
-C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCond.js(94) : GetKongIndexes // ŠÖ”
-C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCond.js(125) : IsCanAgari // ŠÖ”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCond.js(139) : IsCanRon // ŠÖ”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCond.js(156) : GetKongIndexes // ŠÖ”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCond.js(187) : IsCanAgari // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCondHyouka.js(10) : GetWasteIndex // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\GameCondHyouka.js(38) : GetHyoukaPoint // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Gohoubi.js(5) : GohoubiMain // ŠÖ”
@@ -329,3 +329,4 @@ C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameTools\SimpleMenu.js(10) : DSM_De
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Tests\Test0001.js(5) : Test01 // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Tests\Test0001.js(16) : Test02 // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Tests\Test0001.js(31) : Test03 // ŠÖ”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\Tests\Test0001.js(36) : Test04 // ŠÖ”
