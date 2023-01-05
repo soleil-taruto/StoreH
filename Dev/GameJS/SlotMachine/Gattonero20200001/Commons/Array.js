@@ -84,9 +84,9 @@ function <void> SwapElement(<T[]> arr, <int> index_A, <int> index_B)
 
 function <void> Shuffle(<T[]> arr)
 {
-	for (var<int> i = arr.length - 1; 2 <= i; i--)
+	for (var<int> i = arr.length; 2 <= i; i--)
 	{
-		SwapElement(arr, GetRand(i), i);
+		SwapElement(arr, GetRand(i), i - 1);
 	}
 }
 
