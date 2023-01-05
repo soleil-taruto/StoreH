@@ -63,16 +63,9 @@ function <int[]> GetPongIndexes(<Deck_t> deck, <Trump_t> lastWastedCard)
 	}
 	if (ret.length == 3)
 	{
-
-console.log("GPI ret1: " + ret); // test
-
 		var<double> p1 = @@_GPI_GetChowHyoukaPoint(deck, ret[0]);
 		var<double> p2 = @@_GPI_GetChowHyoukaPoint(deck, ret[1]);
 		var<double> p3 = @@_GPI_GetChowHyoukaPoint(deck, ret[2]);
-
-console.log("GPI p1: " + p1); // test
-console.log("GPI p2: " + p2); // test
-console.log("GPI p3: " + p3); // test
 
 		if (Math.max(p1, p2) < p3)
 		{
@@ -86,8 +79,6 @@ console.log("GPI p3: " + p3); // test
 		{
 			DesertElement(ret, 0);
 		}
-
-console.log("GPI ret2: " + ret); // test
 
 		if (ret.length != 2) // 2bs
 		{
