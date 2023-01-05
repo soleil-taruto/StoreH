@@ -1073,14 +1073,14 @@ function* <generatorForTask> @@_EffectYouLose()
 	var<double> x = Screen_W * 2.0;
 	var<double> y = Screen_H * 0.5;
 	var<double> a = 0.0;
-	var<double> z = GetRand3(1.7, 2.0);
+	var<double> z = GetRand3(2.3, 2.7);
 
 	while (@@_ShowResultOn)
 	{
-		x = Approach(x, Screen_W / 2.0, 0.91);
-		y = Approach(y, Screen_H / 2.0, 0.92);
-		a = Approach(a, 1.0, 0.93);
-		z = Approach(z, 1.0, 0.94);
+		x = Approach(x, Screen_W / 2.0, 0.97);
+		y = Approach(y, Screen_H / 2.0, 0.98);
+		a = Approach(a, 1.0, 0.96);
+		z = Approach(z, 1.0, 0.99);
 
 		Draw(P_YouLose, x, y, a, 0.0, z);
 
