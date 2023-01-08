@@ -68,6 +68,8 @@ namespace Charlotte.Tests
 			{
 				if (xp == parentXmlPath)
 					count = chooser(count, node.Children.Where(n => n.Name == name).Count());
+
+				return true;
 			});
 
 			return count;
@@ -110,6 +112,7 @@ namespace Charlotte.Tests
 						writer.WriteLine(node.Value);
 						writer.WriteLine(); // 空行 -- データの区切りとして
 					}
+					return true;
 				});
 			}
 		}
@@ -129,21 +132,32 @@ namespace Charlotte.Tests
 		public void Test05()
 		{
 			// 表示範囲(緯度経度)
-			double NORTH_LAT = 35.61; // 自由が丘駅のちょい上(北)
-			double SOUTH_LAT = 35.595; // 田園調布駅のちょい下(南)
-			double WEST_LON = 139.66; // 九品仏駅のちょい左(西)
-			double EAST_LON = 139.687; // 大岡山駅のちょい右(東)
+			double NORTH_LAT = 35.607500; // 自由が丘駅
+			double SOUTH_LAT = 35.596889; // 田園調布駅
+			double WEST_LON = 139.661000; // 九品仏駅
+			double EAST_LON = 139.685639; // 大岡山駅
 
-			// 出力画像の幅
+			// 表示範囲のマージン(meter)
+			double MARGIN = 300.0;
+
+			// 出力画像の幅(pixel)
 			int IMAGE_WIDTH = 1600;
 
-			OutputImage(NORTH_LAT, SOUTH_LAT, WEST_LON, EAST_LON, IMAGE_WIDTH);
+			OutputImage(NORTH_LAT, SOUTH_LAT, WEST_LON, EAST_LON, MARGIN, IMAGE_WIDTH);
 		}
 
-		private void OutputImage(double nLat, double sLat, double wLon, double eLon, int imageWidth)
+		private void OutputImage(double nLat, double sLat, double wLon, double eLon, double margin, int imageWidth)
 		{
 			double LAT_TO_METER = 111132.871463004;
 			double LON_TO_METER = 90362.222363910;
+
+			// マージン適用
+			{
+				nLat += margin / LAT_TO_METER;
+				sLat -= margin / LAT_TO_METER;
+				wLon -= margin / LON_TO_METER;
+				eLon += margin / LON_TO_METER;
+			}
 
 			double xLon = eLon - wLon;
 			double yLat = nLat - sLat;
@@ -165,7 +179,7 @@ namespace Charlotte.Tests
 			{
 				g.FillRectangle(new SolidBrush(Color.White), 0, 0, w, h);
 
-				Action<string, Pen> drawPolyFromFile = (polyFile, pen) =>
+				Action<string, Pen, bool> drawPolyFromFile = (polyFile, pen, loop) =>
 				{
 					string[] polyLines = File.ReadAllLines(polyFile, Encoding.ASCII);
 					int polyLineIndex = 0;
@@ -185,7 +199,7 @@ namespace Charlotte.Tests
 							p[1] = (p[1] - wLon) * lonToPixel; // Lon to pixel
 						}
 
-						for (int polyIndex = 0; polyIndex < poly.Count; polyIndex++)
+						for (int polyIndex = 0; polyIndex < poly.Count + (loop ? 0 : -1); polyIndex++)
 						{
 							double[] p = poly[polyIndex];
 							double[] q = poly[(polyIndex + 1) % poly.Count];
@@ -205,19 +219,23 @@ namespace Charlotte.Tests
 
 				drawPolyFromFile(
 					@"C:\temp\Building.txt",
-					new Pen(new SolidBrush(Color.FromArgb(128, 255, 128)), 1.0F)
+					new Pen(new SolidBrush(Color.FromArgb(128, 255, 128)), 1.0F),
+					true
 					);
 				drawPolyFromFile(
 					@"C:\temp\Road.txt",
-					new Pen(new SolidBrush(Color.FromArgb(128, 128, 128)), 1.0F)
+					new Pen(new SolidBrush(Color.FromArgb(128, 128, 128)), 1.0F),
+					false
 					);
 				drawPolyFromFile(
 					@"C:\temp\Rail.txt",
-					new Pen(new SolidBrush(Color.FromArgb(0, 0, 0)), 1.0F)
+					new Pen(new SolidBrush(Color.FromArgb(0, 0, 0)), 1.0F),
+					false
 					);
 				drawPolyFromFile(
 					@"C:\temp\Area.txt",
-					new Pen(new SolidBrush(Color.FromArgb(64, 255, 0, 0)), 5.0F)
+					new Pen(new SolidBrush(Color.FromArgb(64, 255, 0, 0)), 5.0F),
+					true
 					);
 			}
 			image.Save(SCommon.NextOutputPath() + ".png");

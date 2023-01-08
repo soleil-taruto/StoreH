@@ -202,20 +202,21 @@ namespace Charlotte.Utilities
 			return buff.ToString();
 		}
 
-		public void Search(Action<string, XMLNode> reaction)
+		public void Search(Func<string, XMLNode, bool> reaction)
 		{
 			this.Search(reaction, "");
 		}
 
-		private void Search(Action<string, XMLNode> reaction, string xmlPathPrefix)
+		private void Search(Func<string, XMLNode, bool> reaction, string xmlPathPrefix)
 		{
 			string xmlPath = xmlPathPrefix + this.Name;
 
-			reaction(xmlPath, this);
-
-			foreach (XMLNode node in this.Children)
+			if (reaction(xmlPath, this))
 			{
-				node.Search(reaction, xmlPath + "/");
+				foreach (XMLNode node in this.Children)
+				{
+					node.Search(reaction, xmlPath + "/");
+				}
 			}
 		}
 	}
