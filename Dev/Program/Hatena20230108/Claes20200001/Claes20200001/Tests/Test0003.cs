@@ -8,7 +8,7 @@ using Charlotte.Commons;
 
 namespace Charlotte.Tests
 {
-	public class Test0002
+	public class Test0003
 	{
 		public void Test01()
 		{
@@ -26,13 +26,12 @@ namespace Charlotte.Tests
 
 			StationInfo[] stations = new StationInfo[]
 			{
-				new StationInfo("35.605417:139.661000:九品仏駅:-80:10"),
-				new StationInfo("35.607500:139.668889:自由が丘駅:-180:-40"),
-				//new StationInfo("35.607500:139.668889:自由が丘駅:-120:-55"),
-				new StationInfo("35.606389:139.679361:緑ヶ丘駅:-20:-50"),
-				new StationInfo("35.607500:139.685639:大岡山駅:0:10"),
-				new StationInfo("35.596889:139.667306:田園調布駅:-185:-15"),
-				new StationInfo("35.603833:139.672306:奥沢駅:0:10"),
+				new StationInfo("35.605417:139.661000:九品仏駅:-80:10:世田谷区:1:004400"),
+				new StationInfo("35.607500:139.668889:自由が丘駅:-180:-40:目黒区:-1:664400"),
+				new StationInfo("35.606389:139.679361:緑ヶ丘駅:-20:-50:目黒区:-1:664400"),
+				new StationInfo("35.607500:139.685639:大岡山駅:0:10:大田区:1:004444"),
+				new StationInfo("35.596889:139.667306:田園調布駅:-185:-15:大田区:1:004466"),
+				new StationInfo("35.603833:139.672306:奥沢駅:0:10:？区:1:880000"),
 			};
 
 			OutputImage(NORTH_LAT, SOUTH_LAT, WEST_LON, EAST_LON, MARGIN, IMAGE_WIDTH, stations);
@@ -44,6 +43,10 @@ namespace Charlotte.Tests
 			public double Lon;
 			public string Name;
 			public I2Point NamePos;
+			public string AreaName;
+			public I2Point AreaNamePos;
+			public Color PointColor;
+			public Color TextColor;
 
 			public StationInfo(string prm)
 			{
@@ -56,6 +59,13 @@ namespace Charlotte.Tests
 				this.NamePos = new I2Point(0, 0);
 				this.NamePos.X = int.Parse(prms[c++]);
 				this.NamePos.Y = int.Parse(prms[c++]);
+				this.AreaName = prms[c++];
+				this.AreaNamePos = new I2Point(0, 0);
+				this.AreaNamePos.X = this.NamePos.X;
+				this.AreaNamePos.Y = this.NamePos.Y + 40 * int.Parse(prms[c++]);
+				int iColor = Convert.ToInt32(prms[c++], 16);
+				this.PointColor = Color.FromArgb((int)(64u * 16777216 + iColor));
+				this.TextColor = Color.FromArgb((int)(224u * 16777216 + iColor));
 			}
 		}
 
@@ -156,7 +166,8 @@ namespace Charlotte.Tests
 					double r = 50.0;
 
 					g.FillEllipse(
-						new SolidBrush(Color.FromArgb(128, 0, 255, 0)),
+						new SolidBrush(station.PointColor),
+						//new SolidBrush(Color.FromArgb(128, 0, 255, 0)),
 						(float)(x - r / 2.0),
 						(float)(y - r / 2.0),
 						(float)r,
@@ -166,9 +177,21 @@ namespace Charlotte.Tests
 					g.DrawString(
 						station.Name,
 						new Font("UD デジタル 教科書体 N-B", 24f, FontStyle.Regular),
-						new SolidBrush(Color.FromArgb(192, 0, 64, 0)),
+						new SolidBrush(station.TextColor),
 						(float)(x + station.NamePos.X),
 						(float)(y + station.NamePos.Y)
+						);
+
+					string areaName = station.AreaName;
+
+					areaName = "(" + areaName + ")";
+
+					g.DrawString(
+						areaName,
+						new Font("UD デジタル 教科書体 N-B", 24f, FontStyle.Regular),
+						new SolidBrush(station.TextColor),
+						(float)(x + station.AreaNamePos.X),
+						(float)(y + station.AreaNamePos.Y)
 						);
 				}
 			}
