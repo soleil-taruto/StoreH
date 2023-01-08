@@ -66,6 +66,7 @@
     <Compile Include="Commons\WorkingDir.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Tests\Test0002.cs" />
     <Compile Include="Utilities\XMLNode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
