@@ -27,5 +27,43 @@ namespace Charlotte.Tests
 			DateTime edTm = DateTime.Now;
 			Console.WriteLine("OK " + (edTm - stTm).TotalSeconds.ToString("F3") + "s");
 		}
+
+		public void Test02()
+		{
+			PrintXMLTree(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-AdmArea-20221001-0001.xml");
+			PrintXMLTree(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-BldL-20221001-0001.xml");
+			PrintXMLTree(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-RailCL-20221001-0001.xml");
+		}
+
+		private void PrintXMLTree(string file)
+		{
+			XMLNode root = XMLNode.LoadFromFile(file);
+
+			XMLPaths = new HashSet<string>();
+			SearchXMLTree(root, "");
+
+			Console.WriteLine(file);
+
+			foreach (string xmlPath in XMLPaths.OrderBy(SCommon.Comp))
+				Console.WriteLine(xmlPath);
+
+			Console.WriteLine();
+
+			XMLPaths = null;
+		}
+
+		private HashSet<string> XMLPaths;
+
+		private void SearchXMLTree(XMLNode node, string parentXMLPath)
+		{
+			string xmlPath = parentXMLPath + "/" + node.Name;
+
+			XMLPaths.Add(xmlPath);
+
+			foreach (XMLNode child in node.Children)
+			{
+				SearchXMLTree(child, xmlPath);
+			}
+		}
 	}
 }
