@@ -45,11 +45,22 @@ namespace Charlotte.Tests
 			root.Search((xmlPath, node) => xmlPaths.Add(xmlPath));
 
 			Console.WriteLine(file);
+			Console.WriteLine();
+
+			List<string> lines = new List<string>();
+
+			lines.Add("XMLパス*最小の個数*最大の個数");
+			lines.Add("----");
 
 			foreach (string xmlPath in xmlPaths.OrderBy(SCommon.Comp))
-				Console.WriteLine(xmlPath
-					+ "\t" + GetNodeCount(root, xmlPath, int.MaxValue, Math.Min)
-					+ "\t" + GetNodeCount(root, xmlPath, int.MinValue, Math.Max));
+				lines.Add(xmlPath
+					+ "*" + GetNodeCount(root, xmlPath, int.MaxValue, Math.Min)
+					+ "*" + GetNodeCount(root, xmlPath, int.MinValue, Math.Max));
+
+			Common.ToConsoleTable(lines);
+
+			foreach (string line in lines)
+				Console.WriteLine(line);
 
 			Console.WriteLine();
 		}
