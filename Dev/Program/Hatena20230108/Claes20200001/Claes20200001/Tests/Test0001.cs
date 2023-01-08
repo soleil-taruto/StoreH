@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using Charlotte.Commons;
 using Charlotte.Utilities;
+using System.IO;
 
 namespace Charlotte.Tests
 {
@@ -37,32 +38,51 @@ namespace Charlotte.Tests
 
 		private void PrintXMLTree(string file)
 		{
+			HashSet<string> xmlPaths = new HashSet<string>();
 			XMLNode root = XMLNode.LoadFromFile(file);
-
-			XMLPaths = new HashSet<string>();
-			SearchXMLTree(root, "");
+			root.Search((xmlPath, node) => xmlPaths.Add(xmlPath));
 
 			Console.WriteLine(file);
 
-			foreach (string xmlPath in XMLPaths.OrderBy(SCommon.Comp))
+			foreach (string xmlPath in xmlPaths.OrderBy(SCommon.Comp))
 				Console.WriteLine(xmlPath);
 
 			Console.WriteLine();
-
-			XMLPaths = null;
 		}
 
-		private HashSet<string> XMLPaths;
-
-		private void SearchXMLTree(XMLNode node, string parentXMLPath)
+		public void Test03()
 		{
-			string xmlPath = parentXMLPath + "/" + node.Name;
+			ExportPosList(
+				@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-AdmArea-20221001-0001.xml",
+				@"C:\temp\Area.txt",
+				"Dataset/AdmArea/area/Surface/patches/PolygonPatch/exterior/Ring/curveMember/Curve/segments/LineStringSegment/posList"
+				);
+			ExportPosList(
+				@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-BldL-20221001-0001.xml",
+				@"C:\temp\Building.txt",
+				"Dataset/BldL/loc/Curve/segments/LineStringSegment/posList"
+				);
+			ExportPosList(
+				@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-RailCL-20221001-0001.xml",
+				@"C:\temp\Rail.txt",
+				"Dataset/RailCL/loc/Curve/segments/LineStringSegment/posList"
+				);
+		}
 
-			XMLPaths.Add(xmlPath);
+		private void ExportPosList(string mapFile, string polyFile, string polyXmlPath)
+		{
+			XMLNode root = XMLNode.LoadFromFile(mapFile);
 
-			foreach (XMLNode child in node.Children)
+			using (StreamWriter writer = new StreamWriter(polyFile, false, Encoding.ASCII))
 			{
-				SearchXMLTree(child, xmlPath);
+				root.Search((xmlPath, node) =>
+				{
+					if (xmlPath == polyXmlPath)
+					{
+						writer.WriteLine(node.Value);
+						writer.WriteLine(); // 空行
+					}
+				});
 			}
 		}
 	}
