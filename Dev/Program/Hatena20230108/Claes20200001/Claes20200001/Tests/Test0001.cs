@@ -31,12 +31,12 @@ namespace Charlotte.Tests
 
 		public void Test02()
 		{
-			PrintXMLTree(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-AdmArea-20221001-0001.xml");
-			PrintXMLTree(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-BldL-20221001-0001.xml");
-			PrintXMLTree(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-RailCL-20221001-0001.xml");
+			PrintXMLPaths(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-AdmArea-20221001-0001.xml");
+			PrintXMLPaths(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-BldL-20221001-0001.xml");
+			PrintXMLPaths(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-RailCL-20221001-0001.xml");
 		}
 
-		private void PrintXMLTree(string file)
+		private void PrintXMLPaths(string file)
 		{
 			HashSet<string> xmlPaths = new HashSet<string>();
 			XMLNode root = XMLNode.LoadFromFile(file);
@@ -45,9 +45,30 @@ namespace Charlotte.Tests
 			Console.WriteLine(file);
 
 			foreach (string xmlPath in xmlPaths.OrderBy(SCommon.Comp))
-				Console.WriteLine(xmlPath);
+				Console.WriteLine(xmlPath
+					+ "\t" + GetNodeCount(root, xmlPath, int.MaxValue, Math.Min)
+					+ "\t" + GetNodeCount(root, xmlPath, int.MinValue, Math.Max));
 
 			Console.WriteLine();
+		}
+
+		private int GetNodeCount(XMLNode root, string xmlPath, int count, Func<int, int, int> chooser)
+		{
+			int p = xmlPath.LastIndexOf('/');
+
+			if (p == -1) // ? ルートTag
+				return 1;
+
+			string parentXmlPath = xmlPath.Substring(0, p);
+			string name = xmlPath.Substring(p + 1);
+
+			root.Search((xp, node) =>
+			{
+				if (xp == parentXmlPath)
+					count = chooser(count, node.Children.Where(n => n.Name == name).Count());
+			});
+
+			return count;
 		}
 
 		public void Test03()
