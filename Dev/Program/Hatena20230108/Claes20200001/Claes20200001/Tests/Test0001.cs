@@ -165,7 +165,7 @@ namespace Charlotte.Tests
 			{
 				g.FillRectangle(new SolidBrush(Color.White), 0, 0, w, h);
 
-				Action<string, Color> drawPolyFromFile = (polyFile, color) =>
+				Action<string, Pen> drawPolyFromFile = (polyFile, pen) =>
 				{
 					string[] polyLines = File.ReadAllLines(polyFile, Encoding.ASCII);
 					int polyLineIndex = 0;
@@ -197,16 +197,28 @@ namespace Charlotte.Tests
 								(0.0 <= q[1] && q[1] < w)
 								)
 							{
-								g.DrawLine(new Pen(new SolidBrush(color)), (float)p[1], (float)p[0], (float)q[1], (float)q[0]);
+								g.DrawLine(pen, (float)p[1], (float)p[0], (float)q[1], (float)q[0]);
 							}
 						}
 					}
 				};
 
-				drawPolyFromFile(@"C:\temp\Building.txt", Color.FromArgb(128, 255, 128));
-				drawPolyFromFile(@"C:\temp\Road.txt", Color.FromArgb(128, 128, 128));
-				drawPolyFromFile(@"C:\temp\Rail.txt", Color.FromArgb(0, 0, 0));
-				drawPolyFromFile(@"C:\temp\Area.txt", Color.FromArgb(255, 64, 0));
+				drawPolyFromFile(
+					@"C:\temp\Building.txt",
+					new Pen(new SolidBrush(Color.FromArgb(128, 255, 128)), 1.0F)
+					);
+				drawPolyFromFile(
+					@"C:\temp\Road.txt",
+					new Pen(new SolidBrush(Color.FromArgb(128, 128, 128)), 1.0F)
+					);
+				drawPolyFromFile(
+					@"C:\temp\Rail.txt",
+					new Pen(new SolidBrush(Color.FromArgb(0, 0, 0)), 1.0F)
+					);
+				drawPolyFromFile(
+					@"C:\temp\Area.txt",
+					new Pen(new SolidBrush(Color.FromArgb(64, 255, 0, 0)), 5.0F)
+					);
 			}
 			image.Save(SCommon.NextOutputPath() + ".png");
 		}
