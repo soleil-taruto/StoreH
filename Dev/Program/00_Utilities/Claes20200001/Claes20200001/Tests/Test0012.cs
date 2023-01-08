@@ -44,6 +44,19 @@ namespace Charlotte.Tests
 				if (root.Children[0].Children.Count != 1) throw null;
 				if (root.Children[0].Children[0].Name != "AttributeTest") throw null;
 				if (root.Children[0].Children[0].Value != "AttributeValueTest") throw null;
+
+				List<string> xmlPaths = new List<string>();
+
+				root.Search((node, xmlPath) =>
+				{
+					xmlPaths.Add(xmlPath);
+					return true;
+				});
+
+				if (xmlPaths.Count != 3) throw null;
+				if (xmlPaths[0] != "Root") throw null;
+				if (xmlPaths[1] != "Root/Parent") throw null;
+				if (xmlPaths[2] != "Root/Parent/AttributeTest") throw null;
 			}
 			Console.WriteLine("OK!");
 		}

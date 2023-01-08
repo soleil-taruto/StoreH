@@ -201,5 +201,24 @@ namespace Charlotte.Utilities
 			}
 			return buff.ToString();
 		}
+
+		// ====
+		// ここから便利機能
+		// ====
+
+		public void Search(Func<XMLNode, string, bool> reaction, string xmlPath = "")
+		{
+			xmlPath += this.Name;
+
+			if (reaction(this, xmlPath))
+			{
+				xmlPath += "/";
+
+				foreach (XMLNode child in this.Children)
+				{
+					child.Search(reaction, xmlPath);
+				}
+			}
+		}
 	}
 }
