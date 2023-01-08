@@ -16,6 +16,7 @@ namespace Charlotte.Tests
 			LoadXMLTest(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-AdmArea-20221001-0001.xml");
 			LoadXMLTest(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-BldL-20221001-0001.xml");
 			LoadXMLTest(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-RailCL-20221001-0001.xml");
+			LoadXMLTest(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-RdEdg-20221001-0001.xml");
 		}
 
 		private List<XMLNode> LoadedXMLs = new List<XMLNode>();
@@ -34,6 +35,7 @@ namespace Charlotte.Tests
 			PrintXMLPaths(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-AdmArea-20221001-0001.xml");
 			PrintXMLPaths(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-BldL-20221001-0001.xml");
 			PrintXMLPaths(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-RailCL-20221001-0001.xml");
+			PrintXMLPaths(@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-RdEdg-20221001-0001.xml");
 		}
 
 		private void PrintXMLPaths(string file)
@@ -86,6 +88,11 @@ namespace Charlotte.Tests
 			ExportPosList(
 				@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-RailCL-20221001-0001.xml",
 				@"C:\temp\Rail.txt",
+				"Dataset/RailCL/loc/Curve/segments/LineStringSegment/posList"
+				);
+			ExportPosList(
+				@"C:\temp\FG-GML-533935-ALL-20221001\FG-GML-533935-RdEdg-20221001-0001.xml",
+				@"C:\temp\Road.txt",
 				"Dataset/RailCL/loc/Curve/segments/LineStringSegment/posList"
 				);
 		}
