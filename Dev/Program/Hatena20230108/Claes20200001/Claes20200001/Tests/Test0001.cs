@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using System.IO;
 using Charlotte.Commons;
 using Charlotte.Utilities;
-using System.IO;
 
 namespace Charlotte.Tests
 {
@@ -108,10 +108,22 @@ namespace Charlotte.Tests
 					if (xmlPath == polyXmlPath)
 					{
 						writer.WriteLine(node.Value);
-						writer.WriteLine(); // 空行
+						writer.WriteLine(); // 空行 -- データの区切りとして
 					}
 				});
 			}
+		}
+
+		public void Test04()
+		{
+			double ER = 6367444.5; // 地球の半径(meter)
+			double LAT = 35.6; // 基準とする北緯(degree)
+
+			double latToMeter = ER * 2.0 * Math.PI / 360.0;
+			double lonToMeter = ER * Math.Cos(LAT * Math.PI / 180.0) * 2.0 * Math.PI / 360.0;
+
+			Console.WriteLine("緯度の 1 度を " + latToMeter.ToString("F9") + " メートルとする。");
+			Console.WriteLine("経度の 1 度を " + lonToMeter.ToString("F9") + " メートルとする。");
 		}
 	}
 }
