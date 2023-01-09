@@ -38,6 +38,26 @@ function* <generatorForTask> @@_TitleMain()
 
 	for (; ; )
 	{
+		if (GetMouseDown() == -1)
+		{
+			if (HoveredPicture == P_Lane01Button)
+			{
+				yield* @@_LaneEntered(1);
+			}
+			else if (HoveredPicture == P_Lane02Button)
+			{
+				yield* @@_LaneEntered(2);
+			}
+			else if (HoveredPicture == P_Lane03Button)
+			{
+				yield* @@_LaneEntered(3);
+			}
+			else if (HoveredPicture == P_LaneXXButton)
+			{
+				yield* @@_LaneEntered(4);
+			}
+		}
+
 		// îwåi
 		{
 			var<double> x = 600.0 + Math.sin(ProcFrame / 1333.0) * 300.0;
@@ -70,6 +90,56 @@ function* <generatorForTask> @@_TitleMain()
 
 		yield 1;
 	}
+
+	FreezeInput();
+}
+
+/*
+	laneNo: 1 - 4
+*/
+function* <generatorForTask> @@_LaneEntered(<int> laneNo)
+{
+	FreezeInput();
+
+	var<int[]> LANE_01_PIC_CNTS = [ 2, 3, 5, 7, 11, 13, 17, 19, 23 ];
+	var<int[]> LANE_02_PIC_CNTS = [ 1, 2, 4, 8, 16, 24, 36, 54, 81 ];
+	var<int[]> LANE_03_PIC_CNTS = [ 3, 4, 5, 6, 12, 13, 14, 15, 21 ];
+
+	var<int[][]> picCntsLst;
+
+	switch (laneNo)
+	{
+	case 1:
+		picCntsLst = [ LANE_01_PIC_CNTS, LANE_01_PIC_CNTS, LANE_01_PIC_CNTS ];
+		break;
+
+	case 2:
+		picCntsLst = [ LANE_02_PIC_CNTS, LANE_02_PIC_CNTS, LANE_02_PIC_CNTS ];
+		break;
+
+	case 3:
+		picCntsLst = [ LANE_03_PIC_CNTS, LANE_03_PIC_CNTS, LANE_03_PIC_CNTS ];
+		break;
+
+	case 4:
+		picCntsLst =
+		[
+			ChooseOne([ LANE_01_PIC_CNTS, LANE_02_PIC_CNTS, LANE_03_PIC_CNTS ]),
+			ChooseOne([ LANE_01_PIC_CNTS, LANE_02_PIC_CNTS, LANE_03_PIC_CNTS ]),
+			ChooseOne([ LANE_01_PIC_CNTS, LANE_02_PIC_CNTS, LANE_03_PIC_CNTS ]),
+		];
+		break;
+
+	default:
+		error();
+
+	}
+
+
+
+	error(); // TODO
+
+
 
 	FreezeInput();
 }
