@@ -42,6 +42,32 @@ var<Picture_t> P_Suica   = @@_Load(RESOURCE_tˆê”Ô‚ÌƒtƒŠ[‘fŞH–[__Suica_png);
 var<Picture_t> P_SuicaB  = @@_Load(RESOURCE_tˆê”Ô‚ÌƒtƒŠ[‘fŞH–[__SuicaB_png);
 var<Picture_t> P_SuicaG  = @@_Load(RESOURCE_tˆê”Ô‚ÌƒtƒŠ[‘fŞH–[__SuicaG_png);
 
+/*
+	ƒXƒƒbƒg‚ÌŠG•¿ƒŠƒXƒg
+	’·‚³ == SLOT_PIC_NUM
+	”{—¦‚Ì‚‚¢‡
+*/
+var<Picture_t[]> P_SlotPics =
+[
+	P_Seven2,
+	P_Seven,
+	P_Bar,
+	P_SuicaB,
+	P_Suica,
+	P_BellC,
+	P_Bell,
+	P_CherryG,
+	P_Cherry,
+];
+
+function <void> @(UNQN)_INIT()
+{
+	if (P_SlotPics.length != SLOT_PIC_NUM)
+	{
+		error();
+	}
+}
+
 var<Picture_t> P_DrumMask = @@_Load(RESOURCE_Picture__Game__DrumMask_png);
 
 var<Picture_t> P_Lane01Button = @@_Load(RESOURCE_Picture__Game__Lane01Button_png);

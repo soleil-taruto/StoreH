@@ -25,8 +25,6 @@ function* <generatorForTask> GameMain()
 	for (; ; )
 	{
 		yield* @@_TitleMain();
-		yield* @@_RotateMain();
-		yield* @@_ResultMain();
 	}
 
 	error(); // Ç±ÇÃä÷êîÇÕèIóπÇµÇƒÇÕÇ»ÇÁÇ»Ç¢ÅB
@@ -42,19 +40,19 @@ function* <generatorForTask> @@_TitleMain()
 		{
 			if (HoveredPicture == P_Lane01Button)
 			{
-				yield* @@_LaneEntered(1);
+				yield* @@_SlotMain(1);
 			}
 			else if (HoveredPicture == P_Lane02Button)
 			{
-				yield* @@_LaneEntered(2);
+				yield* @@_SlotMain(2);
 			}
 			else if (HoveredPicture == P_Lane03Button)
 			{
-				yield* @@_LaneEntered(3);
+				yield* @@_SlotMain(3);
 			}
 			else if (HoveredPicture == P_LaneXXButton)
 			{
-				yield* @@_LaneEntered(4);
+				yield* @@_SlotMain(4);
 			}
 		}
 
@@ -97,10 +95,8 @@ function* <generatorForTask> @@_TitleMain()
 /*
 	laneNo: 1 - 4
 */
-function* <generatorForTask> @@_LaneEntered(<int> laneNo)
+function* <generatorForTask> @@_SlotMain(<int> laneNo)
 {
-	FreezeInput();
-
 	var<int[]> LANE_01_PIC_CNTS = [ 2, 3, 5, 7, 11, 13, 17, 19, 23 ];
 	var<int[]> LANE_02_PIC_CNTS = [ 1, 2, 4, 8, 16, 24, 36, 54, 81 ];
 	var<int[]> LANE_03_PIC_CNTS = [ 3, 4, 5, 6, 12, 13, 14, 15, 21 ];
@@ -132,14 +128,40 @@ function* <generatorForTask> @@_LaneEntered(<int> laneNo)
 
 	default:
 		error();
-
 	}
 
+	if (
+		picCntsLst.length != 3 ||
+		picCntsLst[0].length != SLOT_PIC_NUM ||
+		picCntsLst[1].length != SLOT_PIC_NUM ||
+		picCntsLst[2].length != SLOT_PIC_NUM
+		)
+	{
+		error();
+	}
 
+	var<int[][]> drums = [];
+
+	for (var<int> c = 0; c < 3; c++)
+	{
+		var<int[]> drum = [];
+
+		for (var<int> i = 0; i < SLOT_PIC_NUM; i++)
+		{
+			AddElements(drum, Repeat(i, picCntsLst[c][i]));
+		}
+		Shuffle(drum);
+		drums.push(drum);
+	}
+
+	FreezeInput();
+
+	for (; ; )
+	{
 
 	error(); // TODO
 
-
+	}
 
 	FreezeInput();
 }
@@ -150,16 +172,6 @@ function <void> @@_DrawSlotWall()
 }
 
 function <void> @@_DrawSlotFront()
-{
-	error(); // TODO
-}
-
-function* <generatorForTask> @@_RotateMain()
-{
-	error(); // TODO
-}
-
-function* <generatorForTask> @@_ResultMain()
 {
 	error(); // TODO
 }
