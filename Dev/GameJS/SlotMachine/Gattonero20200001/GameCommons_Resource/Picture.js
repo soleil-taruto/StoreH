@@ -21,6 +21,8 @@ var<Picture_t> P_WhiteCircle = @@_Load(RESOURCE_General__WhiteCircle_png);
 var<Picture_t> P_GameStartButton = @@_Load(RESOURCE_Picture__GameStartButton_png);
 
 var<Picture_t> P_Background = @@_Load(RESOURCE_ÇœÇ≠ÇΩÇª__Wall_png);
+var<Picture_t> P_SlotBackground = @@_Load(RESOURCE_Picture__Game__IMG_20160000_003879_B_png);
+//var<Picture_t> P_SlotBackground = @@_Load(RESOURCE_Picture__Game__IMG_20160000_003893_B_png);
 
 var<Picture_t> P_Bar     = @@_Load(RESOURCE_ètàÍî‘ÇÃÉtÉäÅ[ëfçﬁçHñ[__Bar_png);
 var<Picture_t> P_Bell    = @@_Load(RESOURCE_ètàÍî‘ÇÃÉtÉäÅ[ëfçﬁçHñ[__Bell_png);
@@ -68,7 +70,7 @@ function <void> @(UNQN)_INIT()
 	}
 }
 
-var<Picture_t> P_DrumMask = @@_Load(RESOURCE_Picture__Game__DrumMask_png);
+var<Picture_t> P_DrumShadow = @@_Load(RESOURCE_Picture__Game__DrumShadow_png);
 
 var<Picture_t> P_Lane01Button = @@_Load(RESOURCE_Picture__Game__Lane01Button_png);
 var<Picture_t> P_Lane02Button = @@_Load(RESOURCE_Picture__Game__Lane02Button_png);

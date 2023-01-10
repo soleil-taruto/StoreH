@@ -489,7 +489,7 @@ namespace Charlotte.Utilities
 			}
 		}
 
-		public void FilterRect(Func<I4Color, int, int, I4Color> filter, I4Rect rect)
+		public void FilterRect(I4Rect rect, Func<I4Color, int, int, I4Color> filter)
 		{
 			for (int x = rect.L; x < rect.R; x++)
 			{
@@ -502,7 +502,7 @@ namespace Charlotte.Utilities
 
 		public void FilterAllDot(Func<I4Color, int, int, I4Color> filter)
 		{
-			this.FilterRect(filter, new I4Rect(0, 0, this.W, this.H));
+			this.FilterRect(new I4Rect(0, 0, this.W, this.H), filter);
 		}
 
 		public Canvas GetSubImage(I4Rect rect)

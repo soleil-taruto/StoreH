@@ -154,24 +154,52 @@ function* <generatorForTask> @@_SlotMain(<int> laneNo)
 		drums.push(drum);
 	}
 
+	@@_Drums = drums;
+	@@_DrumRots = [ 0.0, 0.0, 0.0 ];
+
 	FreezeInput();
 
 	for (; ; )
 	{
+		@@_DrawSlot();
 
-	error(); // TODO
 
+
+		yield 1;
 	}
 
 	FreezeInput();
 }
 
-function <void> @@_DrawSlotWall()
-{
-	error(); // TODO
-}
+/*
+	回転ドラム
+	長さ：[3][絵柄の数] -- 各ドラムで絵柄の数が違うこともある。
+	値：絵柄のindex (0 ～ (SLOT_PIC_NUM - 1))
+*/
+var<int[][]> @@_Drums;
 
-function <void> @@_DrawSlotFront()
+/*
+	回転ドラムの位置
+	長さ：[3]
+	値：ある絵柄から次の絵柄までを 1.0 とする。プラス方向で絵柄は上へ移動
+*/
+var<double[]> @@_DrumRots;
+
+function <void> @@_DrawSlot()
 {
-	error(); // TODO
+	SetColor("#ffffff");
+	PrintRect(0, 0, Screen_W, Screen_H);
+
+	for (var<int> c = 0; c < 3; c++)
+	for (var<int> d = 0; d < 3; d++) // test test test
+	{
+		Draw(P_SlotPics[@@_Drums[c][d]], 500 + c * 250, 400 + d * 200, 1.0, 0.0, 1.0);
+	}
+
+	for (var<int> c = 0; c < 3; c++)
+	{
+		Draw(P_DrumShadow, 500 + c * 250, 600, 1.0, 0.0, 1.0);
+	}
+
+	Draw(P_SlotBackground, Screen_W / 2, Screen_H / 2, 1.0, 0.0, 1.0);
 }
