@@ -23,7 +23,8 @@ namespace Charlotte.Tests
 				double alphaRate = Math.Sqrt(1.0 - yRate * yRate);
 				int a = SCommon.ToInt(255 - 255 * alphaRate);
 
-				a /= 3;
+				a /= 2;
+				//a /= 3;
 
 				Console.WriteLine(y + " ==> " + a);
 
