@@ -32,12 +32,22 @@ function <int> GetAddGameCreditRemSec()
 	return ToFix(GetAddGameCreditRemFrame() / 60);
 }
 
-function <int> GetAddGameCreditRem_MM()
+function <int> GetAddGameCreditRem_IntMM()
 {
 	return ToFix(GetAddGameCreditRemSec() / 60);
 }
 
-function <int> GetAddGameCreditRem_SS()
+function <int> GetAddGameCreditRem_IntSS()
 {
 	return GetAddGameCreditRemSec() % 60;
+}
+
+function <string> GetAddGameCreditRem_MM()
+{
+	return ZPad(GetAddGameCreditRem_IntMM(), 2, "0");
+}
+
+function <string> GetAddGameCreditRem_SS()
+{
+	return ZPad(GetAddGameCreditRem_IntSS(), 2, "0");
 }

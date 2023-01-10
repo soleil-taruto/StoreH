@@ -4,8 +4,8 @@
 
 /*
 	色をセットする。
-	color: ex. "#ff0000", "red"
-		アルファ値あり -> "#ff000080"
+	color: ex. "#ff0044", "red"
+		アルファ値あり -> "#ff004480" -- R G B A の順
 */
 function <void> SetColor(<string> color)
 {

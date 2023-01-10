@@ -8,7 +8,7 @@ function* <generatorForTask> Test01()
 
 	console.log(arr);
 
-	var<string> str = JoinString(arr);
+	var<string> str = JoinString(arr, ":");
 
 	console.log(str);
 }

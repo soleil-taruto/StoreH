@@ -14,7 +14,7 @@ function* <generatorForTask> Test01()
 
 		Shuffle(a);
 
-		var s = JoinString(a);
+		var s = JoinString(a, "");
 
 		if (m[s] == undefined)
 		{

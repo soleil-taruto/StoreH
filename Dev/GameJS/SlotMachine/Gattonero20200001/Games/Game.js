@@ -156,6 +156,7 @@ function* <generatorForTask> @@_SlotMain(<int> laneNo)
 
 	@@_Drums = drums;
 	@@_DrumRots = [ 0.0, 0.0, 0.0 ];
+	@@_Bets = [ 0, 0, 0, 0, 0];
 
 	FreezeInput();
 
@@ -163,7 +164,9 @@ function* <generatorForTask> @@_SlotMain(<int> laneNo)
 	{
 		@@_DrawSlot();
 
-
+		//
+		//
+		//
 
 		yield 1;
 	}
@@ -181,12 +184,34 @@ var<int[][]> @@_Drums;
 /*
 	回転ドラムの位置
 	長さ：[3]
-	値：ある絵柄から次の絵柄までを 1.0 とする。プラス方向で絵柄は上へ移動
+	値：ある絵柄から次の絵柄までを 1.0 とする。プラス方向で絵柄は上へ移動 , マイナス方向で絵柄は下へ移動
 */
 var<double[]> @@_DrumRots;
 
+/*
+	投入したコイン数
+	長さ：[5] -- 斜め(左上から右下) , 上段 , 中段 , 下段 , 斜め(左下から右上)
+	値：0 ～
+*/
+var<int[]> @@_Bets;
+
 function <void> @@_DrawSlot()
 {
+	if (108 < Math.abs(@@_Credit - @@_CreditDisp))
+	{
+		@@_CreditDisp = ToInt(Approach(@@_CreditDisp, @@_Credit, 0.99));
+	}
+	else if (@@_Credit < @@_CreditDisp)
+	{
+		@@_CreditDisp--;
+	}
+	else if (@@_Credit > @@_CreditDisp)
+	{
+		@@_CreditDisp++;
+	}
+
+	// ----
+
 	SetColor("#ffffff");
 	PrintRect(0, 0, Screen_W, Screen_H);
 
@@ -202,4 +227,48 @@ function <void> @@_DrawSlot()
 	}
 
 	Draw(P_SlotBackground, Screen_W / 2, Screen_H / 2, 1.0, 0.0, 1.0);
+
+	SetColor("#ff8000");
+	SetFSize(60);
+	SetPrint(30, 80, 0);
+	PrintLine("<RESET>");
+
+	SetColor("#ff8000");
+	SetFSize(60);
+	SetPrint(930, 80, 0);
+	PrintLine("<EXIT>");
+
+	SetColor("#ff8000");
+	SetFSize(60);
+	SetPrint(30, 1160, 0);
+	PrintLine("<START>");
+
+	for (var<int> c = 0; c < 5; c++)
+	{
+		SetColor("#ffff00");
+		SetFSize(90);
+		SetPrint(80, 220 + c * 200, 0);
+		PrintLine("[" + ZPad(@@_Bets[c], 2, "0") + "]");
+	}
+
+	for (var<int> c = 0; c < 3; c++)
+	{
+		SetColor("#00ffffa0");
+		PrintCircle(500 + c * 250, 1050, 100);
+
+		SetColor("#004040");
+		SetFSize(50);
+		SetPrint(435 + c * 250, 1070, 0);
+		PrintLine("STOP");
+	}
+
+	SetColor("#ffffff");
+	SetFSize(60);
+	SetPrint(400, 180, 0);
+	PrintLine("CREDIT : " + ToThousandComma(@@_CreditDisp));
+
+	SetColor("#a0a0a0");
+	SetFSize(32);
+	SetPrint(400, 230, 0);
+	PrintLine("CREDIT 付与まで、あと " + GetAddGameCreditRem_MM() + ":" + GetAddGameCreditRem_SS());
 }

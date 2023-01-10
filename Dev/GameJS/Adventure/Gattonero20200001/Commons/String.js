@@ -124,7 +124,7 @@ function <char[]> ToCharArray(<string> str)
 	return [ ... str ];
 }
 
-function <string> JoinString(<T[]> arr)
+function <string> JoinString(<T[]> arr, <string> separator)
 {
-	return arr.map(v => "" + v).join("");
+	return arr.map(v => "" + v).join(separator);
 }
