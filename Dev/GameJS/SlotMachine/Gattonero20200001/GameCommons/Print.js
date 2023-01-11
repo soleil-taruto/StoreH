@@ -42,14 +42,14 @@ function <void> PrintRectRot(<double> x, <double> y, <double> w, <double> h, <do
 	var<double> t = y - h / 2;
 
 	Context.translate(x, y);
-	Context.rotate(r);
+	Context.rotate(rot);
 	Context.translate(-x, -y);
 
 	Context.fillRect(l, t, w, h);
 
 	// restore
 	Context.translate(x, y);
-	Context.rotate(-r);
+	Context.rotate(-rot);
 	Context.translate(-x, -y);
 }
 

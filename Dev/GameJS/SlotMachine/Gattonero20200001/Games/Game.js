@@ -58,7 +58,7 @@ function* <generatorForTask> @@_TitleMain()
 
 		// îwåi
 		{
-			var<double> x = 600.0 + Math.sin(ProcFrame / 1333.0) * 300.0;
+			var<double> x = 600.0 + Math.sin(ProcFrame / 777.0) * 300.0;
 			var<double> y = 600.0;
 
 			Draw(P_Background, x, y, 1.0, 0.0, 1.0);
@@ -86,6 +86,11 @@ function* <generatorForTask> @@_TitleMain()
 			Draw(P_LaneXXButton, x, y, 1.0, 0.0, 1.0);
 		}
 
+		SetColor("#ffffffa0");
+		SetFSize(32);
+		SetPrint(10, Screen_H - 10, 0);
+		PrintLine("Credit : " + ToThousandComma(@@_CreditDisp) + " / ÉNÉåÉWÉbÉgïtó^Ç‹Ç≈ÅAÇ†Ç∆ " + GetAddGameCreditRem_MM() + ":" + GetAddGameCreditRem_SS());
+
 		yield 1;
 	}
 
@@ -97,6 +102,8 @@ function* <generatorForTask> @@_TitleMain()
 */
 function* <generatorForTask> @@_SlotMain(<int> laneNo)
 {
+	@@_LaneNo = laneNo;
+
 	var<int[]> LANE_01_PIC_CNTS = [ 2, 3, 5, 7, 11, 13, 17, 19, 23 ];
 	var<int[]> LANE_02_PIC_CNTS = [ 1, 2, 4, 8, 16, 24, 36, 54, 81 ];
 	var<int[]> LANE_03_PIC_CNTS = [ 3, 4, 5, 6, 12, 13, 14, 15, 21 ];
@@ -156,23 +163,72 @@ function* <generatorForTask> @@_SlotMain(<int> laneNo)
 
 	@@_Drums = drums;
 	@@_DrumRots = [ 0.0, 0.0, 0.0 ];
-	@@_Bets = [ 0, 0, 0, 0, 0];
+	@@_Bets = [ 0, 0, 0, 0, 0 ];
 
 	FreezeInput();
 
+gameLoop:
 	for (; ; )
 	{
-		@@_DrawSlot();
+		for (; ; ) // Bet
+		{
+			{
+				var<D2Point_t> mousePt = CreateD2Point(GetMouseX(), GetMouseY());
+				var<int> mouseDown = GetMouseDown();
 
-		//
-		//
-		//
+				for (var<int> c = 0; c < 5; c++)
+				{
+					if (!IsOut(mousePt, CreateD4Rect_LTRB(
+						100,
+						150 + c * 200,
+						260,
+						230 + c * 200), 0.0))
+					{
+						if (mouseDown == 1 || (60 <= mouseDown && mouseDown % 10 == 0))
+						{
+							@@_Bets[c] = Math.min(@@_Bets[c] + 1, 99);
+						}
+					}
+				}
+
+				if (mouseDown == -1)
+				{
+					if (!IsOut(mousePt, CreateD4Rect_LTRB(0, 0, 280, 80), 0.0)) // Press RESET
+					{
+						for (var<int> c = 0; c < 5; c++)
+						{
+							@@_Bets[c] = 0;
+						}
+					}
+
+					if (!IsOut(mousePt, CreateD4Rect_LTRB(970, 0, Screen_W, 80), 0.0)) // Press EXIT
+					{
+						break gameLoop;
+					}
+
+					if (!IsOut(mousePt, CreateD4Rect_LTRB(0, 0, 280, 80), 0.0)) // Press START
+					{
+						// TODO
+					}
+				}
+			}
+
+			@@_DrawSlot();
+
+			yield 1;
+		}
 
 		yield 1;
 	}
 
 	FreezeInput();
 }
+
+/*
+	ÉåÅ[Éìî‘çÜ
+	ílÅF1 Å` 4
+*/
+var<int> @@_LaneNo;
 
 /*
 	âÒì]ÉhÉâÉÄ
@@ -262,6 +318,11 @@ function <void> @@_DrawSlot()
 		PrintLine("STOP");
 	}
 
+	SetColor("#80ffff");
+	SetFSize(32);
+	SetPrint(400, 32, 0);
+	PrintLine("LANE NO." + @@_LaneNo);
+
 	SetColor("#ffffff");
 	SetFSize(60);
 	SetPrint(400, 180, 0);
@@ -271,4 +332,41 @@ function <void> @@_DrawSlot()
 	SetFSize(32);
 	SetPrint(400, 230, 0);
 	PrintLine("CREDIT ïtó^Ç‹Ç≈ÅAÇ†Ç∆ " + GetAddGameCreditRem_MM() + ":" + GetAddGameCreditRem_SS());
+
+	if (DEBUG)
+	{
+		SetColor("#ffffff");
+		SetFSize(16);
+		SetPrint(0, 16, 0);
+		PrintLine(GetMouseX() + " " + GetMouseY());
+	}
+
+	@@_DrawBettedBar(0, 750, 600, Math.PI * 0.23);
+	@@_DrawBettedBar(1, 750, 400, 0.0);
+	@@_DrawBettedBar(2, 750, 600, 0.0);
+	@@_DrawBettedBar(3, 750, 800, 0.0);
+	@@_DrawBettedBar(4, 750, 600, Math.PI * -0.23);
+}
+
+function <void> @@_DrawBettedBar(<int> betIdx, x, y, rot)
+{
+	var<int> bet = @@_Bets[betIdx];
+
+	if (bet == 0)
+	{
+		return;
+	}
+
+	var<boolean> nanameFlag = rot != 0.0;
+
+	var<double> w = 850;
+	var<double> h = 20;
+
+	if (nanameFlag)
+	{
+		w *= 1.3;
+	}
+
+	SetColor("#ffff0050");
+	PrintRectRot(x, y, w, h, rot);
 }
