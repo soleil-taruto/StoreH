@@ -300,6 +300,10 @@ gameLoop:
 			yield 1;
 		}
 
+		var<int> prizeCredit = @@_GetPrizeCredit();
+
+		@@_Credit += prizeCredit;
+
 		@@_LastBets = @@_Bets;
 		@@_Bets = [ 0, 0, 0, 0, 0 ];
 
@@ -511,4 +515,9 @@ function <void> @@_DrawBettedBar(<int> betIdx, x, y, rot)
 function <boolean> @@_IsBetted()
 {
 	return @@_Bets.some(v => v != 0);
+}
+
+function <int> @@_GetPrizeCredit()
+{
+	return 0; // TODO
 }
