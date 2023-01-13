@@ -4,7 +4,7 @@
 
 var<int> SLOT_PIC_NUM = 9;
 
-var<int> SLOT_PIC_RATES =
+var<int[]> SLOT_PIC_PRIZES =
 [
 	10000,
 	3000,

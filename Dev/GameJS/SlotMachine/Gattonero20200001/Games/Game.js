@@ -278,7 +278,7 @@ gameLoop:
 				{
 					if (Math.abs(@@_DrumSpeeds[c]) < DRUM_MIN_SPEED)
 					{
-						var<double> nearestPos = ToInt(@@_DrumRots[c]);
+						var<int> nearestPos = ToInt(@@_DrumRots[c]);
 
 						if (Math.abs(@@_DrumRots[c] - nearestPos) < DRUM_MIN_SPEED)
 						{
@@ -519,5 +519,50 @@ function <boolean> @@_IsBetted()
 
 function <int> @@_GetPrizeCredit()
 {
-	return 0; // TODO
+	var<int> ret = 0;
+
+	for (var<int> c = 0; c < 5; c++)
+	{
+		ret += @@_Bets[c] * @@_GetPrize(c);
+	}
+	return ret;
+}
+
+function <int> @@_GetPrize(<int> betIdx)
+{
+	switch (betIdx)
+	{
+	case 0: return @@_GetPrize_YPosLst([ 0, 1, 2 ]);
+	case 1: return @@_GetPrize_YPosLst([ 0, 0, 0 ]);
+	case 2: return @@_GetPrize_YPosLst([ 1, 1, 1 ]);
+	case 3: return @@_GetPrize_YPosLst([ 2, 2, 2 ]);
+	case 4: return @@_GetPrize_YPosLst([ 2, 1, 0 ]);
+
+	default:
+		error();
+	}
+}
+
+function <int> @@_GetPrize_YPosLst(<int[]> yPosLst)
+{
+	var<int[]> picIdxs = [];
+
+	for (var<int> c = 0; c < 3; c++)
+	{
+		var<int> nearestPos = ToInt(@@_DrumRots[c]);
+		var<int> i = (yPosLst[c] - nearestPos) % @@_Drums[c].length;
+		var<int> picIdx = @@_Drums[c][i];
+
+		picIdxs.push(picIdx);
+	}
+
+	if (
+		picIdxs[0] == picIdxs[1] &&
+		picIdxs[0] == picIdxs[2]
+		)
+	{
+		return SLOT_PIC_PRIZES[picIdxs[0]];
+	}
+
+	return 0;
 }
