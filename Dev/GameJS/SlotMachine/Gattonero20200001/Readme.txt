@@ -1,11 +1,11 @@
 ===========
-SevenBridge
+SlotMachine
 ===========
 
 
-セブンブリッジ・テスト実装
+スロットマシン・テスト実装
 
 
 ビルド済みページ：
-http://ornithopter.ccsp.mydns.jp/HPStore/GameJS/SevenBridge
+http://ornithopter.ccsp.mydns.jp/HPStore/GameJS/SlotMachine
 

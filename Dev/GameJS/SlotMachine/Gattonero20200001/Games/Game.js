@@ -104,8 +104,8 @@ function* <generatorForTask> @@_SlotMain(<int> laneNo)
 {
 	@@_LaneNo = laneNo;
 
-	var<int[]> LANE_01_PIC_CNTS = [ 2, 3, 5, 7, 11, 13, 17, 19, 23 ];
-	var<int[]> LANE_02_PIC_CNTS = [ 1, 2, 4, 8, 16, 24, 36, 54, 81 ];
+	var<int[]> LANE_01_PIC_CNTS = [ 1, 2, 4, 8, 16, 24, 36, 54, 81 ];
+	var<int[]> LANE_02_PIC_CNTS = [ 2, 3, 5, 7, 11, 13, 17, 19, 23 ];
 	var<int[]> LANE_03_PIC_CNTS = [ 3, 4, 5, 6, 12, 13, 14, 15, 21 ];
 
 	var<int[][]> picCntsLst;
@@ -206,7 +206,7 @@ gameLoop:
 						break gameLoop;
 					}
 
-					if (!IsOut(mousePt, CreateD4Rect_LTRB(0, 0, 280, 80), 0.0)) // Press START
+					if (!IsOut(mousePt, CreateD4Rect_LTRB(0, 0, 280, 80), 0.0)) // Press AutoBet / START
 					{
 						// TODO
 					}
@@ -297,7 +297,7 @@ function <void> @@_DrawSlot()
 	SetColor("#ff8000");
 	SetFSize(60);
 	SetPrint(30, 1160, 0);
-	PrintLine("<START>");
+	PrintLine(@@_IsBetted() ? "<START>" : "<AutoBet>");
 
 	for (var<int> c = 0; c < 5; c++)
 	{
@@ -369,4 +369,16 @@ function <void> @@_DrawBettedBar(<int> betIdx, x, y, rot)
 
 	SetColor("#ffff0050");
 	PrintRectRot(x, y, w, h, rot);
+}
+
+function <boolean> @@_IsBetted()
+{
+	for (var<int> i = 0; i < 5; i++)
+	{
+		if (@@_Bets[i] != 0)
+		{
+			return true;
+		}
+	}
+	return false;
 }
