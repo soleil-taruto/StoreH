@@ -104,7 +104,7 @@ function* <generatorForTask> @@_SlotMain(<int> laneNo)
 {
 	@@_LaneNo = laneNo;
 
-	var<int[]> LANE_01_PIC_CNTS = [ 1, 2, 4, 8, 16, 24, 36, 54, 81 ];
+	var<int[]> LANE_01_PIC_CNTS = [ 1, 2, 4, 8, 12, 14, 16, 18, 20 ];
 	var<int[]> LANE_02_PIC_CNTS = [ 2, 3, 5, 7, 11, 13, 17, 19, 23 ];
 	var<int[]> LANE_03_PIC_CNTS = [ 3, 4, 5, 6, 12, 13, 14, 15, 21 ];
 
@@ -163,52 +163,69 @@ function* <generatorForTask> @@_SlotMain(<int> laneNo)
 
 	@@_Drums = drums;
 	@@_DrumRots = [ 0.0, 0.0, 0.0 ];
+	@@_DrumSpeeds = [ 0.0, 0.0, 0.0 ];
+	@@_DrumStoppables = [ false, false, false ];
 	@@_Bets = [ 0, 0, 0, 0, 0 ];
+	@@_LastBets = [ 1, 1, 1, 1, 1 ];
 
 	FreezeInput();
 
 gameLoop:
 	for (; ; )
 	{
+	betLoop:
 		for (; ; ) // Bet
 		{
-			{
-				var<D2Point_t> mousePt = CreateD2Point(GetMouseX(), GetMouseY());
-				var<int> mouseDown = GetMouseDown();
+			var<D2Point_t> mousePt = CreateD2Point(GetMouseX(), GetMouseY());
+			var<int> mouseDown = GetMouseDown();
 
-				for (var<int> c = 0; c < 5; c++)
+			for (var<int> c = 0; c < 5; c++)
+			{
+				if (!IsOut(mousePt, CreateD4Rect_LTRB(
+					100,
+					150 + c * 200,
+					260,
+					230 + c * 200), 0.0))
 				{
-					if (!IsOut(mousePt, CreateD4Rect_LTRB(
-						100,
-						150 + c * 200,
-						260,
-						230 + c * 200), 0.0))
+					if (1 <= @@_Credit && (mouseDown == 1 || (60 <= mouseDown && mouseDown % 10 == 0)))
 					{
-						if (mouseDown == 1 || (60 <= mouseDown && mouseDown % 10 == 0))
-						{
-							@@_Bets[c] = Math.min(@@_Bets[c] + 1, 99);
-						}
+						@@_Bets[c] = Math.min(@@_Bets[c] + 1, 99);
+						@@_Credit--;
+					}
+				}
+			}
+
+			if (mouseDown == -1)
+			{
+				if (!IsOut(mousePt, CreateD4Rect_LTRB(0, 0, 280, 80), 0.0)) // Press RESET
+				{
+					for (var<int> c = 0; c < 5; c++)
+					{
+						@@_Bets[c] = 0;
 					}
 				}
 
-				if (mouseDown == -1)
+				if (!IsOut(mousePt, CreateD4Rect_LTRB(970, 0, Screen_W, 80), 0.0)) // Press EXIT
 				{
-					if (!IsOut(mousePt, CreateD4Rect_LTRB(0, 0, 280, 80), 0.0)) // Press RESET
+					break gameLoop;
+				}
+
+				if (!IsOut(mousePt, CreateD4Rect_LTRB(0, Screen_H - 80, 280, Screen_H), 0.0)) // Press AutoBet / START
+				{
+					if (@@_IsBetted())
 					{
-						for (var<int> c = 0; c < 5; c++)
+						break betLoop;
+					}
+					else
+					{
+						for (var<int> i = 0; i < 5; i++)
 						{
-							@@_Bets[c] = 0;
+							while (1 <= @@_Credit && @@_Bets[i] < @@_LastBets[i])
+							{
+								@@_Bets[i]++;
+								@@_Credit--;
+							}
 						}
-					}
-
-					if (!IsOut(mousePt, CreateD4Rect_LTRB(970, 0, Screen_W, 80), 0.0)) // Press EXIT
-					{
-						break gameLoop;
-					}
-
-					if (!IsOut(mousePt, CreateD4Rect_LTRB(0, 0, 280, 80), 0.0)) // Press AutoBet / START
-					{
-						// TODO
 					}
 				}
 			}
@@ -218,7 +235,85 @@ gameLoop:
 			yield 1;
 		}
 
-		yield 1;
+		@@_DrumStoppables = [ true, true, true ];
+
+	rotateDrumsLoop:
+		for (; ; )
+		{
+			if (
+				!@@_DrumSpeeds.some(v => MICRO < Math.abs(v)) &&
+				!@@_DrumStoppables.some(v => v)
+				)
+			{
+				break rotateDrumsLoop;
+			}
+
+			// 加速用定数
+			var<double> DRUM_MAX_SPEED = -0.5;
+			var<double[]> DRUM_ACCELE_RATES = [ 0.94, 0.95, 0.96 ];
+
+			// 減速用定数
+			var<double> DRUM_MIN_SPEED = 0.015;
+			var<double> DRUM_DECELE_RATE = 0.965;
+
+			for (var<int> c = 0; c < 3; c++)
+			{
+				if (GetMouseDown() == 1) // ? ストップボタン押下 -- マウスを押した瞬間で判定する。
+				{
+					var<double> stopBtn_x = 500 + c * 250;
+					var<double> stopBtn_y = 1050;
+					var<double> stopBtn_r = 100;
+
+					if (GetDistanceLessThan(GetMouseX() - stopBtn_x, GetMouseY() - stopBtn_y, stopBtn_r))
+					{
+						@@_DrumStoppables[c] = false;
+					}
+				}
+
+				if (@@_DrumStoppables[c]) // ? 停止前 -> 加速
+				{
+					@@_DrumSpeeds[c] = Approach(@@_DrumSpeeds[c], DRUM_MAX_SPEED, DRUM_ACCELE_RATES[c]);
+				}
+				else // ? 停止後 -> 減速
+				{
+					if (Math.abs(@@_DrumSpeeds[c]) < DRUM_MIN_SPEED)
+					{
+						var<double> nearestPos = ToInt(@@_DrumRots[c]);
+
+						if (Math.abs(@@_DrumRots[c] - nearestPos) < DRUM_MIN_SPEED)
+						{
+							@@_DrumRots[c] = nearestPos;
+							@@_DrumSpeeds[c] = 0.0;
+						}
+					}
+					else
+					{
+						@@_DrumSpeeds[c] = Approach(@@_DrumSpeeds[c], 0.0, DRUM_DECELE_RATE);
+					}
+				}
+
+				@@_DrumRots[c] += @@_DrumSpeeds[c];
+			}
+
+			@@_DrawSlot();
+
+			yield 1;
+		}
+
+		@@_LastBets = @@_Bets;
+		@@_Bets = [ 0, 0, 0, 0, 0 ];
+
+	resultLoop:
+		for (; ; )
+		{
+			break;
+
+			// TODO
+
+			@@_DrawSlot();
+
+			yield 1;
+		}
 	}
 
 	FreezeInput();
@@ -245,11 +340,31 @@ var<int[][]> @@_Drums;
 var<double[]> @@_DrumRots;
 
 /*
+	回転ドラムの速度
+	長さ：[3]
+	値：フレーム毎に @@_DrumRots に加算する値
+*/
+var<double[]> @@_DrumSpeeds;
+
+/*
+	ドラムを停止できるか
+	長さ：[3]
+*/
+var<boolean[]> @@_DrumStoppables;
+
+/*
 	投入したコイン数
 	長さ：[5] -- 斜め(左上から右下) , 上段 , 中段 , 下段 , 斜め(左下から右上)
 	値：0 ～
 */
 var<int[]> @@_Bets;
+
+/*
+	前回投入したコイン数
+	長さ：@@_Bets と同じ
+	値：0 ～
+*/
+var<int[]> @@_LastBets;
 
 function <void> @@_DrawSlot()
 {
@@ -272,9 +387,31 @@ function <void> @@_DrawSlot()
 	PrintRect(0, 0, Screen_W, Screen_H);
 
 	for (var<int> c = 0; c < 3; c++)
-	for (var<int> d = 0; d < 3; d++) // test test test
 	{
-		Draw(P_SlotPics[@@_Drums[c][d]], 500 + c * 250, 400 + d * 200, 1.0, 0.0, 1.0);
+		// 回転位置正規化
+		{
+			while (@@_DrumRots[c] < -@@_Drums[c].length)
+			{
+				@@_DrumRots[c] += @@_Drums[c].length;
+			}
+			while (0.0 < @@_DrumRots[c])
+			{
+				@@_DrumRots[c] -= @@_Drums[c].length;
+			}
+		}
+
+		for (var<int> i = 0; i < @@_Drums[c].length + 3; i++)
+		{
+			var<double> rot = @@_DrumRots[c] + i;
+
+			if (-1.0 < rot && rot < 3.0)
+			{
+				var<double> x = 500.0 + c   * 250.0;
+				var<double> y = 400.0 + rot * 200.0;
+
+				Draw(P_SlotPics[@@_Drums[c][i % @@_Drums[c].length]], x, y, 1.0, 0.0, 1.0);
+			}
+		}
 	}
 
 	for (var<int> c = 0; c < 3; c++)
@@ -373,12 +510,5 @@ function <void> @@_DrawBettedBar(<int> betIdx, x, y, rot)
 
 function <boolean> @@_IsBetted()
 {
-	for (var<int> i = 0; i < 5; i++)
-	{
-		if (@@_Bets[i] != 0)
-		{
-			return true;
-		}
-	}
-	return false;
+	return @@_Bets.some(v => v != 0);
 }
