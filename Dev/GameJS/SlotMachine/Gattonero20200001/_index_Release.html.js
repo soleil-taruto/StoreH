@@ -68,6 +68,16 @@ none<br/>
 
 <br/>
 
+背景：<br/>
+　フリー素材ぱくたそ<br/>
+　https://www.pakutaso.com/<br/>
+
+<br/>
+
+スロットの絵柄：<br/>
+　春一番のフリー素材工房<br/>
+　https://commons.nicovideo.jp/material/nc226455<br/>
+
 <!--
 
 効果音：<br/>
