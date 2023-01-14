@@ -11,17 +11,11 @@ CopyDevGameGameJSToStoreP.exe DEST-ALPHA
 ----
 é¿çsó·
 
-CopyDevGameGameJSToStoreP.exe P
+CopyDevGameGameJSToStoreP.exe A
 
-	-- 2022.10.12 à»ëO
+CopyDevGameGameJSToStoreP.exe B
 
 CopyDevGameGameJSToStoreP.exe C
-
-	-- 2022.10.12 à»ç~
-
-CopyDevGameGameJSToStoreP.exe E
-
-	-- 2022.11.29 à»ç~
 
 
 ----
