@@ -71,10 +71,12 @@
     <Compile Include="Tests\Test0004.cs" />
     <Compile Include="Tests\Test0005.cs" />
     <Compile Include="Tests\Test0006.cs" />
+    <Compile Include="Tests\Test0007.cs" />
     <Compile Include="Utilities\Canvas.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\Test0001.cs" />
+    <Compile Include="Utilities\CsvFileWriter.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
