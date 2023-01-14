@@ -201,6 +201,7 @@ gameLoop:
 				{
 					for (var<int> c = 0; c < 5; c++)
 					{
+						@@_Credit += @@_Bets[c];
 						@@_Bets[c] = 0;
 					}
 				}
