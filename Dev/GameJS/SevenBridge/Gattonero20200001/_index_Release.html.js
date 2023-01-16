@@ -53,7 +53,7 @@ window.onload = function()
 <br/>
 
 テスト用機能：<br/>
-none<br/>
+BETによってシャッフル回数が変化する。<br/>
 
 <br/>
 <br/>

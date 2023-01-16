@@ -208,7 +208,7 @@ function* <generatorForTask> @@_BattleMain()
 	{
 		RCards.push(CreateActor_Trump(RCards_X, RCards_Y, suit, number, true));
 	}
-	Shuffle(RCards);
+	@@_ShuffleCards(RCards);
 
 	for (var<int> c = 0; c < 7; c++)
 	{
@@ -1210,7 +1210,7 @@ function* <generatorForTask> @@_CheckRemYama()
 			SetTrumpPos_Direct(card, RCards_X, RCards_Y);
 			SetTrumpReversed_Direct(card, true);
 		}
-		Shuffle(RCards);
+		@@_ShuffleCards(RCards);
 
 		yield* @@_WaitToTouch("捨てたカードを山に戻しました！");
 	}
@@ -1237,4 +1237,18 @@ function <void> @@_SM_EACH()
 function <void> @@_SetMessage(<string> message)
 {
 	@@_SM_Message = message;
+}
+
+function <void> @@_ShuffleCards(<T[]> cards)
+{
+	var<int> count = ToInt(@@_Bet / 10);
+
+	count = ToRange(count, 1, 10);
+
+	console.log("ShuffleCards_count: " + count); // test test test
+
+	for (var<int> c = 0; c < count; c++)
+	{
+		Shuffle(cards);
+	}
 }
