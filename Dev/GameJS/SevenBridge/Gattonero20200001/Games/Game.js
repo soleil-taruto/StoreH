@@ -1242,13 +1242,13 @@ function <void> @@_SetMessage(<string> message)
 function <void> @@_ShuffleCards(<T[]> cards)
 {
 	var<int> count = ToInt(@@_Bet / 10);
-
 	count = ToRange(count, 1, 10);
-
-	console.log("ShuffleCards_count: " + count); // test test test
+	LOGPOS();
 
 	for (var<int> c = 0; c < count; c++)
 	{
 		Shuffle(cards);
+		LOGPOS();
 	}
+	LOGPOS();
 }
