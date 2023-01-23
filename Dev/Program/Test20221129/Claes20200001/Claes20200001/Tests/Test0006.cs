@@ -68,5 +68,44 @@ namespace Charlotte.Tests
 		{
 			return str == null ? "(null)" : str;
 		}
+
+		public void Test02()
+		{
+			Test02_a("ABCDE.txt"); // -> "ABCDE" & ".txt"
+			Test02_a("ABCDE"); // -> "ABCDE" & ""
+			Test02_a(".ABCDE"); // -> "" & ".ABCDE"
+			Test02_a("."); // -> "" & ""
+			Test02_a(""); // -> "" & ""
+			Test02_a(null); // -> null & null
+
+			Test02_a("C:\\xxx\\ABCDE.txt"); // -> "ABCDE" & ".txt"
+			Test02_a("C:\\xxx\\ABCDE"); // -> "ABCDE" & ""
+			Test02_a("C:\\xxx\\.ABCDE"); // -> "" & ".ABCDE"
+			Test02_a("C:\\xxx\\."); // -> "" & ""
+			Test02_a("C:\\xxx\\"); // -> "" & ""
+
+			Test02_a("...."); // -> "..." & ""
+			Test02_a("..."); // -> ".." & ""
+			Test02_a(".."); // -> "." & ""
+
+			Test02_a("C:\\xxx\\...."); // -> "..." & ""
+			Test02_a("C:\\xxx\\..."); // -> ".." & ""
+			Test02_a("C:\\xxx\\.."); // -> "." & ""
+
+			Test02_a("ABCDE.txt.xxx.zzz"); // -> "ABCDE.txt.xxx" & ".zzz"
+			Test02_a("ABCDE.txt.xxx."); // -> "ABCDE.txt.xxx" & ""
+			Test02_a("ABCDE.txt.xxx"); // -> "ABCDE.txt" & ".xxx"
+			Test02_a("ABCDE.txt."); // -> "ABCDE.txt" & ""
+
+			Test02_a("ABCDE.txt...."); // -> "ABCDE.txt..." & ""
+			Test02_a("ABCDE.txt..."); // -> "ABCDE.txt.." & ""
+			Test02_a("ABCDE.txt.."); // -> "ABCDE.txt." & ""
+		}
+
+		private void Test02_a(string path)
+		{
+			Console.WriteLine(Unnull(Path.GetFileNameWithoutExtension(path)));
+			Console.WriteLine(Unnull(Path.GetExtension(path)));
+		}
 	}
 }
