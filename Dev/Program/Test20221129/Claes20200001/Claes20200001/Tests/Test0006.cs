@@ -107,5 +107,16 @@ namespace Charlotte.Tests
 			Console.WriteLine(Unnull(Path.GetFileNameWithoutExtension(path)));
 			Console.WriteLine(Unnull(Path.GetExtension(path)));
 		}
+
+		public void Test03()
+		{
+			SCommon.ToThrowPrint(() => SCommon.EraseExt("C:\\"));
+			SCommon.ToThrowPrint(() => SCommon.EraseExt("C:\\xxx\\.abcde"));
+			SCommon.ToThrowPrint(() => SCommon.EraseExt("ABCDE.txt"));
+			SCommon.ToThrowPrint(() => SCommon.EraseExt("ABCDE"));
+			SCommon.ToThrowPrint(() => SCommon.EraseExt(".abcde"));
+			SCommon.ToThrowPrint(() => SCommon.EraseExt(""));
+			SCommon.ToThrowPrint(() => SCommon.EraseExt(null));
+		}
 	}
 }
