@@ -110,13 +110,25 @@ namespace Charlotte.Tests
 
 		public void Test03()
 		{
-			SCommon.ToThrowPrint(() => SCommon.EraseExt("C:\\"));
-			SCommon.ToThrowPrint(() => SCommon.EraseExt("C:\\xxx\\.abcde"));
-			SCommon.ToThrowPrint(() => SCommon.EraseExt("ABCDE.txt"));
-			SCommon.ToThrowPrint(() => SCommon.EraseExt("ABCDE"));
-			SCommon.ToThrowPrint(() => SCommon.EraseExt(".abcde"));
-			SCommon.ToThrowPrint(() => SCommon.EraseExt(""));
-			SCommon.ToThrowPrint(() => SCommon.EraseExt(null));
+			//Console.WriteLine(EraseExt("C:\\")); // 例外
+			Console.WriteLine(EraseExt("C:\\xxx\\.abcde")); // -> "C:\\xxx"
+			Console.WriteLine(EraseExt("ABCDE.txt")); // -> ABCDE
+			Console.WriteLine(EraseExt("ABCDE")); // -> ABCDE
+			Console.WriteLine(EraseExt(".abcde")); // -> ""
+			//Console.WriteLine(EraseExt("")); // 例外
+			//Console.WriteLine(EraseExt(null)); // 例外
+
+			// ---
+
+			Console.WriteLine(SCommon.ChangeExt("C:\\xxx\\.abcde", " - コピー.abcde")); // -> "C:\\xxx\\ - コピー.abcde"
+			Console.WriteLine(SCommon.ChangeExt("C:\\xxx\\.abcde", ".zzz")); // -> "C:\\xxx\\.zzz"
+			Console.WriteLine(SCommon.ChangeExt("C:\\xxx\\.abcde", "zzz")); // -> "C:\\xxx\\zzz"
+			Console.WriteLine(SCommon.ChangeExt("C:\\xxx\\.abcde", "")); // -> "C:\\xxx"
+		}
+
+		private string EraseExt(string path)
+		{
+			return Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
 		}
 	}
 }

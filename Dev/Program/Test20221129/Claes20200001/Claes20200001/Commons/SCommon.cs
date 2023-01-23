@@ -742,6 +742,24 @@ namespace Charlotte.Commons
 			return path;
 		}
 
+		public static string ToParentPath(string path)
+		{
+			path = Path.GetDirectoryName(path);
+
+			// path -> Path.GetDirectoryName(path)
+			// -----------------------------------
+			// "C:\\ABC\\DEF" -> "C:\\ABC"
+			// "C:\\ABC" -> "C:\\"
+			// "C:\\" -> null
+			// "" -> 例外
+			// null -> null
+
+			if (string.IsNullOrEmpty(path))
+				throw new Exception("パスから親パスに変換できません。" + path);
+
+			return path;
+		}
+
 		#region ToFairLocalPath, ToFairRelPath
 
 		/// <summary>
@@ -866,57 +884,15 @@ namespace Charlotte.Commons
 				if (n % 100 == 0)
 					ProcMain.WriteLog("パス名の衝突回避に時間が掛かっています。" + n);
 
-				newPath = SCommon.EraseExt(path) + "_" + n + Path.GetExtension(path);
+				newPath = SCommon.ChangeExt(path, "_" + n + Path.GetExtension(path));
 				n++;
 			}
 			return newPath;
 		}
 
-		public static string EraseExt(string path)
+		public static string ChangeExt(string path, string ext)
 		{
-			return Path.Combine(SCommon.ToParentPath(path), SCommon.GetFileNameNoExt(path));
-		}
-
-		public static string ToParentPath(string path)
-		{
-			path = Path.GetDirectoryName(path);
-
-			// path -> Path.GetDirectoryName(path)
-			// -----------------------------------
-			// "C:\\ABC\\DEF" -> "C:\\ABC"
-			// "C:\\ABC" -> "C:\\"
-			// "C:\\" -> null
-			// "" -> 例外
-			// null -> null
-
-			if (string.IsNullOrEmpty(path))
-				throw new Exception("パスから親パスに変換できません。" + path);
-
-			return path;
-		}
-
-		public static string GetFileNameNoExt(string path)
-		{
-			path = Path.GetFileNameWithoutExtension(path);
-
-			// path -> Path.GetFileNameWithoutExtension(path)
-			// ----------------------------------------------
-			// "C:\\xxx\\ABCDE.txt" -> "ABCDE"
-			// "C:\\xxx\\ABCDE" -> "ABCDE"
-			// "C:\\xxx\\.ABCDE" -> ""
-			// "C:\\xxx\\." -> ""
-			// "C:\\xxx\\" -> ""
-			// "ABCDE.txt" -> "ABCDE"
-			// "ABCDE" -> "ABCDE"
-			// ".ABCDE" -> ""
-			// "." -> ""
-			// "" -> ""
-			// null -> null
-
-			if (string.IsNullOrEmpty(path))
-				throw new Exception("パスを拡張子無しファイル名に変換できません。" + path);
-
-			return path;
+			return Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path) + ext);
 		}
 
 		#region ReadPart, WritePart
