@@ -29,7 +29,7 @@ namespace Charlotte.GameCommons
 		{
 			if (!File.Exists(DDConsts.ConfigFile))
 			{
-				if (!File.Exists(SCommon.EraseExt(ProcMain.SelfFile) + ".pdb")) // ? 開発環境ではないっぽい -> リリース版なのに設定ファイルが無いのは可怪しいのでエラーにする。
+				if (!File.Exists(SCommon.ChangeExt(ProcMain.SelfFile, ".pdb"))) // ? 開発環境ではないっぽい -> リリース版なのに設定ファイルが無いのは可怪しいのでエラーにする。
 					throw new DDError();
 
 				return;
