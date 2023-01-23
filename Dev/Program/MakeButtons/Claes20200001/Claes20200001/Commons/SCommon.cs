@@ -664,11 +664,6 @@ namespace Charlotte.Commons
 			}
 		}
 
-		public static string EraseExt(string path)
-		{
-			return Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
-		}
-
 		public static string ChangeRoot(string path, string oldRoot, string rootNew)
 		{
 			return PutYen(rootNew) + ChangeRoot(path, oldRoot);
@@ -743,24 +738,6 @@ namespace Charlotte.Commons
 			path = Path.GetFullPath(path);
 			path = PutYen(path) + ".";
 			path = Path.GetFullPath(path);
-
-			return path;
-		}
-
-		public static string ToParentPath(string path)
-		{
-			path = Path.GetDirectoryName(path);
-
-			// path -> Path.GetDirectoryName(path)
-			// -----------------------------------
-			// "C:\\ABC\\DEF" -> "C:\\ABC"
-			// "C:\\ABC" -> "C:\\"
-			// "C:\\" -> null
-			// "" -> 例外
-			// null -> null
-
-			if (string.IsNullOrEmpty(path))
-				throw new Exception("パスから親パスに変換できません。" + path);
 
 			return path;
 		}
@@ -893,6 +870,53 @@ namespace Charlotte.Commons
 				n++;
 			}
 			return newPath;
+		}
+
+		public static string EraseExt(string path)
+		{
+			return Path.Combine(SCommon.ToParentPath(path), SCommon.GetFileNameNoExt(path));
+		}
+
+		public static string ToParentPath(string path)
+		{
+			path = Path.GetDirectoryName(path);
+
+			// path -> Path.GetDirectoryName(path)
+			// -----------------------------------
+			// "C:\\ABC\\DEF" -> "C:\\ABC"
+			// "C:\\ABC" -> "C:\\"
+			// "C:\\" -> null
+			// "" -> 例外
+			// null -> null
+
+			if (string.IsNullOrEmpty(path))
+				throw new Exception("パスから親パスに変換できません。" + path);
+
+			return path;
+		}
+
+		public static string GetFileNameNoExt(string path)
+		{
+			path = Path.GetFileNameWithoutExtension(path);
+
+			// path -> Path.GetFileNameWithoutExtension(path)
+			// ----------------------------------------------
+			// "C:\\xxx\\ABCDE.txt" -> "ABCDE"
+			// "C:\\xxx\\ABCDE" -> "ABCDE"
+			// "C:\\xxx\\.ABCDE" -> ""
+			// "C:\\xxx\\." -> ""
+			// "C:\\xxx\\" -> ""
+			// "ABCDE.txt" -> "ABCDE"
+			// "ABCDE" -> "ABCDE"
+			// ".ABCDE" -> ""
+			// "." -> ""
+			// "" -> ""
+			// null -> null
+
+			if (string.IsNullOrEmpty(path))
+				throw new Exception("パスを拡張子無しファイル名に変換できません。" + path);
+
+			return path;
 		}
 
 		#region ReadPart, WritePart
