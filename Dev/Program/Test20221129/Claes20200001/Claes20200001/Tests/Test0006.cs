@@ -124,6 +124,14 @@ namespace Charlotte.Tests
 			Console.WriteLine(SCommon.ChangeExt("C:\\xxx\\.abcde", ".zzz")); // -> "C:\\xxx\\.zzz"
 			Console.WriteLine(SCommon.ChangeExt("C:\\xxx\\.abcde", "zzz")); // -> "C:\\xxx\\zzz"
 			Console.WriteLine(SCommon.ChangeExt("C:\\xxx\\.abcde", "")); // -> "C:\\xxx"
+
+			Console.WriteLine(SCommon.ChangeExt("C:\\xxx\\.zzz", ".aaa")); // -> "C:\\xxx\\.aaa"
+			Console.WriteLine(SCommon.ChangeExt(".\\.zzz", ".aaa")); // -> ".\\.aaa"
+			Console.WriteLine(SCommon.ChangeExt(".zzz", ".aaa")); // -> ".aaa"
+
+			Console.WriteLine(SCommon.ChangeExt("C:\\xxx\\ABCDE.zzz", ".aaa")); // -> "C:\\xxx\\ABCDE.aaa"
+			Console.WriteLine(SCommon.ChangeExt(".\\ABCDE.zzz", ".aaa")); // -> ".\\ABCDE.aaa"
+			Console.WriteLine(SCommon.ChangeExt("ABCDE.zzz", ".aaa")); // -> "ABCDE.aaa"
 		}
 
 		private string EraseExt(string path)

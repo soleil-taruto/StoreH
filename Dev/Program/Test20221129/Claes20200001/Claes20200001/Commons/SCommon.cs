@@ -890,6 +890,9 @@ namespace Charlotte.Commons
 			return newPath;
 		}
 
+		// 注意：
+		// ChangeExt("C:\\xxx\\.zzz", "") -> "C:\\xxx"
+
 		public static string ChangeExt(string path, string ext)
 		{
 			return Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path) + ext);
