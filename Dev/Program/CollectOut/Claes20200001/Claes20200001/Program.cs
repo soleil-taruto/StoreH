@@ -87,7 +87,7 @@ namespace Charlotte
 			}
 			ar.End();
 
-			if (this.DistributeDirs != null)
+			if (this.DistributeDirs != null) // 回収の実行_配布を行う
 			{
 				using (WorkingDir wd = new WorkingDir())
 				{
@@ -101,7 +101,7 @@ namespace Charlotte
 					this.Distribute();
 				}
 			}
-			else
+			else // 回収の実行_配布を行わない
 			{
 				this.OutputDir = SCommon.GetOutputDir();
 
@@ -220,14 +220,10 @@ namespace Charlotte
 					Console.WriteLine("/> " + str);
 
 				if (only1.Count != 0) // ? 未配信のプロジェクトがある。
-				{
 					ProcUndistributedProjects(only1);
-				}
 
 				if (only2.Count != 0) // ? 廃止されたプロジェクトがある。
-				{
 					ProcRemovedProjects(only2);
-				}
 
 				rPaths = both1.ToArray();
 				wPaths = both2.ToArray();
