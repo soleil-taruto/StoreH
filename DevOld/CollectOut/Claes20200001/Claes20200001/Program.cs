@@ -19,8 +19,6 @@ namespace Charlotte
 			ProcMain.CUIMain(new Program().Main2);
 		}
 
-		private bool OpenOutputDirIfNeeded = true;
-
 		private void Main2(ArgsReader ar)
 		{
 			if (ProcMain.DEBUG)
@@ -31,11 +29,7 @@ namespace Charlotte
 			{
 				Main4(ar);
 			}
-
-			if (OpenOutputDirIfNeeded)
-			{
-				SCommon.OpenOutputDirIfCreated();
-			}
+			SCommon.OpenOutputDirIfCreated();
 		}
 
 		private void Main3()
@@ -93,16 +87,29 @@ namespace Charlotte
 			}
 			ar.End();
 
-			this.OutputDir = SCommon.GetOutputDir();
+			if (this.DistributeDirs != null) // 回収の実行_配布を行う
+			{
+				using (WorkingDir wd = new WorkingDir())
+				{
+					this.OutputDir = wd.MakePath();
+					SCommon.CreateDir(this.OutputDir);
 
-			Console.WriteLine("< " + rDir);
-			Console.WriteLine("> " + this.OutputDir);
+					Console.WriteLine("< " + rDir);
+					Console.WriteLine("> " + this.OutputDir);
 
-			SearchOut(rDir);
+					SearchOut(rDir);
+					this.Distribute();
+				}
+			}
+			else // 回収の実行_配布を行わない
+			{
+				this.OutputDir = SCommon.GetOutputDir();
 
-			if (this.DistributeDirs != null)
-				this.Distribute();
+				Console.WriteLine("< " + rDir);
+				Console.WriteLine("> " + this.OutputDir);
 
+				SearchOut(rDir);
+			}
 			Console.WriteLine("done!");
 		}
 
@@ -182,9 +189,6 @@ namespace Charlotte
 		/// </summary>
 		private void Distribute()
 		{
-			Console.WriteLine("配布を行うので回収先フォルダは開きません。");
-			OpenOutputDirIfNeeded = false;
-
 			Console.WriteLine("Distribute-ST");
 
 			string[] rPaths = Directory.GetDirectories(this.OutputDir)
@@ -215,11 +219,14 @@ namespace Charlotte
 				foreach (string str in only2)
 					Console.WriteLine("/> " + str);
 
-				if (only1.Count != 0)
-					throw new Exception("未配信のプロジェクト：" + only1[0]);
+				if (only1.Count != 0) // ? 未配信のプロジェクトがある。
+					ProcUndistributedProjects(only1);
 
-				if (only2.Count != 0)
-					throw new Exception("廃止されたプロジェクト：" + only2[0]);
+				if (only2.Count != 0) // ? 廃止されたプロジェクトがある。
+					ProcRemovedProjects(only2);
+
+				rPaths = both1.ToArray();
+				wPaths = both2.ToArray();
 			}
 
 			if (SCommon.HasSame_Comp(rPaths, CompDistribute))
@@ -235,7 +242,7 @@ namespace Charlotte
 			{
 				string rPath = rPaths[index];
 				string wPath = wPaths[index];
-				string destPath = Path.Combine(Path.GetDirectoryName(wPath), Path.GetFileName(rPath));
+				string destPath = Path.Combine(SCommon.ToParentPath(wPath), Path.GetFileName(rPath));
 
 				Console.WriteLine("< " + rPath);
 				Console.WriteLine("W " + wPath);
@@ -276,6 +283,45 @@ namespace Charlotte
 			}
 
 			return name;
+		}
+
+		private void ProcUndistributedProjects(List<string> rPaths)
+		{
+			string outDir = Path.Combine(SCommon.GetOutputDir(), "未配信のプロジェクト");
+			SCommon.CreateDir(outDir);
+
+			Console.WriteLine("未配信のプロジェクトが見つかりました。");
+
+			foreach (string rPath in rPaths)
+			{
+				string wPath = Path.Combine(outDir, Path.GetFileName(rPath));
+
+				Console.WriteLine("< " + rPath);
+				Console.WriteLine("> " + wPath);
+
+				SCommon.CopyPath(rPath, wPath);
+			}
+			Console.WriteLine("未配信のプロジェクト_End");
+		}
+
+		private void ProcRemovedProjects(List<string> rPaths)
+		{
+			string outDir = Path.Combine(SCommon.GetOutputDir(), "廃止されたプロジェクト");
+			SCommon.CreateDir(outDir);
+
+			Console.WriteLine("廃止されたプロジェクトが見つかりました。");
+
+			foreach (string rPath in rPaths)
+			{
+				string wPath = Path.Combine(outDir, Path.GetFileName(rPath));
+
+				Console.WriteLine("< " + rPath);
+				Console.WriteLine("> " + wPath);
+
+				SCommon.CopyPath(rPath, wPath);
+				SCommon.DeletePath(rPath);
+			}
+			Console.WriteLine("廃止されたプロジェクト_End");
 		}
 	}
 }
