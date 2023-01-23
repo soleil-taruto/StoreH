@@ -751,8 +751,16 @@ namespace Charlotte.Commons
 		{
 			path = Path.GetDirectoryName(path);
 
+			// path -> Path.GetDirectoryName(path)
+			// -----------------------------------
+			// "C:\\ABC\\DEF" -> "C:\\ABC"
+			// "C:\\ABC" -> "C:\\"
+			// "C:\\" -> null
+			// "" -> 例外
+			// null -> null
+
 			if (string.IsNullOrEmpty(path))
-				throw new Exception("パスから親パスに変換できません。");
+				throw new Exception("パスから親パスに変換できません。" + path);
 
 			return path;
 		}
