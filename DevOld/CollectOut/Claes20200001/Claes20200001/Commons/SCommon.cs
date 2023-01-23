@@ -664,11 +664,6 @@ namespace Charlotte.Commons
 			}
 		}
 
-		public static string EraseExt(string path)
-		{
-			return Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
-		}
-
 		public static string ChangeRoot(string path, string oldRoot, string rootNew)
 		{
 			return PutYen(rootNew) + ChangeRoot(path, oldRoot);
@@ -889,10 +884,18 @@ namespace Charlotte.Commons
 				if (n % 100 == 0)
 					ProcMain.WriteLog("パス名の衝突回避に時間が掛かっています。" + n);
 
-				newPath = SCommon.EraseExt(path) + "_" + n + Path.GetExtension(path);
+				newPath = SCommon.ChangeExt(path, "_" + n + Path.GetExtension(path));
 				n++;
 			}
 			return newPath;
+		}
+
+		// 注意：
+		// ChangeExt("C:\\xxx\\.zzz", "") -> "C:\\xxx"
+
+		public static string ChangeExt(string path, string ext)
+		{
+			return Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path) + ext);
 		}
 
 		#region ReadPart, WritePart
