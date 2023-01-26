@@ -11,14 +11,13 @@ var<TaskManager_t> GameTasks = CreateTaskManager();
 var<int> @@_Credit = 1000;
 var<int> @@_CreditDisp = @@_Credit;
 
-function <void> AddGameCredit(<int> value)
+function <void> @(UNQN)_EACH()
 {
-	@@_Credit += value;
-}
-
-function <void> ApproachCreditDisp()
-{
-	if (@@_Credit < @@_CreditDisp)
+	if (108 < Math.abs(@@_Credit - @@_CreditDisp))
+	{
+		@@_CreditDisp = ToInt(Approach(@@_CreditDisp, @@_Credit, 0.99));
+	}
+	else if (@@_Credit < @@_CreditDisp)
 	{
 		@@_CreditDisp--;
 	}
@@ -26,6 +25,11 @@ function <void> ApproachCreditDisp()
 	{
 		@@_CreditDisp++;
 	}
+}
+
+function <void> AddGameCredit(<int> value)
+{
+	@@_Credit += value;
 }
 
 function* <generatorForTask> GameMain()
@@ -107,8 +111,6 @@ function* <generatorForTask> @@_TitleMain()
 			y += yStep;
 			Draw(P_LaneXXButton, x, y, 1.0, 0.0, 1.0);
 		}
-
-		ApproachCreditDisp();
 
 		SetColor("#ffffffa0");
 		SetFSize(32);
@@ -441,21 +443,6 @@ var<int[]> @@_LastBets;
 
 function <void> @@_DrawSlot()
 {
-	if (108 < Math.abs(@@_Credit - @@_CreditDisp))
-	{
-		@@_CreditDisp = ToInt(Approach(@@_CreditDisp, @@_Credit, 0.99));
-	}
-	else if (@@_Credit < @@_CreditDisp)
-	{
-		@@_CreditDisp--;
-	}
-	else if (@@_Credit > @@_CreditDisp)
-	{
-		@@_CreditDisp++;
-	}
-
-	// ----
-
 	SetColor("#ffffff");
 	PrintRect(0, 0, Screen_W, Screen_H);
 
