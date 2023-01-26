@@ -36,22 +36,32 @@ function* <generatorForTask> @@_TitleMain()
 
 	for (; ; )
 	{
+		Play(M_Title);
+
 		if (GetMouseDown() == -1)
 		{
 			if (HoveredPicture == P_Lane01Button)
 			{
+				Play(M_Lane_01);
+
 				yield* @@_SlotMain(1);
 			}
 			else if (HoveredPicture == P_Lane02Button)
 			{
+				Play(M_Lane_02);
+
 				yield* @@_SlotMain(2);
 			}
 			else if (HoveredPicture == P_Lane03Button)
 			{
+				Play(M_Lane_03);
+
 				yield* @@_SlotMain(3);
 			}
 			else if (HoveredPicture == P_LaneXXButton)
 			{
+				Play(M_Lane_XX);
+
 				yield* @@_SlotMain(4);
 			}
 		}
@@ -102,11 +112,13 @@ function* <generatorForTask> @@_TitleMain()
 */
 function* <generatorForTask> @@_SlotMain(<int> laneNo)
 {
+	SE(S_EnterLane);
+
 	@@_LaneNo = laneNo;
 
-	var<int[]> LANE_01_PIC_CNTS = [ 1, 2, 4, 8, 12, 14, 16, 18, 20 ];
-	var<int[]> LANE_02_PIC_CNTS = [ 2, 3, 5, 7, 11, 13, 17, 19, 23 ];
-	var<int[]> LANE_03_PIC_CNTS = [ 3, 4, 5, 6, 12, 13, 14, 15, 21 ];
+	var<int[]> LANE_01_PIC_CNTS = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ];
+	var<int[]> LANE_02_PIC_CNTS = [ 2, 3, 5, 7, 11, 13, 17, 1, 1 ];
+	var<int[]> LANE_03_PIC_CNTS = [ 3, 4, 5, 6, 7, 8, 9, 10, 1 ];
 
 	var<int[][]> picCntsLst;
 
@@ -162,11 +174,11 @@ function* <generatorForTask> @@_SlotMain(<int> laneNo)
 	}
 
 	@@_Drums = drums;
-	@@_DrumRots = [ 0.0, 0.0, 0.0 ];
-	@@_DrumSpeeds = [ 0.0, 0.0, 0.0 ];
+	@@_DrumRots       = [ 0.0, 0.0, 0.0 ];
+	@@_DrumSpeeds     = [ 0.0, 0.0, 0.0 ];
 	@@_DrumStoppables = [ false, false, false ];
-	@@_Bets = [ 0, 0, 0, 0, 0 ];
-	@@_LastBets = [ 1, 1, 1, 1, 1 ];
+	@@_Bets           = [ 0, 0, 0, 0, 0 ];
+	@@_LastBets       = [ 5, 5, 5, 5, 5 ];
 
 	FreezeInput();
 
@@ -187,10 +199,15 @@ gameLoop:
 					260,
 					230 + c * 200), 0.0))
 				{
-					if (1 <= @@_Credit && (mouseDown == 1 || (60 <= mouseDown && mouseDown % 10 == 0)))
+					if (1 <= @@_Credit && (mouseDown == 1 || (60 <= mouseDown && mouseDown % 10 == 0))) // ? ‰Ÿ‰º or ˜A‘Å
 					{
-						@@_Bets[c] = Math.min(@@_Bets[c] + 1, 99);
-						@@_Credit--;
+						if (@@_Bets[c] < 99) // ? “Š“ü‰Â”\
+						{
+							SE(S_BetCoin);
+
+							@@_Bets[c]++;
+							@@_Credit--;
+						}
 					}
 				}
 			}
@@ -199,6 +216,8 @@ gameLoop:
 			{
 				if (!IsOut(mousePt, CreateD4Rect_LTRB(0, 0, 280, 80), 0.0)) // Press RESET
 				{
+					SE(S_GetCoin);
+
 					for (var<int> c = 0; c < 5; c++)
 					{
 						@@_Credit += @@_Bets[c];
@@ -219,6 +238,8 @@ gameLoop:
 					}
 					else
 					{
+						SE(S_BetCoin);
+
 						for (var<int> i = 0; i < 5; i++)
 						{
 							while (1 <= @@_Credit && @@_Bets[i] < @@_LastBets[i])
@@ -235,6 +256,8 @@ gameLoop:
 
 			yield 1;
 		}
+
+		SE(S_RotStart);
 
 		@@_DrumStoppables = [ true, true, true ];
 
@@ -267,7 +290,12 @@ gameLoop:
 
 					if (GetDistanceLessThan(GetMouseX() - stopBtn_x, GetMouseY() - stopBtn_y, stopBtn_r))
 					{
-						@@_DrumStoppables[c] = false;
+						if (@@_DrumStoppables[c])
+						{
+							SE(S_RotStop);
+
+							@@_DrumStoppables[c] = false;
+						}
 					}
 				}
 
@@ -303,6 +331,24 @@ gameLoop:
 
 		var<int> prizeCredit = @@_GetPrizeCredit();
 
+		if (1 <= prizeCredit)
+		{
+			SE(S_Atari);
+
+			for (var<int> c = 0; c < 5; c++)
+			{
+				AddEffectDelay(c * 10 + 20, () => SE(S_GetCoin));
+			}
+
+			AddEffect(Effect_Atari_01());
+			AddEffectDelay(30, () => AddEffect(Effect_Atari_02()));
+			AddEffectDelay(60, () => AddEffect(Effect_Atari_03(prizeCredit)));
+		}
+		else
+		{
+			SE(S_Hazure);
+		}
+
 		@@_Credit += prizeCredit;
 
 		@@_LastBets = @@_Bets;
@@ -320,6 +366,8 @@ gameLoop:
 			yield 1;
 		}
 	}
+
+	SE(S_LeaveLane);
 
 	FreezeInput();
 }
@@ -451,7 +499,9 @@ function <void> @@_DrawSlot()
 
 	for (var<int> c = 0; c < 3; c++)
 	{
-		SetColor("#00ffffa0");
+		var<boolean> stoppable = @@_DrumStoppables[c];
+
+		SetColor(stoppable ? "#00ffffa0" : "#40a0a0a0");
 		PrintCircle(500 + c * 250, 1050, 100);
 
 		SetColor("#004040");

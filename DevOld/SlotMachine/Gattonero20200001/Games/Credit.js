@@ -17,6 +17,8 @@ function <void> @(UNQN)_EACH()
 
 	if (@@_RemFrame <= 0)
 	{
+		SE(S_ChargeCoin);
+
 		AddGameCredit(@@_CREDIT_ADD);
 		@@_RemFrame = @@_PERIDO_FRAME;
 	}
