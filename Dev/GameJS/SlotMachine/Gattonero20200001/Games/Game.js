@@ -342,6 +342,7 @@ gameLoop:
 
 			AddEffect(Effect_Atari_01());
 			AddEffectDelay(30, () => AddEffect(Effect_Atari_02()));
+			AddEffectDelay(60, () => AddEffect(Effect_Atari_03(prizeCredit)));
 		}
 		else
 		{
