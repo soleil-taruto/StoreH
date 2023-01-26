@@ -272,6 +272,8 @@ C:\Dev\GameJS\SlotMachine\Gattonero20200001\GameCommons_Resource\Picture.js(75) 
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\GameCommons_Resource\Picture.js(76) : P_Lane02Button // •Ï”
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\GameCommons_Resource\Picture.js(77) : P_Lane03Button // •Ï”
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\GameCommons_Resource\Picture.js(78) : P_LaneXXButton // •Ï”
+C:\Dev\GameJS\SlotMachine\Gattonero20200001\GameCommons_Resource\Picture.js(80) : P_AtariEffects_01 // •Ï”
+C:\Dev\GameJS\SlotMachine\Gattonero20200001\GameCommons_Resource\Picture.js(104) : P_AtariEffects_02 // •Ï”
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\GameCommons_Resource\SoundEffect.js(19) : S_Atari // •Ï”
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\GameCommons_Resource\SoundEffect.js(20) : S_Hazure // •Ï”
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\GameCommons_Resource\SoundEffect.js(21) : S_BetCoin // •Ï”
@@ -289,6 +291,8 @@ C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Credit.js(35) : GetAddGameCred
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Credit.js(40) : GetAddGameCreditRem_IntSS // ŠÖ”
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Credit.js(45) : GetAddGameCreditRem_MM // ŠÖ”
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Credit.js(50) : GetAddGameCreditRem_SS // ŠÖ”
+C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Effect.js(5) : Effect_Atari_01 // ŠÖ”
+C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Effect.js(16) : Effect_Atari_02 // ŠÖ”
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Game.js(14) : AddGameCredit // ŠÖ”
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Game.js(19) : GameMain // ŠÖ”
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Game.js(6) : Camera // •Ï”

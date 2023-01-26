@@ -339,6 +339,9 @@ gameLoop:
 			{
 				AddEffectDelay(c * 10 + 20, () => SE(S_GetCoin));
 			}
+
+			AddEffect(Effect_Atari_01());
+			AddEffectDelay(30, () => AddEffect(Effect_Atari_02()));
 		}
 		else
 		{

@@ -76,3 +76,47 @@ var<Picture_t> P_Lane01Button = @@_Load(RESOURCE_Picture__Game__Lane01Button_png
 var<Picture_t> P_Lane02Button = @@_Load(RESOURCE_Picture__Game__Lane02Button_png);
 var<Picture_t> P_Lane03Button = @@_Load(RESOURCE_Picture__Game__Lane03Button_png);
 var<Picture_t> P_LaneXXButton = @@_Load(RESOURCE_Picture__Game__LaneXXButton_png);
+
+var<Picture_t[]> P_AtariEffects_01 =
+[
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0000_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0100_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0200_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0300_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0400_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0001_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0101_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0201_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0301_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0401_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0002_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0102_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0202_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0302_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0402_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0003_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0103_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0203_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0303_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_roseeffect04_192__Tile_0403_png),
+];
+
+var<Picture_t[]> P_AtariEffects_02 =
+[
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0000_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0001_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0002_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0003_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0004_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0005_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0006_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0007_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0008_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0009_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0010_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0011_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0012_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0013_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0014_png),
+	@@_Load(RESOURCE_ぴぽや倉庫__pipo_btleffect154__Tile_0015_png),
+];
