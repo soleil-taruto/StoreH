@@ -353,7 +353,7 @@ gameLoop:
 
 		var<int> prizeCredit = @@_GetPrizeCredit();
 
-		if (1 <= prizeCredit)
+		if (1 <= prizeCredit) // 当たり_結果エフェクト
 		{
 			SE(S_Atari);
 
@@ -366,7 +366,7 @@ gameLoop:
 			AddEffectDelay(30, () => AddEffect(Effect_Atari_02()));
 			AddEffectDelay(60, () => AddEffect(Effect_Atari_03(prizeCredit)));
 		}
-		else
+		else // ハズレ_結果エフェクト
 		{
 			SE(S_Hazure);
 		}
@@ -375,18 +375,6 @@ gameLoop:
 
 		@@_LastBets = @@_Bets;
 		@@_Bets = [ 0, 0, 0, 0, 0 ];
-
-	resultLoop:
-		for (; ; )
-		{
-			break;
-
-			// TODO
-
-			@@_DrawSlot();
-
-			yield 1;
-		}
 	}
 
 	SE(S_LeaveLane);
@@ -508,7 +496,7 @@ function <void> @@_DrawSlot()
 	{
 		var<boolean> stoppable = @@_DrumStoppables[c];
 
-		SetColor(stoppable ? "#00ffffa0" : "#40a0a0a0");
+		SetColor(stoppable ? "#00ffffc0" : "#40a0a0a0");
 		PrintCircle(500 + c * 250, 1050, 100);
 
 		SetColor("#004040");
