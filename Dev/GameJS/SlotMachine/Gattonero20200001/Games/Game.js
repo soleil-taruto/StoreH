@@ -112,6 +112,8 @@ function* <generatorForTask> @@_TitleMain()
 */
 function* <generatorForTask> @@_SlotMain(<int> laneNo)
 {
+	SE(S_EnterLane);
+
 	@@_LaneNo = laneNo;
 
 	var<int[]> LANE_01_PIC_CNTS = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ];
@@ -197,10 +199,15 @@ gameLoop:
 					260,
 					230 + c * 200), 0.0))
 				{
-					if (1 <= @@_Credit && (mouseDown == 1 || (60 <= mouseDown && mouseDown % 10 == 0)))
+					if (1 <= @@_Credit && (mouseDown == 1 || (60 <= mouseDown && mouseDown % 10 == 0))) // ? ‰Ÿ‰º or ˜A‘Å
 					{
-						@@_Bets[c] = Math.min(@@_Bets[c] + 1, 99);
-						@@_Credit--;
+						if (@@_Bets[c] < 99) // ? “Š“ü‰Â”\
+						{
+							SE(S_BetCoin);
+
+							@@_Bets[c]++;
+							@@_Credit--;
+						}
 					}
 				}
 			}
@@ -209,6 +216,8 @@ gameLoop:
 			{
 				if (!IsOut(mousePt, CreateD4Rect_LTRB(0, 0, 280, 80), 0.0)) // Press RESET
 				{
+					SE(S_GetCoin);
+
 					for (var<int> c = 0; c < 5; c++)
 					{
 						@@_Credit += @@_Bets[c];
@@ -229,6 +238,8 @@ gameLoop:
 					}
 					else
 					{
+						SE(S_BetCoin);
+
 						for (var<int> i = 0; i < 5; i++)
 						{
 							while (1 <= @@_Credit && @@_Bets[i] < @@_LastBets[i])
@@ -245,6 +256,8 @@ gameLoop:
 
 			yield 1;
 		}
+
+		SE(S_RotStart);
 
 		@@_DrumStoppables = [ true, true, true ];
 
@@ -277,7 +290,12 @@ gameLoop:
 
 					if (GetDistanceLessThan(GetMouseX() - stopBtn_x, GetMouseY() - stopBtn_y, stopBtn_r))
 					{
-						@@_DrumStoppables[c] = false;
+						if (@@_DrumStoppables[c])
+						{
+							SE(S_RotStop);
+
+							@@_DrumStoppables[c] = false;
+						}
 					}
 				}
 
@@ -313,6 +331,20 @@ gameLoop:
 
 		var<int> prizeCredit = @@_GetPrizeCredit();
 
+		if (1 <= prizeCredit)
+		{
+			SE(S_Atari);
+
+			for (var<int> c = 0; c < 5; c++)
+			{
+				AddEffectDelay(c * 10 + 20, () => SE(S_GetCoin));
+			}
+		}
+		else
+		{
+			SE(S_Hazure);
+		}
+
 		@@_Credit += prizeCredit;
 
 		@@_LastBets = @@_Bets;
@@ -330,6 +362,8 @@ gameLoop:
 			yield 1;
 		}
 	}
+
+	SE(S_LeaveLane);
 
 	FreezeInput();
 }
