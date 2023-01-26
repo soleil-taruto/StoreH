@@ -15,7 +15,7 @@ function* <generatorForTask> Effect_Atari_01()
 
 function* <generatorForTask> Effect_Atari_02()
 {
-	AddEffectDelay(20, () => SE(S_AtariDon));
+	AddEffectDelay(10, () => SE(S_AtariDon));
 
 	for (var<Picture_t> picture of P_AtariEffects_02)
 	for (var<int> c = 0; c < 3; c++)

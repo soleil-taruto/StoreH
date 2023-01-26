@@ -17,7 +17,7 @@ function <SE_t> @@_Load(<string> url)
 // š‚±‚±‚Ü‚ÅŒÅ’è -- ‚¿‰ñ‚è_‹¤’Ê -- ƒTƒ“ƒvƒ‹‚Æ‚µ‚ÄƒL[ƒv
 
 var S_Atari      = @@_Load(RESOURCE_¬X•½__powerup04_mp3);
-var S_AtariDon   = @@_Load(RESOURCE_¬X•½__destruction1_mp3);
+var S_AtariDon   = @@_Load(RESOURCE_¬X•½__warp2_mp3);
 var S_Hazure     = @@_Load(RESOURCE_¬X•½__cat_like1a_mp3);
 var S_BetCoin    = @@_Load(RESOURCE_¬X•½__coin03_mp3);
 var S_GetCoin    = @@_Load(RESOURCE_¬X•½__coin07_mp3);

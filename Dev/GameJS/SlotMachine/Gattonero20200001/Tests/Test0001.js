@@ -38,6 +38,14 @@ function* <generatorForTask> Test02()
 			break;
 		}
 
+		SetColor("#00ffff");
+		PrintRect(0, 0, Screen_W, Screen_H);
+
+		SetPrint(10, 110);
+		SetFSize(100);
+		SetColor("#000000");
+		PrintLine("CLICK SCREEN");
+
 		yield 1;
 	}
 
