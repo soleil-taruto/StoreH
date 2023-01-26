@@ -36,22 +36,32 @@ function* <generatorForTask> @@_TitleMain()
 
 	for (; ; )
 	{
+		Play(M_Title);
+
 		if (GetMouseDown() == -1)
 		{
 			if (HoveredPicture == P_Lane01Button)
 			{
+				Play(M_Lane_01);
+
 				yield* @@_SlotMain(1);
 			}
 			else if (HoveredPicture == P_Lane02Button)
 			{
+				Play(M_Lane_02);
+
 				yield* @@_SlotMain(2);
 			}
 			else if (HoveredPicture == P_Lane03Button)
 			{
+				Play(M_Lane_03);
+
 				yield* @@_SlotMain(3);
 			}
 			else if (HoveredPicture == P_LaneXXButton)
 			{
+				Play(M_Lane_XX);
+
 				yield* @@_SlotMain(4);
 			}
 		}
@@ -104,9 +114,9 @@ function* <generatorForTask> @@_SlotMain(<int> laneNo)
 {
 	@@_LaneNo = laneNo;
 
-	var<int[]> LANE_01_PIC_CNTS = [ 1, 2, 4, 8, 12, 14, 16, 18, 20 ];
-	var<int[]> LANE_02_PIC_CNTS = [ 2, 3, 5, 7, 11, 13, 17, 19, 23 ];
-	var<int[]> LANE_03_PIC_CNTS = [ 3, 4, 5, 6, 12, 13, 14, 15, 21 ];
+	var<int[]> LANE_01_PIC_CNTS = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ];
+	var<int[]> LANE_02_PIC_CNTS = [ 2, 3, 5, 7, 11, 13, 17, 1, 1 ];
+	var<int[]> LANE_03_PIC_CNTS = [ 3, 4, 5, 6, 7, 8, 9, 10, 1 ];
 
 	var<int[][]> picCntsLst;
 
@@ -162,11 +172,11 @@ function* <generatorForTask> @@_SlotMain(<int> laneNo)
 	}
 
 	@@_Drums = drums;
-	@@_DrumRots = [ 0.0, 0.0, 0.0 ];
-	@@_DrumSpeeds = [ 0.0, 0.0, 0.0 ];
+	@@_DrumRots       = [ 0.0, 0.0, 0.0 ];
+	@@_DrumSpeeds     = [ 0.0, 0.0, 0.0 ];
 	@@_DrumStoppables = [ false, false, false ];
-	@@_Bets = [ 0, 0, 0, 0, 0 ];
-	@@_LastBets = [ 1, 1, 1, 1, 1 ];
+	@@_Bets           = [ 0, 0, 0, 0, 0 ];
+	@@_LastBets       = [ 5, 5, 5, 5, 5 ];
 
 	FreezeInput();
 
@@ -451,7 +461,9 @@ function <void> @@_DrawSlot()
 
 	for (var<int> c = 0; c < 3; c++)
 	{
-		SetColor("#00ffffa0");
+		var<boolean> stoppable = @@_DrumStoppables[c];
+
+		SetColor(stoppable ? "#00ffffa0" : "#40a0a0a0");
 		PrintCircle(500 + c * 250, 1050, 100);
 
 		SetColor("#004040");

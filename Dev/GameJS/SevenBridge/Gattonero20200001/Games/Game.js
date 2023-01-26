@@ -195,7 +195,19 @@ var<double> WCards_Y = 1210;
 
 function* <generatorForTask> @@_BattleMain()
 {
-	Play(M_Battle);
+	// ƒoƒgƒ‹‹ÈÄ¶
+	{
+		var<Sound_t[]> BGM_LST =
+		[
+			M_Battle_03,
+			M_Battle_01,
+			M_Battle_02,
+		];
+
+		var<int> bgmIdx = ToInt(@@_Bet / 10) % 3;
+
+		Play(BGM_LST[bgmIdx]);
+	}
 
 	DealerDeck = CreateDeck( 170,  590);
 	PlayerDeck = CreateDeck(1430, 1010);

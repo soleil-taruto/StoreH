@@ -234,7 +234,9 @@ C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\TaskManager.js(69) : Exe
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\TaskManager.js(93) : AddDelay // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons\TaskManager.js(102) : AddKeep // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons_Resource\Music.js(19) : M_Title // •Ï”
-C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons_Resource\Music.js(20) : M_Battle // •Ï”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons_Resource\Music.js(20) : M_Battle_01 // •Ï”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons_Resource\Music.js(21) : M_Battle_02 // •Ï”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons_Resource\Music.js(22) : M_Battle_03 // •Ï”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons_Resource\Picture.js(15) : P_Dummy // •Ï”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons_Resource\Picture.js(16) : P_WhiteBox // •Ï”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\GameCommons_Resource\Picture.js(17) : P_WhiteCircle // •Ï”
@@ -282,7 +284,7 @@ C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Effect.js(13) : Effect_Dummy /
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Effect.js(23) : AddEffect_Explode // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Game.js(14) : AddGameCredit // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Game.js(19) : GameMain // ŠÖ”
-C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Game.js(1106) : GameJs_Test05 // ŠÖ”
+C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Game.js(1118) : GameJs_Test05 // ŠÖ”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Game.js(6) : Camera // •Ï”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Game.js(9) : GameTasks // •Ï”
 C:\Dev\GameJS\SevenBridge\Gattonero20200001\Games\Game.js(184) : DealerDeck // •Ï”
