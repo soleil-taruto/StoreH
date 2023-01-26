@@ -16,11 +16,14 @@ function <SE_t> @@_Load(<string> url)
 
 // š‚±‚±‚Ü‚ÅŒÅ’è -- ‚¿‰ñ‚è_‹¤’Ê -- ƒTƒ“ƒvƒ‹‚Æ‚µ‚ÄƒL[ƒv
 
-var S_Atari     = @@_Load(RESOURCE_¬X•½__powerup04_mp3);
-var S_Hazure    = @@_Load(RESOURCE_¬X•½__cat_like1a_mp3);
-var S_BetCoin   = @@_Load(RESOURCE_¬X•½__coin03_mp3);
-var S_GetCoin   = @@_Load(RESOURCE_¬X•½__coin07_mp3);
-var S_EnterLane = @@_Load(RESOURCE_¬X•½__jump06_mp3);
-var S_LeaveLane = @@_Load(RESOURCE_¬X•½__jump07_mp3);
-var S_RotStart  = @@_Load(RESOURCE_¬X•½__jump01_mp3);
-var S_RotStop   = @@_Load(RESOURCE_¬X•½__jump02_mp3);
+var S_Atari      = @@_Load(RESOURCE_¬X•½__powerup04_mp3);
+var S_AtariDon   = @@_Load(RESOURCE_¬X•½__destruction1_mp3);
+var S_Hazure     = @@_Load(RESOURCE_¬X•½__cat_like1a_mp3);
+var S_BetCoin    = @@_Load(RESOURCE_¬X•½__coin03_mp3);
+var S_GetCoin    = @@_Load(RESOURCE_¬X•½__coin07_mp3);
+var S_ChargeCoin = @@_Load(RESOURCE_¬X•½__coin08_mp3);
+var S_EnterLane  = @@_Load(RESOURCE_¬X•½__jump06_mp3);
+var S_LeaveLane  = @@_Load(RESOURCE_¬X•½__jump07_mp3);
+var S_RotStart   = @@_Load(RESOURCE_¬X•½__jump01_mp3);
+var S_RotStop    = @@_Load(RESOURCE_¬X•½__jump02_mp3);
+

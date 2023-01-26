@@ -15,6 +15,8 @@ function* <generatorForTask> Effect_Atari_01()
 
 function* <generatorForTask> Effect_Atari_02()
 {
+	AddEffectDelay(20, () => SE(S_AtariDon));
+
 	for (var<Picture_t> picture of P_AtariEffects_02)
 	for (var<int> c = 0; c < 3; c++)
 	{
@@ -26,12 +28,12 @@ function* <generatorForTask> Effect_Atari_02()
 
 function* <generatorForTask> Effect_Atari_03(<int> prizeCredit)
 {
-	for (var<Scene_t> scene of CreateScene(60))
+	for (var<Scene_t> scene of CreateScene(90))
 	{
 		SetColor("#ffff00c0");
 		PrintRect(0, 500, 1200, 200);
 
-		SetPrint(30, 620);
+		SetPrint(30 + scene.Numer / 2, 620);
 		SetFSize(60);
 		SetColor("#000000");
 		PrintLine("YOU GOT " + ToThousandComma(prizeCredit) + " COINS !!!");
