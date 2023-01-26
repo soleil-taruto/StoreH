@@ -16,6 +16,18 @@ function <void> AddGameCredit(<int> value)
 	@@_Credit += value;
 }
 
+function <void> ApproachCreditDisp()
+{
+	if (@@_Credit < @@_CreditDisp)
+	{
+		@@_CreditDisp--;
+	}
+	else if (@@_Credit > @@_CreditDisp)
+	{
+		@@_CreditDisp++;
+	}
+}
+
 function* <generatorForTask> GameMain()
 {
 	FreezeInput();
@@ -95,6 +107,8 @@ function* <generatorForTask> @@_TitleMain()
 			y += yStep;
 			Draw(P_LaneXXButton, x, y, 1.0, 0.0, 1.0);
 		}
+
+		ApproachCreditDisp();
 
 		SetColor("#ffffffa0");
 		SetFSize(32);
@@ -227,6 +241,12 @@ gameLoop:
 
 				if (!IsOut(mousePt, CreateD4Rect_LTRB(970, 0, Screen_W, 80), 0.0)) // Press EXIT
 				{
+					for (var<int> c = 0; c < 5; c++) // •¥‚¢–ß‚µ
+					{
+						@@_Credit += @@_Bets[c];
+//						@@_Bets[c] = 0;
+					}
+
 					break gameLoop;
 				}
 

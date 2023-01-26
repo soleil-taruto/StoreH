@@ -297,7 +297,8 @@ C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Effect.js(5) : Effect_Atari_01
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Effect.js(16) : Effect_Atari_02 // ŠÖ”
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Effect.js(29) : Effect_Atari_03 // ŠÖ”
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Game.js(14) : AddGameCredit // ŠÖ”
-C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Game.js(19) : GameMain // ŠÖ”
+C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Game.js(19) : ApproachCredit // ŠÖ”
+C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Game.js(31) : GameMain // ŠÖ”
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Game.js(6) : Camera // •Ï”
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Game.js(9) : GameTasks // •Ï”
 C:\Dev\GameJS\SlotMachine\Gattonero20200001\Games\Actors\Actor.js(7) : Actor_t // ’è‹`
