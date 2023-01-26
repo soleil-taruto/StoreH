@@ -63,7 +63,7 @@ BAR : x 1000<br/>
 
 <br/>
 
-背景：<br/>
+タイトル・メニューの背景：<br/>
 　フリー素材ぱくたそ<br/>
 　https://www.pakutaso.com/<br/>
 
@@ -75,15 +75,21 @@ BAR : x 1000<br/>
 
 <br/>
 
-効果音：<br/>
-　小森平<br/>
-　https://taira-komori.jpn.org/<br/>
+エフェクト：<br/>
+　ぴぽや<br/>
+　https://pipoya.net/<br/>
 
 <br/>
 
 音楽：<br/>
 　フリーBGM・音楽素材MusMus<br/>
 　https://musmus.main.jp<br/>
+
+<br/>
+
+効果音：<br/>
+　小森平<br/>
+　https://taira-komori.jpn.org/<br/>
 
 <br/>
 <br/>
