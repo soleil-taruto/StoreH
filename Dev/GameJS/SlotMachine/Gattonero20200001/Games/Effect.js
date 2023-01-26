@@ -28,13 +28,13 @@ function* <generatorForTask> Effect_Atari_03(<int> prizeCredit)
 {
 	for (var<Scene_t> scene of CreateScene(60))
 	{
-		SetColor("#000080a0");
+		SetColor("#ffff00c0");
 		PrintRect(0, 500, 1200, 200);
 
-		SetPrint(30, 600);
+		SetPrint(30, 620);
 		SetFSize(60);
-		SetColor("#ffffff");
-		PrintLine("YOU GAT " + ToThousandComma(prizeCredit) + " COINS !!!");
+		SetColor("#000000");
+		PrintLine("YOU GOT " + ToThousandComma(prizeCredit) + " COINS !!!");
 
 		yield 1;
 	}

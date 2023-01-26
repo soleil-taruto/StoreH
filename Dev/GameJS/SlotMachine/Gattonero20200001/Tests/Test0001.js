@@ -28,3 +28,18 @@ function* <generatorForTask> Test01()
 		console.log(s + " ==> " + m[s]);
 	}
 }
+
+function* <generatorForTask> Test02()
+{
+	AddEffect(Effect_Atari_01());
+	AddEffectDelay(30, () => AddEffect(Effect_Atari_02()));
+	AddEffectDelay(60, () => AddEffect(Effect_Atari_03(1234567890)));
+
+	for (; ; )
+	{
+		SetColor("#808080");
+		PrintRect(0, 0, Screen_W, Screen_H);
+
+		yield 1;
+	}
+}
