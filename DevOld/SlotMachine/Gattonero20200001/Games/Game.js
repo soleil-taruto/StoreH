@@ -11,6 +11,22 @@ var<TaskManager_t> GameTasks = CreateTaskManager();
 var<int> @@_Credit = 1000;
 var<int> @@_CreditDisp = @@_Credit;
 
+function <void> @(UNQN)_EACH()
+{
+	if (108 < Math.abs(@@_Credit - @@_CreditDisp))
+	{
+		@@_CreditDisp = ToInt(Approach(@@_CreditDisp, @@_Credit, 0.99));
+	}
+	else if (@@_Credit < @@_CreditDisp)
+	{
+		@@_CreditDisp--;
+	}
+	else if (@@_Credit > @@_CreditDisp)
+	{
+		@@_CreditDisp++;
+	}
+}
+
 function <void> AddGameCredit(<int> value)
 {
 	@@_Credit += value;
@@ -227,6 +243,12 @@ gameLoop:
 
 				if (!IsOut(mousePt, CreateD4Rect_LTRB(970, 0, Screen_W, 80), 0.0)) // Press EXIT
 				{
+					for (var<int> c = 0; c < 5; c++) // 払い戻し
+					{
+						@@_Credit += @@_Bets[c];
+//						@@_Bets[c] = 0;
+					}
+
 					break gameLoop;
 				}
 
@@ -331,7 +353,7 @@ gameLoop:
 
 		var<int> prizeCredit = @@_GetPrizeCredit();
 
-		if (1 <= prizeCredit)
+		if (1 <= prizeCredit) // 当たり_結果エフェクト
 		{
 			SE(S_Atari);
 
@@ -344,7 +366,7 @@ gameLoop:
 			AddEffectDelay(30, () => AddEffect(Effect_Atari_02()));
 			AddEffectDelay(60, () => AddEffect(Effect_Atari_03(prizeCredit)));
 		}
-		else
+		else // ハズレ_結果エフェクト
 		{
 			SE(S_Hazure);
 		}
@@ -353,18 +375,6 @@ gameLoop:
 
 		@@_LastBets = @@_Bets;
 		@@_Bets = [ 0, 0, 0, 0, 0 ];
-
-	resultLoop:
-		for (; ; )
-		{
-			break;
-
-			// TODO
-
-			@@_DrawSlot();
-
-			yield 1;
-		}
 	}
 
 	SE(S_LeaveLane);
@@ -421,21 +431,6 @@ var<int[]> @@_LastBets;
 
 function <void> @@_DrawSlot()
 {
-	if (108 < Math.abs(@@_Credit - @@_CreditDisp))
-	{
-		@@_CreditDisp = ToInt(Approach(@@_CreditDisp, @@_Credit, 0.99));
-	}
-	else if (@@_Credit < @@_CreditDisp)
-	{
-		@@_CreditDisp--;
-	}
-	else if (@@_Credit > @@_CreditDisp)
-	{
-		@@_CreditDisp++;
-	}
-
-	// ----
-
 	SetColor("#ffffff");
 	PrintRect(0, 0, Screen_W, Screen_H);
 
@@ -501,7 +496,7 @@ function <void> @@_DrawSlot()
 	{
 		var<boolean> stoppable = @@_DrumStoppables[c];
 
-		SetColor(stoppable ? "#00ffffa0" : "#40a0a0a0");
+		SetColor(stoppable ? "#00ffffc0" : "#40a0a0a0");
 		PrintCircle(500 + c * 250, 1050, 100);
 
 		SetColor("#004040");
