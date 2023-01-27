@@ -194,7 +194,13 @@ function* <generatorForTask> @@_SlotMain(<int> laneNo)
 	@@_DrumSpeeds     = [ 0.0, 0.0, 0.0 ];
 	@@_DrumStoppables = [ false, false, false ];
 	@@_Bets           = [ 0, 0, 0, 0, 0 ];
-	@@_LastBets       = [ 5, 5, 5, 5, 5 ];
+//	@@_LastBets       = [ 5, 5, 5, 5, 5 ];
+
+	// ƒŒ[ƒ“‚ğ•Ï‚¦‚Ä‚àˆÛ‚·‚éB
+	if (!@@_LastBets)
+	{
+		@@_LastBets = [ 5, 5, 5, 5, 5 ];
+	}
 
 	FreezeInput();
 
