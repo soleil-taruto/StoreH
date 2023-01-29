@@ -12,25 +12,18 @@ namespace Charlotte
 	/// </summary>
 	public class ProgramDataFolder
 	{
-		private static ProgramDataFolder _i = null;
+		public static ProgramDataFolder I;
 
-		public static ProgramDataFolder I
-		{
-			get
-			{
-				if (_i == null)
-					_i = new ProgramDataFolder();
-
-				return _i;
-			}
-		}
-
-		private ProgramDataFolder()
+		public ProgramDataFolder()
 		{
 			SCommon.CreateDir(RootDir);
 		}
 
-		private static string RootDir = Path.Combine(Environment.GetEnvironmentVariable("ProgramData"), "CCSP-{c4323a86-2bf7-4f92-8262-daeae5ca0aba}");
+		/// <summary>
+		/// 共有データのルートフォルダ
+		/// 変更する場合は、初期化前に設定すること。
+		/// </summary>
+		public static string RootDir = @"C:\temp\HTTCmdP_ProgramData";
 
 		/// <summary>
 		/// 利用者：Action_AccessCounter

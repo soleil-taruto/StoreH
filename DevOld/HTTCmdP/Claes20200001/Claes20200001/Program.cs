@@ -53,6 +53,7 @@ namespace Charlotte
 			//Main4(new ArgsReader(new string[] { docRoot, "80", "/K", "/H", @"C:\temp\2.tsv" }));
 			//Main4(new ArgsReader(new string[] { docRoot, "8080", "/K", "/T", @"C:\temp\1.tsv", "/H", @"C:\temp\2.tsv" }));
 			//Main4(new ArgsReader(new string[] { docRoot, "80", "/K", "/N", @"C:\temp\1.html" }));
+			//Main4(new ArgsReader(new string[] { docRoot, "80", "/K", "/P", @"C:\temp\ABCDEF" }));
 			//new Test0001().Test01();
 			//new Test0001().Test02();
 			//new Test0001().Test03();
@@ -163,6 +164,12 @@ namespace Charlotte
 								ProcMain.WriteLog("BatchServiceCredentials: " + Common.BatchServiceCredentials);
 								continue;
 							}
+							if (ar.ArgIs("/P"))
+							{
+								ProgramDataFolder.RootDir = SCommon.MakeFullPath(ar.NextArg());
+								ProcMain.WriteLog("ProgramDataFolder.RootDir: " + ProgramDataFolder.RootDir);
+								continue;
+							}
 							break;
 						}
 					}
@@ -171,6 +178,8 @@ namespace Charlotte
 				{
 					this.DocRoot = Directory.GetCurrentDirectory();
 				}
+
+				ProgramDataFolder.I = new ProgramDataFolder();
 
 				ProcMain.WriteLog("HTTCmd-Start");
 				ProcMain.WriteLog("DocRoot: " + this.DocRoot);

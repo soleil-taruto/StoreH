@@ -35,6 +35,10 @@ OPTIONS
 
 	BatchService-の実行者の信用証明用文字列を設定します。
 
+/P PROGRAM-DATA-FOLDER-ROOT-DIR
+
+	共有データのルートフォルダを指定します。
+
 
 ----
 BatchService
