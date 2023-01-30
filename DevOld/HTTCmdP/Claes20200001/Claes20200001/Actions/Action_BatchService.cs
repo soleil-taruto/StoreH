@@ -28,6 +28,22 @@ namespace Charlotte.Actions
 			{
 				ProcMain.WriteLog("BatchService-ST");
 
+				// クライアントIP_チェック -- ローカル・ループバック・アドレス (localhost) 以外はアクセス不可とする。
+				{
+					string clientIPPort = channel.Channel.Handler.RemoteEndPoint.ToString();
+					string clientIP = clientIPPort.Split(':')[0];
+
+					clientIP = SCommon.ToJString(clientIP, false, false, false, false); // 2bs
+
+					ProcMain.WriteLog("clientIP: " + clientIP);
+
+					// memo:
+					// ローカル・ループバック・アドレス (localhost) == 127.0.0.0 ～ 127.255.255.255
+
+					if (!clientIP.StartsWith("127."))
+						throw new Exception("Bad clientIP");
+				}
+
 				if (!File.Exists(BATCH_FILE))
 					throw new Exception("no BATCH_FILE");
 

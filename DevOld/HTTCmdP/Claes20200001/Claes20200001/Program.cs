@@ -44,7 +44,7 @@ namespace Charlotte
 			//Main4(new ArgsReader(new string[] { }));
 			//Main4(new ArgsReader(new string[] { docRoot }));
 			//Main4(new ArgsReader(new string[] { docRoot, "80" }));
-			Main4(new ArgsReader(new string[] { docRoot, "80", "/K" }));
+			//Main4(new ArgsReader(new string[] { docRoot, "80", "/K" }));
 			//Main4(new ArgsReader(new string[] { docRoot, "80", "/T", @"C:\temp\1.tsv" }));
 			//Main4(new ArgsReader(new string[] { docRoot, "80", "/T", @"C:\temp\1.tsv", "/K" }));
 			//Main4(new ArgsReader(new string[] { docRoot, "80", "/K", "/T", @"C:\temp\1.tsv" }));
@@ -54,6 +54,7 @@ namespace Charlotte
 			//Main4(new ArgsReader(new string[] { docRoot, "8080", "/K", "/T", @"C:\temp\1.tsv", "/H", @"C:\temp\2.tsv" }));
 			//Main4(new ArgsReader(new string[] { docRoot, "80", "/K", "/N", @"C:\temp\1.html" }));
 			//Main4(new ArgsReader(new string[] { docRoot, "80", "/K", "/P", @"C:\temp\ABCDEF" }));
+			Main4(new ArgsReader(new string[] { docRoot, "80", "/K", "/B", "ABCDEF" }));
 			//new Test0001().Test01();
 			//new Test0001().Test02();
 			//new Test0001().Test03();

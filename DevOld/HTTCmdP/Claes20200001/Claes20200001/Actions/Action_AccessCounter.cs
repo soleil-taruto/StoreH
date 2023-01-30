@@ -39,7 +39,7 @@ namespace Charlotte.Actions
 				if (group == null)
 					throw new ArgumentNullException("group is null");
 
-				group = SCommon.ToJString(Encoding.ASCII.GetBytes(group), false, false, false, false); // 2bs
+				group = SCommon.ToJString(group, false, false, false, false); // 2bs
 
 				if (!Regex.IsMatch(group, "^[-0-9A-Za-z]+$"))
 					throw new Exception("Bad group: " + group);
@@ -52,7 +52,7 @@ namespace Charlotte.Actions
 				string clientIPPort = channel.Channel.Handler.RemoteEndPoint.ToString();
 				string clientIP = clientIPPort.Split(':')[0];
 
-				clientIP = SCommon.ToJString(Encoding.ASCII.GetBytes(clientIP), false, false, false, false); // 2bs
+				clientIP = SCommon.ToJString(clientIP, false, false, false, false); // 2bs
 
 				if (!Regex.IsMatch(clientIP, "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$"))
 					throw new Exception("Bad clientIP: " + clientIP);
