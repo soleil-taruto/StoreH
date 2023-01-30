@@ -155,9 +155,21 @@ function* <generatorForTask> @@_SlotMain(<int> laneNo)
 	case 4:
 		picCntsLst =
 		[
-			ChooseOne([ LANE_01_PIC_CNTS, LANE_02_PIC_CNTS, LANE_03_PIC_CNTS ]),
-			ChooseOne([ LANE_01_PIC_CNTS, LANE_02_PIC_CNTS, LANE_03_PIC_CNTS ]),
-			ChooseOne([ LANE_01_PIC_CNTS, LANE_02_PIC_CNTS, LANE_03_PIC_CNTS ]),
+			[
+				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
+				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
+				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
+			],
+			[
+				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
+				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
+				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
+			],
+			[
+				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
+				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
+				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
+			],
 		];
 		break;
 
