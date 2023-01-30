@@ -38,6 +38,8 @@ OPTIONS
 /P PROGRAM-DATA-FOLDER-ROOT-DIR
 
 	共有データのルートフォルダを指定します。
+	デフォルトのルートフォルダは C:\temp\HTTCmdP_ProgramData です。
+	存在しない場合、起動時にフォルダを作成します。
 
 
 ----

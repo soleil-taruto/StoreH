@@ -181,13 +181,13 @@ namespace Charlotte
 
 				ProgramDataFolder.I = new ProgramDataFolder();
 
-				ProcMain.WriteLog("HTTCmd-Start");
+				ProcMain.WriteLog("HTTCmd-P-Start");
 				ProcMain.WriteLog("DocRoot: " + this.DocRoot);
 				ProcMain.WriteLog("PortNo: " + hs.PortNo);
 
 				hs.Perform();
 
-				ProcMain.WriteLog("HTTCmd-End");
+				ProcMain.WriteLog("HTTCmd-P-End");
 			}
 		}
 
