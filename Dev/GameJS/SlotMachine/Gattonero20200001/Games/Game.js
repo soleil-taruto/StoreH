@@ -135,6 +135,12 @@ function* <generatorForTask> @@_SlotMain(<int> laneNo)
 	var<int[]> LANE_01_PIC_CNTS = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ];
 	var<int[]> LANE_02_PIC_CNTS = [ 2, 3, 5, 7, 11, 13, 17, 1, 1 ];
 	var<int[]> LANE_03_PIC_CNTS = [ 3, 4, 5, 6, 7, 8, 9, 10, 1 ];
+	var<int[]> LANE_XX_PIC_CNTS =
+	[
+		GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
+		GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
+		GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
+	];
 
 	var<int[][]> picCntsLst;
 
@@ -153,24 +159,7 @@ function* <generatorForTask> @@_SlotMain(<int> laneNo)
 		break;
 
 	case 4:
-		picCntsLst =
-		[
-			[
-				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
-				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
-				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
-			],
-			[
-				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
-				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
-				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
-			],
-			[
-				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
-				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
-				GetRandRange(1, 20), GetRandRange(1, 20), GetRandRange(1, 20),
-			],
-		];
+		picCntsLst = [ LANE_XX_PIC_CNTS, LANE_XX_PIC_CNTS, LANE_XX_PIC_CNTS ];
 		break;
 
 	default:
