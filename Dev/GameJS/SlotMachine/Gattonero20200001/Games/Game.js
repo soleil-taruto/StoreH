@@ -38,10 +38,7 @@ function* <generatorForTask> GameMain()
 	ClearAllActor();
 	ClearAllTask(GameTasks);
 
-	for (; ; )
-	{
-		yield* @@_TitleMain();
-	}
+	yield* @@_TitleMain();
 
 	error(); // この関数は終了してはならない。
 }
@@ -190,6 +187,7 @@ function* <generatorForTask> @@_SlotMain(<int> laneNo)
 		drums.push(drum);
 	}
 
+	@@_ExtInfoPicCnts = picCntsLst[0];
 	@@_Drums = drums;
 	@@_DrumRots       = [ 0.0, 0.0, 0.0 ];
 	@@_DrumSpeeds     = [ 0.0, 0.0, 0.0 ];
@@ -222,11 +220,38 @@ gameLoop:
 					260,
 					230 + c * 200), 0.0))
 				{
-					if (1 <= @@_Credit && (mouseDown == 1 || (60 <= mouseDown && mouseDown % 10 == 0))) // ? 押下 or 連打
+					var<boolean> pressFlag; // ? 押下 or 連打
+					var<boolean> pressSoundFlag;
+
+					if (600 <= mouseDown)
 					{
-						if (@@_Bets[c] < 99) // ? 投入可能
+						pressFlag      = mouseDown %  2 == 0;
+						pressSoundFlag = mouseDown % 10 == 0;
+					}
+					else if (300 <= mouseDown)
+					{
+						pressFlag      = mouseDown %  5 == 0;
+						pressSoundFlag = mouseDown % 10 == 0;
+					}
+					else if (60 <= mouseDown)
+					{
+						pressFlag = mouseDown % 10 == 0;
+						pressSoundFlag = pressFlag;
+					}
+					else
+					{
+						pressFlag = mouseDown == 1;
+						pressSoundFlag = pressFlag;
+					}
+
+					if (1 <= @@_Credit && pressFlag)
+					{
+						if (@@_Bets[c] < 100) // ? 投入可能
 						{
-							SE(S_BetCoin);
+							if (pressSoundFlag)
+							{
+								SE(S_BetCoin);
+							}
 
 							@@_Bets[c]++;
 							@@_Credit--;
@@ -390,6 +415,12 @@ gameLoop:
 }
 
 /*
+	補足情報
+	ドラムの絵柄の個数リスト
+*/
+var<int[]> @@_ExtInfoPicCnts;
+
+/*
 	レーン番号
 	値：1 ～ 4
 */
@@ -512,10 +543,23 @@ function <void> @@_DrawSlot()
 		PrintLine("STOP");
 	}
 
+	var<string> dispLaneNo = "" + @@_LaneNo;
+
+	if (dispLaneNo == "4")
+	{
+		dispLaneNo = "X";
+	}
+	var<string> dispLaneNoExt = "(" + JoinString(@@_ExtInfoPicCnts, ", ") + ")";
+
 	SetColor("#80ffff");
 	SetFSize(32);
 	SetPrint(400, 32, 0);
-	PrintLine("LANE NO." + @@_LaneNo);
+	PrintLine("LANE NO." + dispLaneNo);
+
+	SetColor("#408080");
+	SetFSize(24);
+	SetPrint(400, 64, 0);
+	PrintLine(dispLaneNoExt);
 
 	SetColor("#ffffff");
 	SetFSize(60);
