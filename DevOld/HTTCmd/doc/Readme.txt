@@ -147,7 +147,7 @@
 
 　ソースがこの辺にあります。
 
-　　https://github.com/soleil-taruto/Store/tree/main/HTTCmd
+　　https://github.com/soleil-taruto/StoreH/tree/main/DevOld/HTTCmd
 
 
 ■取り扱い種別
