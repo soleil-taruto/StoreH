@@ -16,7 +16,7 @@ function <Sound_t> @@_Load(<string> url)
 
 // ★ここまで固定 -- 持ち回り_共通 -- サンプルとしてキープ
 
-var<Sound_t> M_Title     = @@_Load(RESOURCE_魔王魂__魔王魂_8bit29_mp3);
-var<Sound_t> M_Battle_01 = @@_Load(RESOURCE_魔王魂__魔王魂_8bit28_mp3);
-var<Sound_t> M_Battle_02 = @@_Load(RESOURCE_魔王魂__魔王魂_8bit27_mp3);
-var<Sound_t> M_Battle_03 = @@_Load(RESOURCE_魔王魂__魔王魂_8bit26_mp3);
+var<Sound_t> M_Title     = @@_Load(RESOURCE_魔王魂__魔王魂_8bit29_wc4g__0_39690_4410_4410__mp3);
+var<Sound_t> M_Battle_01 = @@_Load(RESOURCE_魔王魂__魔王魂_8bit28_wc4g__0_39690_4410_4410__mp3);
+var<Sound_t> M_Battle_02 = @@_Load(RESOURCE_魔王魂__魔王魂_8bit27_wc4g__0_39690_4410_4410__mp3);
+var<Sound_t> M_Battle_03 = @@_Load(RESOURCE_魔王魂__魔王魂_8bit26_wc4g__13009500_39690_4410_4410__mp3);
