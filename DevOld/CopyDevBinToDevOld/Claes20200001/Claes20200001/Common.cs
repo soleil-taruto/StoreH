@@ -2,20 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using Charlotte.Commons;
 
 namespace Charlotte
 {
 	public static class Common
 	{
-		public static string LiteFormatDIG(string str)
+		public static bool ExistsPath(string path)
 		{
-			string fmt = str;
-
-			foreach (char chr in SCommon.DECIMAL)
-				fmt = fmt.Replace(chr, '9');
-
-			return fmt;
+			return Directory.Exists(path) || File.Exists(path);
 		}
 	}
 }

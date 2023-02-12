@@ -90,9 +90,9 @@ namespace Charlotte
 
 			ProcMain.WriteLog("start!");
 
-			// 出力先クリア
-			SCommon.DeletePath(WRootDir);
-			SCommon.CreateDir(WRootDir);
+			// 出力先(全)クリア -- 廃止
+			//SCommon.DeletePath(WRootDir);
+			//SCommon.CreateDir(WRootDir);
 
 			Queue<string[]> q = new Queue<string[]>();
 
@@ -122,6 +122,14 @@ namespace Charlotte
 
 		private void CopySourceDir(string projectDir)
 		{
+			// 出力先(個別)クリア
+			{
+				string destProjectDir = SCommon.ChangeRoot(projectDir, Consts.R_ROOT_DIR, WRootDir);
+
+				SCommon.DeletePath(destProjectDir);
+				SCommon.CreateDir(destProjectDir);
+			}
+
 			foreach (string srcLocalDir in Consts.SRC_LOCAL_DIRS)
 			{
 				string rDir = Path.Combine(projectDir, srcLocalDir);
@@ -154,6 +162,9 @@ namespace Charlotte
 					{
 						CopyResourceDir(projectDir, "res", true); // 画像・音楽 etc.
 					}
+
+					CopyOtherResourceFiles(projectDir);
+					CopyOtherResourceDirs(projectDir);
 				}
 			}
 		}
@@ -169,6 +180,23 @@ namespace Charlotte
 				ProcMain.WriteLog("> " + wFile);
 
 				File.Copy(rFile, wFile);
+			}
+		}
+
+		private void CopyOtherResourceFiles(string projectDir)
+		{
+			foreach (string rFile in Directory.GetFiles(projectDir))
+			{
+				string wFile = SCommon.ChangeRoot(rFile, Consts.R_ROOT_DIR, WRootDir);
+
+				if (!Common.ExistsPath(wFile))
+				{
+					ProcMain.WriteLog("OF");
+					ProcMain.WriteLog("< " + rFile);
+					ProcMain.WriteLog("> " + wFile);
+
+					File.Copy(rFile, wFile);
+				}
 			}
 		}
 
@@ -202,6 +230,28 @@ namespace Charlotte
 			}
 		}
 
+		private void CopyOtherResourceDirs(string projectDir)
+		{
+			foreach (string rDir in Directory.GetDirectories(projectDir))
+			{
+				string wDir = SCommon.ChangeRoot(rDir, Consts.R_ROOT_DIR, WRootDir);
+
+				if (!Common.ExistsPath(wDir))
+				{
+					ProcMain.WriteLog("OD");
+					ProcMain.WriteLog("< " + rDir);
+					ProcMain.WriteLog("T " + wDir);
+
+					string treeFile = Path.Combine(wDir, "_Tree.txt");
+					string[] treeFileData = MakeTreeFileData(rDir);
+
+					SCommon.CreateDir(wDir);
+
+					File.WriteAllLines(treeFile, treeFileData, Encoding.UTF8);
+				}
+			}
+		}
+
 		private string[] MakeTreeFileData(string targDir)
 		{
 			string[] paths = Directory.GetDirectories(targDir, "*", SearchOption.AllDirectories)
@@ -231,6 +281,10 @@ namespace Charlotte
 						));
 				}
 			}
+
+			if (dest.Count == 0)
+				dest.Add("Nothing");
+
 			return dest.ToArray();
 		}
 	}

@@ -83,14 +83,16 @@ namespace Charlotte
 				string title = pTkns[--p];
 				int date;
 
-				if (Common.LiteFormatDIG(title).StartsWith("99999999_"))
+				const string DATED_LOCAL_NAME_PATTERN = "^[0-9]{8}_.+$";
+
+				if (Regex.IsMatch(title, DATED_LOCAL_NAME_PATTERN))
 				{
 					date = int.Parse(title.Substring(0, 8));
 					title = title.Substring(9);
 				}
 				else
 				{
-					while (!Common.LiteFormatDIG(pTkns[--p]).StartsWith("99999999_")) ;
+					while (!Regex.IsMatch(pTkns[--p], DATED_LOCAL_NAME_PATTERN)) ;
 					date = int.Parse(pTkns[p].Substring(0, 8));
 				}
 
@@ -208,6 +210,9 @@ namespace Charlotte
 				CopyResourceDir(rDir, wDir, "dat", true);
 				CopyResourceDir(rDir, wDir, "res", true);
 				CopyResourceDir(rDir, wDir, "doc", false);
+
+				CopyOtherResourceFiles(rDir, wDir);
+				CopyOtherResourceDirs(rDir, wDir);
 			}
 
 			File.WriteAllLines(Path.Combine(OutputRootDir, "Copy.log"), Logs, Encoding.UTF8);
@@ -226,6 +231,24 @@ namespace Charlotte
 				ProcMain.WriteLog("> " + wFile);
 
 				File.Copy(rFile, wFile);
+			}
+		}
+
+		private void CopyOtherResourceFiles(string rDir, string wDir)
+		{
+			foreach (string localName in Directory.GetFiles(SCommon.ToParentPath(rDir)).Select(v => Path.GetFileName(v)))
+			{
+				string rFile = Path.Combine(SCommon.ToParentPath(rDir), localName);
+				string wFile = Path.Combine(SCommon.ToParentPath(wDir), localName);
+
+				if (!Common.ExistsPath(wFile))
+				{
+					ProcMain.WriteLog("OF");
+					ProcMain.WriteLog("< " + rFile);
+					ProcMain.WriteLog("> " + wFile);
+
+					File.Copy(rFile, wFile);
+				}
 			}
 		}
 
@@ -264,6 +287,32 @@ namespace Charlotte
 			}
 		}
 
+		private void CopyOtherResourceDirs(string rDirPrm, string wDirPrm)
+		{
+			foreach (string localName in Directory.GetDirectories(SCommon.ToParentPath(rDirPrm)).Select(v => Path.GetFileName(v)))
+			{
+				string rDir = Path.Combine(SCommon.ToParentPath(rDirPrm), localName);
+				string wDir = Path.Combine(SCommon.ToParentPath(wDirPrm), localName);
+
+				if (!Common.ExistsPath(wDir))
+				{
+					ProcMain.WriteLog("OD");
+					ProcMain.WriteLog("< " + rDir);
+					ProcMain.WriteLog("T " + wDir);
+
+					Logs.Add("< " + rDir);
+					Logs.Add("T " + wDir);
+
+					string treeFile = Path.Combine(wDir, "_Tree.txt");
+					string[] treeFileData = MakeTreeFileData(rDir);
+
+					SCommon.CreateDir(wDir);
+
+					File.WriteAllLines(treeFile, treeFileData, Encoding.UTF8);
+				}
+			}
+		}
+
 		private string[] MakeTreeFileData(string targDir)
 		{
 			string[] paths = Directory.GetDirectories(targDir, "*", SearchOption.AllDirectories)
@@ -293,6 +342,10 @@ namespace Charlotte
 						));
 				}
 			}
+
+			if (dest.Count == 0)
+				dest.Add("Nothing");
+
 			return dest.ToArray();
 		}
 	}
