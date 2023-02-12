@@ -46,26 +46,6 @@ function <Action event> @@_GetEvPointer(<Action double double> touch)
 {
 	var<Action event> ret = function(event)
 	{
-		touch(event.pageX, event.pageY);
-	};
-
-	return ret;
-}
-
-function <Action event> @@_GetEvTouch(<Action double double> touch)
-{
-	var<Action event> ret = function(event)
-	{
-		touch(event.changedTouches[0].pageX, event.changedTouches[0].pageY);
-	};
-
-	return ret;
-}
-
-function <Action event> @@_GetEvMouse(<Action double double> touch)
-{
-	var<Action event> ret = function(event)
-	{
 		touch(event.x, event.y);
 	};
 
