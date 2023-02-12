@@ -192,12 +192,12 @@ C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\KF_Input.js(16) : PadIn
 C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\KF_Input.js(17) : PadInputIndex_B // •Ï”
 C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\KF_Input.js(18) : PadInputIndex_Pause // •Ï”
 C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\KF_Input.js(181) : FreezeInputFrame // •Ï”
+C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\Mouse.js(55) : @ // ŠÖ”
 C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\Mouse.js(65) : @ // ŠÖ”
-C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\Mouse.js(84) : @ // ŠÖ”
-C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\Mouse.js(120) : GetMouseDown // ŠÖ”
-C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\Mouse.js(128) : ClearMouseDown // ŠÖ”
-C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\Mouse.js(136) : GetMouseX // ŠÖ”
-C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\Mouse.js(144) : GetMouseY // ŠÖ”
+C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\Mouse.js(101) : GetMouseDown // ŠÖ”
+C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\Mouse.js(109) : ClearMouseDown // ŠÖ”
+C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\Mouse.js(117) : GetMouseX // ŠÖ”
+C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\Mouse.js(125) : GetMouseY // ŠÖ”
 C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\Music.js(17) : Play // ŠÖ”
 C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\Music.js(50) : @ // ŠÖ”
 C:\Dev\GameJS\00_Adventure\Gattonero20200001\GameCommons\Music.js(98) : Fadeout // ŠÖ”

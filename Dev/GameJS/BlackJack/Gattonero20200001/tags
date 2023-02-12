@@ -189,12 +189,12 @@ C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\KF_Input.js(16) : PadInput
 C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\KF_Input.js(17) : PadInputIndex_B // ïœêî
 C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\KF_Input.js(18) : PadInputIndex_Pause // ïœêî
 C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\KF_Input.js(181) : FreezeInputFrame // ïœêî
+C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\Mouse.js(55) : @ // ä÷êî
 C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\Mouse.js(65) : @ // ä÷êî
-C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\Mouse.js(84) : @ // ä÷êî
-C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\Mouse.js(120) : GetMouseDown // ä÷êî
-C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\Mouse.js(128) : ClearMouseDown // ä÷êî
-C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\Mouse.js(136) : GetMouseX // ä÷êî
-C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\Mouse.js(144) : GetMouseY // ä÷êî
+C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\Mouse.js(101) : GetMouseDown // ä÷êî
+C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\Mouse.js(109) : ClearMouseDown // ä÷êî
+C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\Mouse.js(117) : GetMouseX // ä÷êî
+C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\Mouse.js(125) : GetMouseY // ä÷êî
 C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\Music.js(17) : Play // ä÷êî
 C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\Music.js(50) : @ // ä÷êî
 C:\Dev\GameJS\BlackJack\Gattonero20200001\GameCommons\Music.js(98) : Fadeout // ä÷êî
