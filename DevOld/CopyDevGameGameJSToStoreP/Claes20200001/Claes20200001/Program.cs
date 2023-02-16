@@ -90,9 +90,9 @@ namespace Charlotte
 
 			ProcMain.WriteLog("start!");
 
-			// 出力先(全)クリア -- 廃止
-			//SCommon.DeletePath(WRootDir);
-			//SCommon.CreateDir(WRootDir);
+			// 出力先(全)クリア
+			SCommon.DeletePath(WRootDir);
+			SCommon.CreateDir(WRootDir);
 
 			Queue<string[]> q = new Queue<string[]>();
 
@@ -122,6 +122,7 @@ namespace Charlotte
 
 		private void CopySourceDir(string projectDir)
 		{
+#if false // 不要
 			// 出力先(個別)クリア
 			{
 				string destProjectDir = SCommon.ChangeRoot(projectDir, Consts.R_ROOT_DIR, WRootDir);
@@ -129,6 +130,7 @@ namespace Charlotte
 				SCommon.DeletePath(destProjectDir);
 				SCommon.CreateDir(destProjectDir);
 			}
+#endif
 
 			foreach (string srcLocalDir in Consts.SRC_LOCAL_DIRS)
 			{
