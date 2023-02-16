@@ -28,6 +28,33 @@ function <void> PrintRect(<double> l, <double> t, <double> w, <double> h)
 
 /*
 	矩形を描画する。
+	(x, y, w, h): 中心座標, 幅, 高さ
+	rot: 傾き
+*/
+function <void> PrintRectRot(<double> x, <double> y, <double> w, <double> h, <double> rot)
+{
+	if (w < MICRO || h < MICRO) // ? 小さすぎるので描画不要
+	{
+		return;
+	}
+
+	var<double> l = x - w / 2;
+	var<double> t = y - h / 2;
+
+	Context.translate(x, y);
+	Context.rotate(rot);
+	Context.translate(-x, -y);
+
+	Context.fillRect(l, t, w, h);
+
+	// restore
+	Context.translate(x, y);
+	Context.rotate(-rot);
+	Context.translate(-x, -y);
+}
+
+/*
+	矩形を描画する。
 	(l, t, r, b): 左上座標, 右下座標
 */
 function <void> PrintRect_LTRB(<double> l, <double> t, <double> r, <double> b)
@@ -103,4 +130,14 @@ function <void> PrintLine(<string> line)
 {
 	Context.fillText(line, @@_X, @@_Y);
 	@@_Y += @@_YStep;
+}
+
+/*
+	文字列を描画したときの幅を取得する。
+	line: 文字列
+	ret: 文字列の幅
+*/
+function <double> GetPrintLineWidth(<string> line)
+{
+	return Context.measureText(line).width;
 }

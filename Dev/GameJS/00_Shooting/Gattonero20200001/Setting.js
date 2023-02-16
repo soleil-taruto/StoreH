@@ -39,7 +39,7 @@ gameLoop:
 		switch (selectIndex)
 		{
 		case 0:
-			yield* @@_VolumeSetting("‰¹Šy", MusicVolume, function <void> (<double> volume)
+			yield* @@_VolumeSetting("‰¹Šy", MusicVolume, DEFAULT_MUSIC_VOLUME, function <void> (<double> volume)
 			{
 				MusicVolume = volume;
 				MusicVolumeChanged();
@@ -48,7 +48,7 @@ gameLoop:
 			break;
 
 		case 1:
-			yield* @@_VolumeSetting("Œø‰Ê‰¹", SEVolume, function <void> (<double> volume)
+			yield* @@_VolumeSetting("Œø‰Ê‰¹", SEVolume, DEFAULT_SE_VOLUME, function <void> (<double> volume)
 			{
 				SEVolume = volume;
 				SaveLocalStorage();
@@ -79,7 +79,7 @@ gameLoop:
 	FreezeInput();
 }
 
-function* <generatorForTask> @@_VolumeSetting(<string> name, <double> initVolume, <Action double> volumeChanged)
+function* <generatorForTask> @@_VolumeSetting(<string> name, <double> initVolume, <double> defaultVolume, <Action double> volumeChanged)
 {
 	FreezeInput();
 
@@ -121,7 +121,7 @@ function* <generatorForTask> @@_VolumeSetting(<string> name, <double> initVolume
 		}
 		if (GetInput_B() == 1)
 		{
-			volume = DEFAULT_VOLUME * 100.0;
+			volume = defaultVolume * 100.0;
 			changed = true;
 		}
 		if (GetInput_A() == 1)

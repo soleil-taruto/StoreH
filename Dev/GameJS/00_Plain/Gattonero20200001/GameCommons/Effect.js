@@ -45,3 +45,28 @@ function <void> ClearAllEffect()
 {
 	@@_Effects = [];
 }
+
+// ====
+// ‚±‚±‚©‚ç•Ö—˜‹@”\
+// ====
+
+function <void> AddEffectDelay(<int> delayFrame, <Action> routine)
+{
+	AddEffect(function* <generatorForTask> ()
+	{
+		yield* Repeat(1, delayFrame);
+		routine();
+	}());
+}
+
+function <void> AddEffectKeep(<int> keepFrame, <Action> routine)
+{
+	AddEffect(function* <generatorForTask> ()
+	{
+		for (var<int> frame = 0; frame < keepFrame; frame++)
+		{
+			routine();
+			yield 1;
+		}
+	}());
+}

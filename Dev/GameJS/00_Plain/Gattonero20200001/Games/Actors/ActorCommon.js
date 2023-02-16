@@ -26,6 +26,11 @@ function <void> KillActor(<Actor_t> actor)
 	actor.Killed = true;
 }
 
+function <Actor_t[]> GetAllActor()
+{
+	return @@_Actors;
+}
+
 function <void> ClearAllActor()
 {
 	@@_Actors = [];

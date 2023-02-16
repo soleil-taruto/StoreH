@@ -6,7 +6,7 @@
 	音楽の音量
 	0.0 ～ 1.0
 */
-var<double> MusicVolume = DEFAULT_VOLUME;
+var<double> MusicVolume = DEFAULT_MUSIC_VOLUME;
 
 var<int> @@_State = 0; // 0 == 停止中, 1 == 再生中, 2 == フェードアウト中, 3 == 曲停止, 4 == 次の曲を再生
 var<Sound_t> @@_Music = null;

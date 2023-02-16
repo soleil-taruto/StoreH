@@ -128,3 +128,16 @@ function <string> JoinString(<T[]> arr, <string> separator)
 {
 	return arr.map(v => "" + v).join(separator);
 }
+
+function <string> ToThousandComma(<T> value)
+{
+	var<string> str = "" + value;
+
+	// HACK: Ú“ª«EÚ”ö«‚ğl—¶‚µ‚Ä‚¢‚È‚¢B
+
+	for (var<int> i = str.length - 3; 1 <= i; i -= 3)
+	{
+		str = str.substring(0, i) + "," + str.substring(i);
+	}
+	return str;
+}
