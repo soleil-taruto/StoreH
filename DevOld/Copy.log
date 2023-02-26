@@ -166,6 +166,12 @@ T C:\home\GitHub\StoreH\DevOld\CopyDevBinToDevOld\out
 > C:\home\GitHub\StoreH\DevOld\CopyDevGameGameJSToStoreP\doc
 < C:\DevBin\20230212_Program\CopyDevGameGameJSToStoreP\out
 T C:\home\GitHub\StoreH\DevOld\CopyDevGameGameJSToStoreP\out
+< C:\DevBin\20230226_Cron\Petra20200001
+> C:\home\GitHub\StoreH\DevOld\Cron\Petra20200001
+< C:\DevBin\20230226_Cron\doc
+> C:\home\GitHub\StoreH\DevOld\Cron\doc
+< C:\DevBin\20230226_Cron\out
+T C:\home\GitHub\StoreH\DevOld\Cron\out
 < C:\DevBin\20221026_Dev\GameJS\Doremy\Gattonero20200001
 > C:\home\GitHub\StoreH\DevOld\Doremy\Gattonero20200001
 < C:\DevBin\20221026_Dev\GameJS\Doremy\res
