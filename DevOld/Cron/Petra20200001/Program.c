@@ -3,9 +3,16 @@
 #include <time.h>
 #include <windows.h>
 
-static void Error(void)
+#define Error() \
+	Error_LN(__LINE__)
+
+static void Error_LN(int lineno)
 {
-	printf("FATAL\n");
+	char command[1024]; // rough size
+
+	printf("FATAL %d\n", lineno);
+	sprintf(command, "START "" *[ERROR-%d]", lineno);
+	system(command);
 	exit(1);
 }
 
@@ -91,6 +98,8 @@ void main(int argc, char **argv)
 		printf("SetEvent_Stop\n");
 		goto endProc;
 	}
+	if (argc != 1) // ? 不明なコマンド引数が指定されている。
+		Error();
 
 	printf("ST_Cron\n");
 
