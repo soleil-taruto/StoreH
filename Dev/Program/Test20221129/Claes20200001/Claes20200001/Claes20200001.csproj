@@ -74,6 +74,7 @@
     <Compile Include="Tests\Test0007.cs" />
     <Compile Include="Tests\Test0008.cs" />
     <Compile Include="Tests\Test0009.cs" />
+    <Compile Include="Tests\Test0010.cs" />
     <Compile Include="Utilities\Canvas.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
