@@ -1,3 +1,0 @@
-Title=MSSAGame
-Author=cerulean.charlotte
-Copyright=(C) 202x cerulean.charlotte
