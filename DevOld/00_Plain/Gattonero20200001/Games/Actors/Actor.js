@@ -20,6 +20,8 @@
 	//
 	<generatorForTask> Draw
 
+	<Crash_t> Crash // 今フレームの当たり判定置き場, null で初期化すること。null == 当たり判定無し
+
 	<boolean> Killed // 死亡フラグ
 }
 
@@ -30,5 +32,5 @@
 */
 function <boolean> DrawActor(<Actor_t> actor) // ret: ? 生存
 {
-	return NextVal(actor.Draw);
+	return !actor.Killed && NextVal(actor.Draw);
 }

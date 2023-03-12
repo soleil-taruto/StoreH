@@ -16,8 +16,8 @@ function <Sound_t> @@_Load(<string> url)
 
 // ★ここまで固定 -- 持ち回り_共通 -- サンプルとしてキープ
 
-var<Sound_t> M_Title   = @@_Load(RESOURCE_MusMus__MusMus_BGM_124_mp3);
-var<Sound_t> M_Lane_01 = @@_Load(RESOURCE_MusMus__MusMus_BGM_141_mp3);
-var<Sound_t> M_Lane_02 = @@_Load(RESOURCE_MusMus__MusMus_BGM_147_mp3);
-var<Sound_t> M_Lane_03 = @@_Load(RESOURCE_MusMus__MusMus_BGM_156_mp3);
-var<Sound_t> M_Lane_XX = @@_Load(RESOURCE_MusMus__MusMus_BGM_081_mp3);
+var<Sound_t> M_Title   = @@_Load(RESOURCE_MusMus__MusMus_BGM_124_wc4g__0_39690_4410_4410__mp3);
+var<Sound_t> M_Lane_01 = @@_Load(RESOURCE_MusMus__MusMus_BGM_141_wc4g__0_39690_4410_4410__mp3);
+var<Sound_t> M_Lane_02 = @@_Load(RESOURCE_MusMus__MusMus_BGM_147_wc4g__0_39690_4410_4410__mp3);
+var<Sound_t> M_Lane_03 = @@_Load(RESOURCE_MusMus__MusMus_BGM_156_wc4g__0_39690_4410_4410__mp3);
+var<Sound_t> M_Lane_XX = @@_Load(RESOURCE_MusMus__MusMus_BGM_081_wc4g__6350400_39690_4410_4410__mp3);

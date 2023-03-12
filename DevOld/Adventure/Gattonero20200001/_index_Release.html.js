@@ -33,7 +33,7 @@ window.onload = function()
 
 <br/>
 
-<div style="color: red;">このゲームは開発中です。</div>
+<div style="color: red;">このゲームは開発中ですが、いちおう動きます。</div>
 
 <br/>
 

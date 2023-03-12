@@ -42,17 +42,7 @@ function <void> @@_TouchEnd(<double> x, <double> y)
 	@@_ScreenPosToCanvasPos();
 }
 
-function <Action event> @@_GetEvTouch(<Action double double> touch)
-{
-	var<Action event> ret = function(event)
-	{
-		touch(event.changedTouches[0].pageX, event.changedTouches[0].pageY);
-	};
-
-	return ret;
-}
-
-function <Action event> @@_GetEvMouse(<Action double double> touch)
+function <Action event> @@_GetEvPointer(<Action double double> touch)
 {
 	var<Action event> ret = function(event)
 	{
@@ -64,19 +54,10 @@ function <Action event> @@_GetEvMouse(<Action double double> touch)
 
 function <void> @(UNQN)_INIT()
 {
-	if (window.ontouchstart === null)
-	{
-		CanvasBox.ontouchstart = @@_GetEvTouch(@@_TouchStart);
-		CanvasBox.ontouchmove  = @@_GetEvTouch(@@_TouchMove);
-		CanvasBox.ontouchend   = @@_GetEvTouch(@@_TouchEnd);
-	}
-	else
-	{
-		CanvasBox.onmousedown  = @@_GetEvMouse(@@_TouchStart);
-		CanvasBox.onmousemove  = @@_GetEvMouse(@@_TouchMove);
-		CanvasBox.onmouseup    = @@_GetEvMouse(@@_TouchEnd);
-		CanvasBox.onmouseleave = @@_GetEvMouse(@@_TouchEnd);
-	}
+	CanvasBox.onpointerdown  = @@_GetEvPointer(@@_TouchStart);
+	CanvasBox.onpointermove  = @@_GetEvPointer(@@_TouchMove);
+	CanvasBox.onpointerup    = @@_GetEvPointer(@@_TouchEnd);
+	CanvasBox.onpointerleave = @@_GetEvPointer(@@_TouchEnd);
 }
 
 var<int> @@_DownCount;

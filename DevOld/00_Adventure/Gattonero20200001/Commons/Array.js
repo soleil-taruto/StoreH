@@ -2,6 +2,18 @@
 	”z—ñ
 */
 
+function <int> IndexOf(<T[]> arr, <Func T boolean> match)
+{
+	for (var<int> i = 0; i < arr.length; i++)
+	{
+		if (match(arr[i]))
+		{
+			return i;
+		}
+	}
+	return -1; // not found
+}
+
 function <void> InsertElement(<T[]> arr, <int> index, <T> element)
 {
 	if (index < 0 || arr.length < index)
@@ -30,7 +42,7 @@ function <void> AddElements(<T[]> arr, <T[]> elements)
 	}
 }
 
-function <void> DesertElement(<T[]> arr, <int> index)
+function <T> DesertElement(<T[]> arr, <int> index)
 {
 	if (index < 0 || arr.length <= index)
 	{
@@ -72,9 +84,9 @@ function <void> SwapElement(<T[]> arr, <int> index_A, <int> index_B)
 
 function <void> Shuffle(<T[]> arr)
 {
-	for (var<int> i = arr.length - 1; 2 <= i; i--)
+	for (var<int> i = arr.length; 2 <= i; i--)
 	{
-		SwapElement(arr, GetRand(i), i);
+		SwapElement(arr, GetRand(i), i - 1);
 	}
 }
 
@@ -223,4 +235,14 @@ function <void> NextRun(generator)
 	{
 		error();
 	}
+}
+
+function <T[]> Select(<T[]> arr, <Func T T> filter)
+{
+	return arr.map(v => filter(v));
+}
+
+function <T[]> Where(<T[]> arr, <Func T boolean> match)
+{
+	return arr.filter(v => match(v));
 }

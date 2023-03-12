@@ -30,5 +30,5 @@
 */
 function <boolean> DrawActor(<Actor_t> actor) // ret: ? ê∂ë∂
 {
-	return NextVal(actor.Draw);
+	return !actor.Killed && NextVal(actor.Draw);
 }

@@ -105,6 +105,8 @@ function <void> @@_DrawBar2(<double> zureRate, <I3Color_t> backColor, <int> barI
 	var<double> h = 300.0 * AToBRate(0.2, 1.0, 1.0 - zureRate);
 	var<double> y = Screen_H / 2 + 600.0 * wave * AToBRate(0.05, 1.0, zureRate);
 
-	SetColor(I4ColorToString(I3ColorToI4Color(backColor, 32)));
+	var<int> iAlpha = ToInt(AToBRate(32.0, 128.0, zureRate));
+
+	SetColor(I4ColorToString(I3ColorToI4Color(backColor, iAlpha)));
 	PrintRect(0, y - h / 2, Screen_W, h);
 }

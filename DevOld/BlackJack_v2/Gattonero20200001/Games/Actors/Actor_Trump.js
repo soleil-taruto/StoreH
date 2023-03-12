@@ -10,8 +10,9 @@ var<int> ActorKind_Trump = @(AUTO);
 	number: 絵柄の数字 (1～13)
 	reversed: 裏返っているか
 */
-function <Actor_t> CreateActor_Trump(<double> x, <double> y, <Suit_e> suit, <int> number, <boolean> reversed)
+function <Trump_t> CreateActor_Trump(<double> x, <double> y, <Suit_e> suit, <int> number, <boolean> reversed)
 {
+	/// Trump_t : Actor_t
 	var ret =
 	{
 		Kind: ActorKind_Trump,
@@ -40,7 +41,7 @@ function <Actor_t> CreateActor_Trump(<double> x, <double> y, <Suit_e> suit, <int
 
 var<double> @@_PICTURE_Z = 1.0;
 
-function* <generatorForTask> @@_Draw(<Actor_t> actor)
+function* <generatorForTask> @@_Draw(<Trump_t> actor)
 {
 	for (; ; )
 	{
@@ -67,7 +68,7 @@ function* <generatorForTask> @@_Draw(<Actor_t> actor)
 	}
 }
 
-function <void> SetTrumpPos(<Actor_t> actor, <double> x, <double> y)
+function <void> SetTrumpPos(<Trump_t> actor, <double> x, <double> y)
 {
 	actor.X = x;
 	actor.Y = y;
@@ -75,18 +76,18 @@ function <void> SetTrumpPos(<Actor_t> actor, <double> x, <double> y)
 	actor.Dest_Y = y;
 }
 
-function <void> SetTrumpDest(<Actor_t> actor, <double> x, <double> y)
+function <void> SetTrumpDest(<Trump_t> actor, <double> x, <double> y)
 {
 	actor.Dest_X = x;
 	actor.Dest_Y = y;
 }
 
-function <boolean> IsTrumpReversed(<Actor_t> actor)
+function <boolean> IsTrumpReversed(<Trump_t> actor)
 {
 	return actor.Reversed;
 }
 
-function <void> SetTrumpReversed(<Actor_t> actor, <boolean> reversed)
+function <void> SetTrumpReversed(<Trump_t> actor, <boolean> reversed)
 {
 	if (actor.Reversed ? !reversed : reversed)
 	{
@@ -95,7 +96,7 @@ function <void> SetTrumpReversed(<Actor_t> actor, <boolean> reversed)
 	}
 }
 
-function* <generatorForTask> @@_Turn(<Actor_t> actor, <boolean> reversed)
+function* <generatorForTask> @@_Turn(<Trump_t> actor, <boolean> reversed)
 {
 	for (var<Scene_t> scene of CreateScene(30))
 	{
@@ -126,12 +127,12 @@ function* <generatorForTask> @@_Turn(<Actor_t> actor, <boolean> reversed)
 	}
 }
 
-function <void> SetTrumpAutoStRot(<Actor_t> actor) // 回転開始をセットする。
+function <void> SetTrumpAutoStRot(<Trump_t> actor) // 回転開始をセットする。
 {
 	SetTrumpStRot(actor, GetRand2() * 200.0);
 }
 
-function <void> SetTrumpStRot(<Actor_t> actor, <double> rot)
+function <void> SetTrumpStRot(<Trump_t> actor, <double> rot)
 {
 	actor.Rot = rot;
 }

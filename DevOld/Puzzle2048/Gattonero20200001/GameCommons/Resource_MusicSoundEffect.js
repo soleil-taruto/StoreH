@@ -44,7 +44,7 @@ function <SE_t> @@_LoadSE(<string> url)
 	return ret;
 }
 
-// ここから各種音楽・効果音
+// ここから各種効果音
 
 // プリフィクス
 // M_ ... 音楽,BGM

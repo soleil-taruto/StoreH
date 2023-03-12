@@ -4,8 +4,9 @@
 
 var<int> ActorKind_Trump = @(AUTO);
 
-function <Actor_t> CreateActor_Trump(<double> x, <double> y, <boolean> reversed)
+function <Trump_t> CreateActor_Trump(<double> x, <double> y, <boolean> reversed)
 {
+	/// Trump_t : Actor_t
 	var ret =
 	{
 		Kind: ActorKind_Trump,
@@ -28,7 +29,7 @@ function <Actor_t> CreateActor_Trump(<double> x, <double> y, <boolean> reversed)
 	return ret;
 }
 
-function* <generatorForTask> @@_Draw(<Actor_t> actor)
+function* <generatorForTask> @@_Draw(<Trump_t> actor)
 {
 	for (; ; )
 	{
@@ -57,18 +58,18 @@ function* <generatorForTask> @@_Draw(<Actor_t> actor)
 	}
 }
 
-function <void> SetTrumpDest(<Actor_t> actor, <double> x, <double> y)
+function <void> SetTrumpDest(<Trump_t> actor, <double> x, <double> y)
 {
 	actor.Dest_X = x;
 	actor.Dest_Y = y;
 }
 
-function <boolean> IsTrumpReversed(<Actor_t> actor)
+function <boolean> IsTrumpReversed(<Trump_t> actor)
 {
 	return actor.Reversed;
 }
 
-function <void> SetTrumpReversed(<Actor_t> actor, <boolean> reversed)
+function <void> SetTrumpReversed(<Trump_t> actor, <boolean> reversed)
 {
 	if (actor.Reversed ? !reversed : reversed)
 	{
@@ -77,7 +78,7 @@ function <void> SetTrumpReversed(<Actor_t> actor, <boolean> reversed)
 	}
 }
 
-function* <generatorForTask> @@_Turn(<Actor_t> actor, <boolean> reversed)
+function* <generatorForTask> @@_Turn(<Trump_t> actor, <boolean> reversed)
 {
 	for (var<Scene_t> scene of CreateScene(60))
 	{

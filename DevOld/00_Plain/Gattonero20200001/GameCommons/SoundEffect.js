@@ -6,7 +6,7 @@
 	å¯â âπÇÃâπó 
 	0.0 Å` 1.0
 */
-var<double> SEVolume = DEFAULT_VOLUME;
+var<double> SEVolume = DEFAULT_SE_VOLUME;
 
 var<SE_t[]> @@_SEBuff = [];
 

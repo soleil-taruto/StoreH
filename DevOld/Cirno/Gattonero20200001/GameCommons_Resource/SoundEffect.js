@@ -7,7 +7,7 @@ function <SE_t> @@_Load(<string> url)
 	return LoadSE(url);
 }
 
-// ここから各種音楽・効果音
+// ここから各種効果音
 
 // プリフィクス
 // S_ ... 効果音

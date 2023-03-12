@@ -2,8 +2,6 @@
 	’è”
 */
 
-// none
-
 /// Suit_e
 //
 var Suit_e_SPADE = 1;

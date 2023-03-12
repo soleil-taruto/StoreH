@@ -114,7 +114,17 @@ function <int> StrToInt(<string> str)
 	return value * sign;
 }
 
+function <int> ParseInteger(<string> str)
+{
+	return StrToInt(str);
+}
+
 function <char[]> ToCharArray(<string> str)
 {
 	return [ ... str ];
+}
+
+function <string> JoinString(<T[]> arr, <string> separator)
+{
+	return arr.map(v => "" + v).join(separator);
 }

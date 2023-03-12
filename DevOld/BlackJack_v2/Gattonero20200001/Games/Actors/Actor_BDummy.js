@@ -32,12 +32,12 @@ function* <generatorForTask> @@_Draw(<Actor_t> actor)
 	{
 		actor.Y += 2.0;
 
-		if (Map.H * TILE_H < actor.Y)
+		if (Screen_H < actor.Y)
 		{
 			break;
 		}
 
-		Draw(P_Dummy, actor.X - Camera.X, actor.Y - Camera.Y, 1.0, 0.0, 1.0);
+		Draw(P_Dummy, actor.X, actor.Y, 1.0, 0.0, 1.0);
 
 		yield 1;
 	}

@@ -81,8 +81,8 @@ function* <generatorForTask> @@_BetMain()
 			{
 				var<int> inc = Math.min(INC_SPAN, @@_Credit);
 
-				@@_Credit -= INC_SPAN;
-				@@_Bet += INC_SPAN;
+				@@_Credit -= inc;
+				@@_Bet += inc;
 
 				betUpZure = 10.0;
 			}
@@ -186,7 +186,7 @@ function* <generatorForTask> @@_PlayerTurnMain()
 	@@_PlayerCards.push(@@_StockCards.pop());
 	@@_PlayerCards.push(@@_StockCards.pop());
 
-	for (var<Actor_t> card of @@_DealerCards.concat(@@_PlayerCards))
+	for (var<Trump_t> card of @@_DealerCards.concat(@@_PlayerCards))
 	{
 		SetTrumpPos(card, Screen_W + 300, -300);
 		SetTrumpAutoStRot(card);
@@ -201,6 +201,8 @@ function* <generatorForTask> @@_PlayerTurnMain()
 		AddDelay(GameTasks, 5 + 10 * index, () => SetTrumpDest(@@_PlayerCards[index], @@_CARD_X + @@_CARD_X_STEP * index, @@_PLAYER_CARD_Y + @@_CARD_Y_STEP * index));
 	}
 
+	// HACK: 大幅に遅延して(或いはめっちゃ素早く操作されて)カード退場後に実行されるとヤバい。
+	//
 	AddDelay(GameTasks, 30, () => SetTrumpReversed(@@_DealerCards[0], false));
 	AddDelay(GameTasks, 50, () => SetTrumpReversed(@@_PlayerCards[0], false));
 	AddDelay(GameTasks, 70, () => SetTrumpReversed(@@_PlayerCards[1], false));
@@ -223,7 +225,7 @@ function* <generatorForTask> @@_PlayerTurnMain()
 			if (HoveredPicture == P_ButtonHit)
 			{
 				var<int> count  = @@_PlayerCards.length;
-				var<Actor_t> card = @@_StockCards.pop();
+				var<Trump_t> card = @@_StockCards.pop();
 
 				@@_PlayerCards.push(card);
 
@@ -288,7 +290,7 @@ function* <generatorForTask> @@_DealerTurnMain()
 		if (1 <= frame && frame % 60 == 0) // ディーラーのヒット
 		{
 			var<int> count  = @@_DealerCards.length;
-			var<Actor_t> card = @@_StockCards.pop();
+			var<Trump_t> card = @@_StockCards.pop();
 
 			@@_DealerCards.push(card);
 
@@ -604,9 +606,9 @@ function* <generatorForTask> @@_E_DrawBattleBackground()
 	}
 }
 
-function <Actor_t[]> @@_GetAllCard()
+function <Trump_t[]> @@_GetAllCard()
 {
-	var<Actor_t[]> dest = [];
+	var<Trump_t[]> dest = [];
 
 	for (var<Suit_e> suit of [ Suit_e_SPADE, Suit_e_HEART, Suit_e_DIA, Suit_e_CLUB ])
 	for (var<int> number = 1; number <= 13; number++)
@@ -616,12 +618,12 @@ function <Actor_t[]> @@_GetAllCard()
 	return dest;
 }
 
-function <int[]> @@_GetCardsScores(<Actor_t[]> cards)
+function <int[]> @@_GetCardsScores(<Trump_t[]> cards)
 {
 	var<int> score = 0;
 	var<int> ace = 0;
 
-	for (var<Actor_t> card of cards)
+	for (var<Trump_t> card of cards)
 	{
 		var<int> n = card.Number;
 
@@ -648,7 +650,7 @@ function <int[]> @@_GetCardsScores(<Actor_t[]> cards)
 	return dest;
 }
 
-function <void> @@_ExeuntCards(<Actor_t[]> cards)
+function <void> @@_ExeuntCards(<Trump_t[]> cards)
 {
 	var<int> delayFrame = 0;
 

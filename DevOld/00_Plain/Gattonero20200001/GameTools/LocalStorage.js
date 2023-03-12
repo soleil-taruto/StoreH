@@ -30,8 +30,8 @@ function <void> LoadLocalStorage()
 	{
 		// SaveData >
 
-		MusicVolume = DEFAULT_VOLUME;
-		SEVolume    = DEFAULT_VOLUME;
+		MusicVolume = DEFAULT_MUSIC_VOLUME;
+		SEVolume    = DEFAULT_SE_VOLUME;
 
 		PadInputIndex_A = 0;
 		PadInputIndex_B = 3;

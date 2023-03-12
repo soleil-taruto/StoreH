@@ -1,3 +1,1 @@
-CALL C:\Factory\SetEnv.bat
-RDMD /RM out
-CALL qqc
+C:\Factory\Tools\RDMD.exe /RM out

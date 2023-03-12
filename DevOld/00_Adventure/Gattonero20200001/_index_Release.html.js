@@ -26,22 +26,5 @@ window.onload = function()
 <center>
 <div id="Gattonero20200001-CanvasBox"></div>
 </center>
-
-<br/>
-
-<hr/>
-
-<br/>
-
-<div style="color: red;">‚±‚ÌƒQ[ƒ€‚ÍŠJ”­’†‚Å‚·B</div>
-
-<br/>
-
-<hr/>
-
-<br/>
-<br/>
-<br/>
-
 </body>
 </html>

@@ -6,7 +6,7 @@ function* <generatorForTask> Test01()
 {
 	ClearAllActor();
 
-	var<Actor_t> card = CreateActor_Trump(Screen_W / 2.0, Screen_H / 2.0, 1, 1, false);
+	var<Trump_t> card = CreateActor_Trump(Screen_W / 2.0, Screen_H / 2.0, 1, 1, false);
 
 	AddActor(card);
 
@@ -26,7 +26,7 @@ function* <generatorForTask> Test02()
 {
 	ClearAllActor();
 
-	var<Actor_t> card = CreateActor_Trump(Screen_W / 2.0, Screen_H / 2.0, 1, 1, false);
+	var<Trump_t> card = CreateActor_Trump(Screen_W / 2.0, Screen_H / 2.0, 1, 1, false);
 	var<boolean> reversed = false;
 
 	AddActor(card);

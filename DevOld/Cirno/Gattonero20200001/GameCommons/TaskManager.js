@@ -85,3 +85,28 @@ function <void> ExecuteAllTask(<TaskManager_t> info)
 	}
 	RemoveFalse(info.Tasks);
 }
+
+// ====
+// ‚±‚±‚©‚ç•Ö—˜‹@”\
+// ====
+
+function <void> AddDelay(<TaskManager_t> info, <int> delayFrame, <Action> routine)
+{
+	AddTask(info, function* <generatorForTask> ()
+	{
+		yield* Repeat(1, delayFrame);
+		routine();
+	}());
+}
+
+function <void> AddKeep(<TaskManager_t> info, <int> keepFrame, <Action> routine)
+{
+	AddTask(info, function* <generatorForTask> ()
+	{
+		for (var<int> frame = 0; frame < keepFrame; frame++)
+		{
+			routine();
+			yield 1;
+		}
+	}());
+}

@@ -34,13 +34,13 @@ function <void> ProcMain(<generatorForTask> appMain)
 	Canvas = document.createElement("canvas");
 	Canvas.width  = Screen_W;
 	Canvas.height = Screen_H;
-	Canvas.style.width  = "calc(min(" + Screen_W + "px, 100%))";
-//	Canvas.style.height = Screen_H + "px";
+	Canvas.style.width  = "calc(min(" + Canvas_W + "px, 100%))";
+//	Canvas.style.height = Canvas_H + "px";
 	Canvas.style.height = "";
 
 	CanvasBox = document.getElementById("Gattonero20200001-CanvasBox");
-	CanvasBox.style.width  = "calc(min(" + Screen_W + "px, 100%))";
-//	CanvasBox.style.height = Screen_H + "px";
+	CanvasBox.style.width  = "calc(min(" + Canvas_W + "px, 100%))";
+//	CanvasBox.style.height = Canvas_H + "px";
 	CanvasBox.style.height = "";
 	CanvasBox.innerHTML = "";
 	CanvasBox.appendChild(Canvas);
@@ -85,6 +85,10 @@ function <void> @@_Anime()
 		Context = null;
 		@@_HzChaserTime += 16;
 		ProcFrame++;
+	}
+	else
+	{
+		LOGPOS();
 	}
 	requestAnimationFrame(@@_Anime);
 }
