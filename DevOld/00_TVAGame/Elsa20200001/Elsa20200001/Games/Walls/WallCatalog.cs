@@ -10,14 +10,11 @@ namespace Charlotte.Games.Walls
 	{
 		public static Wall Create(string name)
 		{
-			if (name == GameConsts.MAPPRM_DEFAULT_VALUE)
-				return new Wall_Dark();
-
 			Wall wall;
 
 			switch (name)
 			{
-				//case Consts.WALL_DEFAULT: wall = new Wall_Dark(); break; // 難読化のため、ここに書けない。
+				case GameConsts.MAPPRM_DEFAULT_VALUE: wall = new Wall_Dark(); break;
 				case "Dark": wall = new Wall_Dark(); break;
 				//case "B0001": wall = new Wall_Simple(Ground.I.Picture.Wall_B0001); break;
 				//case "B0002": wall = new Wall_Simple(Ground.I.Picture.Wall_B0002); break;

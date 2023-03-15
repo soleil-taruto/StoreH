@@ -488,5 +488,85 @@ namespace Charlotte.Utilities
 				}
 			}
 		}
+
+		public void FilterRect(I4Rect rect, Func<I4Color, int, int, I4Color> filter)
+		{
+			for (int x = rect.L; x < rect.R; x++)
+			{
+				for (int y = rect.T; y < rect.B; y++)
+				{
+					this[x, y] = filter(this[x, y], x, y);
+				}
+			}
+		}
+
+		public void FilterAllDot(Func<I4Color, int, int, I4Color> filter)
+		{
+			this.FilterRect(new I4Rect(0, 0, this.W, this.H), filter);
+		}
+
+		public Canvas GetSubImage(I4Rect rect)
+		{
+			Canvas dest = new Canvas(rect.W, rect.H);
+
+			for (int x = 0; x < rect.W; x++)
+			{
+				for (int y = 0; y < rect.H; y++)
+				{
+					dest[x, y] = this[rect.L + x, rect.T + y];
+				}
+			}
+			return dest;
+		}
+
+		public Canvas GetClone()
+		{
+			return this.GetSubImage(new I4Rect(0, 0, this.W, this.H));
+		}
+
+		public Canvas SetMargin(Func<I4Color, int, int, bool> matchOuter, I4Color outerColor, int margin_l, int margin_t, int margin_r, int margin_b)
+		{
+			int x1 = int.MaxValue;
+			int y1 = int.MaxValue;
+			int x2 = -1; // -1 == 未検出
+			int y2 = -1;
+
+			for (int x = 0; x < this.W; x++)
+			{
+				for (int y = 0; y < this.H; y++)
+				{
+					if (!matchOuter(this[x, y], x, y))
+					{
+						x1 = Math.Min(x1, x);
+						y1 = Math.Min(y1, y);
+						x2 = Math.Max(x2, x);
+						y2 = Math.Max(y2, y);
+					}
+				}
+			}
+
+			I4Rect rect;
+
+			if (x2 == -1) // ? 中身無し
+			{
+				rect = new I4Rect(0, 0, 0, 0);
+			}
+			else
+			{
+				rect = I4Rect.LTRB(x1, y1, x2 + 1, y2 + 1);
+			}
+
+			Canvas dest = new Canvas(margin_l + rect.W + margin_r, margin_t + rect.H + margin_b);
+
+			dest.Fill(outerColor);
+			dest.DrawImage(this.GetSubImage(rect), margin_l, margin_t, false);
+
+			return dest;
+		}
+
+		public Canvas SetMargin(Func<I4Color, int, int, bool> matchOuter, I4Color outerColor, int margin)
+		{
+			return this.SetMargin(matchOuter, outerColor, margin, margin, margin, margin);
+		}
 	}
 }

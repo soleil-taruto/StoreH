@@ -9,7 +9,8 @@ namespace Charlotte.Utilities
 {
 	/// <summary>
 	/// JSON-ツリーのノード
-	/// Array, Map, StringValue, WordValue のどれか１つが not null であること。
+	/// 読み込み時 (LoadFromFile, Load) は Array, Map, StringValue, WordValue のどれか一つを not null にセットする。
+	/// 書き出し時 (WriteToFile, GetString) は Array, Map, StringValue, WordValue の順で見て最初に not null であった値が書き出される。
 	/// </summary>
 	public class JsonNode
 	{

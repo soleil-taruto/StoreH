@@ -34,7 +34,7 @@ namespace Charlotte.Novels
 				if (index == -1)
 					throw new DDError("シナリオデータの最初のページが見つかりません。");
 
-				lines = SCommon.A_InsertRange(lines, index + 1, new string[] { "#Include/Startup" });
+				lines = SCommon.Arrays.InsertRange(lines, index + 1, new string[] { "#Include/Startup" });
 			}
 
 			// memo: lines タブスペース除去済み
@@ -53,8 +53,8 @@ namespace Charlotte.Novels
 					string includeName = line.Trim();
 					string[] includeLines = ReadScenarioLines(includeName);
 
-					lines = SCommon.A_RemoveRange(lines, index, 1);
-					lines = SCommon.A_InsertRange(lines, index, includeLines);
+					lines = SCommon.Arrays.RemoveRange(lines, index, 1);
+					lines = SCommon.Arrays.InsertRange(lines, index, includeLines);
 				}
 			}
 

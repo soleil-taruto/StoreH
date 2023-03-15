@@ -107,7 +107,7 @@ namespace Charlotte
 						),
 					DR_CHR_BLUR_LV
 					);
-				drChrImg.FilterAllDot(dot =>
+				drChrImg.FilterAllDot((dot, x, y) =>
 				{
 					dot.A = (int)(dot.A * 0.1);
 					return dot;

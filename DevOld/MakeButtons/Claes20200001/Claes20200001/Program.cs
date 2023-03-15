@@ -57,17 +57,68 @@ namespace Charlotte
 			//new Test0001().Test01();
 			//new Test0002().Test01();
 			//new Test0003().Test01();
+			//MaskPictures_01();
+			//UtsurikomiChecker_01();
 			//Main_20210421();
 			//Main_20210422();
 			//Main_20221001();
-			MaskPictures_01();
+			//Main_20221226();
+			Main_20230105();
 
 			// --
 		}
 
-		private void MaskPictures_01()
+		private void Main_20230105()
 		{
-			EditPictures.MaskPictures(@"C:\temp");
+			int scale = 4;
+			int w = scale * 440;
+			int h = scale * 100;
+			I4Color color;
+			int fontSize = 140;
+			int text_x = 60;
+
+			color = new I4Color(255, 150, 0, 255);
+			MakePictures.MakeButton(scale, w, h, color, fontSize, "Lane01Button:第 1 のレーン", text_x);
+			color = new I4Color(255, 100, 50, 255);
+			MakePictures.MakeButton(scale, w, h, color, fontSize, "Lane02Button:第 2 のレーン", text_x);
+			color = new I4Color(255, 50, 100, 255);
+			MakePictures.MakeButton(scale, w, h, color, fontSize, "Lane03Button:第 3 のレーン", text_x);
+			color = new I4Color(255, 0, 150, 255);
+			MakePictures.MakeButton(scale, w, h, color, fontSize, "LaneXXButton:第 X のレーン", text_x);
+		}
+
+		private void Main_20221226()
+		{
+			int scale = 4;
+			int w = scale * 1200;
+			int h = scale * 200;
+			I4Color color;
+			int fontSize = 360;
+
+			MakePictures.TEXT_BACK_COLOR = new I4Color(0, 0, 0, 160);
+
+			color = new I4Color(255, 255, 0, 255);
+			MakePictures.MakeButton(scale, w, h, color, fontSize, "YouWin:YOU WIN", 780);
+			color = new I4Color(0, 160, 255, 255);
+			MakePictures.MakeButton(scale, w, h, color, fontSize, "YouLose:YOU LOSE", 640);
+
+			// ----
+
+			w = scale * 400;
+			h = scale * 100;
+			fontSize = 140;
+			int text_x = 370;
+
+			color = new I4Color(255, 160, 0, 255);
+			MakePictures.MakeButton(scale, w, h, color, fontSize, "ツモ", text_x);
+			color = new I4Color(255, 120, 40, 255);
+			MakePictures.MakeButton(scale, w, h, color, fontSize, "ロン", text_x);
+			color = new I4Color(255, 80, 80, 255);
+			MakePictures.MakeButton(scale, w, h, color, fontSize, "ポン", text_x);
+			color = new I4Color(255, 40, 120, 255);
+			MakePictures.MakeButton(scale, w, h, color, fontSize, "チー", text_x);
+			color = new I4Color(255, 0, 160, 255);
+			MakePictures.MakeButton(scale, w, h, color, fontSize, "カン", text_x);
 		}
 
 		private void Main_20221001()
@@ -120,6 +171,20 @@ namespace Charlotte
 			MakePictures.MakeButton(12, 2400, 480, color, 180, "コンテニュー", 180);
 			MakePictures.MakeButton(12, 2400, 480, color, 180, "設定", 675);
 			MakePictures.MakeButton(12, 2400, 480, color, 180, "終了", 675);
+		}
+
+		// ====
+		// ====
+		// ====
+
+		private void MaskPictures_01()
+		{
+			EditPictures.MaskPictures(@"C:\temp");
+		}
+
+		private void UtsurikomiChecker_01()
+		{
+			UtsurikomiChecker.CheckDir(@"C:\temp");
 		}
 	}
 }

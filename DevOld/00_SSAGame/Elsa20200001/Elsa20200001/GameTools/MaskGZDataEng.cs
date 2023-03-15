@@ -71,13 +71,13 @@ namespace Charlotte.GameTools
 			return Math.Min(307, size / 2);
 		}
 
-		private void Transpose(byte[] data, string seed)
+		private void Transpose(byte[] data, uint seed)
 		{
 			int[] swapIdxLst = Enumerable.Range(1, this.GetTransposeSize(data.Length)).ToArray();
 
 			this.X = (uint)data.Length;
 			this.Rand();
-			this.X ^= uint.Parse(seed);
+			this.X ^= seed;
 			this.AvoidXIsZero();
 			this.Shuffle(swapIdxLst);
 
@@ -88,7 +88,7 @@ namespace Charlotte.GameTools
 
 		public void Transpose(byte[] data)
 		{
-			this.Transpose(data, "2022103525"); // 難読化貢献のため seed を文字列化しておく
+			this.Transpose(data, 2022103525);
 		}
 	}
 }

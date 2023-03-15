@@ -45,38 +45,38 @@
 			// Counter
 			// 
 			this.Counter.AutoSize = true;
-			this.Counter.Location = new System.Drawing.Point(12, 9);
+			this.Counter.Location = new System.Drawing.Point(218, 12);
 			this.Counter.Name = "Counter";
 			this.Counter.Size = new System.Drawing.Size(17, 20);
-			this.Counter.TabIndex = 0;
+			this.Counter.TabIndex = 1;
 			this.Counter.Text = "0";
 			// 
 			// PauseBtn
 			// 
-			this.PauseBtn.Location = new System.Drawing.Point(12, 32);
+			this.PauseBtn.Location = new System.Drawing.Point(12, 12);
 			this.PauseBtn.Name = "PauseBtn";
-			this.PauseBtn.Size = new System.Drawing.Size(200, 100);
-			this.PauseBtn.TabIndex = 1;
+			this.PauseBtn.Size = new System.Drawing.Size(200, 50);
+			this.PauseBtn.TabIndex = 0;
 			this.PauseBtn.Text = "Pause";
 			this.PauseBtn.UseVisualStyleBackColor = true;
 			this.PauseBtn.Click += new System.EventHandler(this.PauseBtn_Click);
 			// 
 			// CloseBtn
 			// 
-			this.CloseBtn.Location = new System.Drawing.Point(12, 138);
+			this.CloseBtn.Location = new System.Drawing.Point(12, 124);
 			this.CloseBtn.Name = "CloseBtn";
-			this.CloseBtn.Size = new System.Drawing.Size(100, 50);
-			this.CloseBtn.TabIndex = 2;
+			this.CloseBtn.Size = new System.Drawing.Size(250, 50);
+			this.CloseBtn.TabIndex = 3;
 			this.CloseBtn.Text = "Close";
 			this.CloseBtn.UseVisualStyleBackColor = true;
 			this.CloseBtn.Click += new System.EventHandler(this.CloseBtn_Click);
 			// 
 			// FiveSecBtn
 			// 
-			this.FiveSecBtn.Location = new System.Drawing.Point(118, 138);
+			this.FiveSecBtn.Location = new System.Drawing.Point(12, 68);
 			this.FiveSecBtn.Name = "FiveSecBtn";
-			this.FiveSecBtn.Size = new System.Drawing.Size(50, 50);
-			this.FiveSecBtn.TabIndex = 3;
+			this.FiveSecBtn.Size = new System.Drawing.Size(250, 50);
+			this.FiveSecBtn.TabIndex = 2;
 			this.FiveSecBtn.Text = "5s";
 			this.FiveSecBtn.UseVisualStyleBackColor = true;
 			this.FiveSecBtn.Click += new System.EventHandler(this.FiveSecBtn_Click);

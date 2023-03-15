@@ -18,5 +18,14 @@ namespace Charlotte.Tests
 			canvas.Fill(new I4Color(255, 128, 0, 255));
 			canvas.Save(SCommon.NextOutputPath() + ".png");
 		}
+
+		public void Test02()
+		{
+			Canvas canvas = new Canvas(300, 300);
+			canvas.Fill(new I4Color(255, 0, 0, 255));
+			canvas.FillCircle(new I4Color(0, 255, 0, 255), new I2Point(150, 150), 100);
+			canvas = canvas.SetMargin((dot, x, y) => dot.R == 255, new I4Color(0, 0, 255, 255), 50);
+			canvas.Save(SCommon.NextOutputPath() + ".png");
+		}
 	}
 }

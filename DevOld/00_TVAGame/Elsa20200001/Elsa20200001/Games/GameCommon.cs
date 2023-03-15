@@ -229,25 +229,7 @@ namespace Charlotte.Games
 		{
 			GameStatus gameStatus = Game.I.Status.GetClone();
 
-			// ★★★★★ *****PSH (<-このパターンで検索できるようにしておく)
-			// プレイヤー・ステータス反映(セーブ時)
-			// その他の反映箇所：
-			// -- マップ入場時
-			// -- マップ退場時
-			{
-				// すべきこと：
-				// -- 各方面に展開されているゲーム状態を gameStatus に反映・格納する。
-
-				// 例：
-				//gameStatus.StartHP = Game.I.Player.HP;
-				//gameStatus.StartFaceDirection = Game.I.Player.FaceDirection;
-				//gameStatus.Start選択武器 = Game.I.Player.選択武器;
-				// --
-
-				gameStatus.StartHP = Game.I.Player.HP;
-				gameStatus.StartFaceDirection = Game.I.Player.FaceDirection;
-				gameStatus.Start選択武器 = Game.I.Player.選択武器;
-			}
+			GameStatusCopier.セーブ時(gameStatus);
 
 			SaveGame(gameStatus);
 		}

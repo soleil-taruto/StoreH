@@ -80,7 +80,7 @@ namespace Charlotte.Utilities
 			}
 		}
 
-		private static EraInfo[] EraInfos = new EraInfo[] 
+		private static EraInfo[] EraInfos = new EraInfo[]
 		{
 			new EraInfo(0, null),
 			new EraInfo(6450717, "大化"),

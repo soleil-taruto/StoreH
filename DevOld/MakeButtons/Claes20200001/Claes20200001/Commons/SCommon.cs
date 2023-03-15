@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.IO;
 using System.IO.Compression;
-using System.Threading;
 using System.Diagnostics;
 using System.Security.Cryptography;
 
@@ -477,33 +477,73 @@ namespace Charlotte.Commons
 			}
 		}
 
-		public static IEnumerable<T> E_RemoveRange<T>(IEnumerable<T> list, int index, int count)
+		public static class Arrays
 		{
-			if (
-				list == null ||
-				index < 0 || list.Count() < index ||
-				count < 0 || list.Count() - index < count
-				)
-				throw new ArgumentException();
+			public static T[] GetRange<T>(T[] arr, int index)
+			{
+				return GetRange(arr, index, arr.Length - index);
+			}
 
-			return list.Take(index).Concat(list.Skip(index + count));
-		}
+			public static T[] GetRange<T>(T[] arr, int index, int count)
+			{
+				if (
+					arr == null ||
+					index < 0 || arr.Length < index ||
+					count < 0 || arr.Length - index < count
+					)
+					throw new ArgumentException();
 
-		public static IEnumerable<T> E_InsertRange<T>(IEnumerable<T> list, int index, IEnumerable<T> listForInsert)
-		{
-			if (
-				list == null ||
-				listForInsert == null ||
-				index < 0 || list.Count() < index
-				)
-				throw new ArgumentException();
+				T[] dest = new T[count];
 
-			return list.Take(index).Concat(listForInsert).Concat(list.Skip(index));
-		}
+				Array.Copy(arr, index, dest, 0, count);
 
-		public static IEnumerable<T> E_AddRange<T>(IEnumerable<T> list, IEnumerable<T> listForAdd)
-		{
-			return SCommon.E_InsertRange(list, list.Count(), listForAdd);
+				return dest;
+			}
+
+			public static T[] RemoveRange<T>(T[] arr, int index)
+			{
+				return RemoveRange(arr, index, arr.Length - index);
+			}
+
+			public static T[] RemoveRange<T>(T[] arr, int index, int count)
+			{
+				if (
+					arr == null ||
+					index < 0 || arr.Length < index ||
+					count < 0 || arr.Length - index < count
+					)
+					throw new ArgumentException();
+
+				T[] dest = new T[arr.Length - count];
+
+				Array.Copy(arr, 0, dest, 0, index);
+				Array.Copy(arr, index + count, dest, index, arr.Length - (index + count));
+
+				return dest;
+			}
+
+			public static T[] InsertRange<T>(T[] arr, int index, T[] arrForInsert)
+			{
+				if (
+					arr == null ||
+					arrForInsert == null ||
+					index < 0 || arr.Length < index
+					)
+					throw new ArgumentException();
+
+				T[] dest = new T[arr.Length + arrForInsert.Length];
+
+				Array.Copy(arr, 0, dest, 0, index);
+				Array.Copy(arrForInsert, 0, dest, index, arrForInsert.Length);
+				Array.Copy(arr, index, dest, index + arrForInsert.Length, arr.Length - index);
+
+				return dest;
+			}
+
+			public static T[] AddRange<T>(T[] arr, T[] arrForAdd)
+			{
+				return InsertRange(arr, arr.Length, arrForAdd);
+			}
 		}
 
 		private const int IO_TRY_MAX = 10;
@@ -624,11 +664,6 @@ namespace Charlotte.Commons
 			}
 		}
 
-		public static string EraseExt(string path)
-		{
-			return Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
-		}
-
 		public static string ChangeRoot(string path, string oldRoot, string rootNew)
 		{
 			return PutYen(rootNew) + ChangeRoot(path, oldRoot);
@@ -703,6 +738,24 @@ namespace Charlotte.Commons
 			path = Path.GetFullPath(path);
 			path = PutYen(path) + ".";
 			path = Path.GetFullPath(path);
+
+			return path;
+		}
+
+		public static string ToParentPath(string path)
+		{
+			path = Path.GetDirectoryName(path);
+
+			// path -> Path.GetDirectoryName(path)
+			// -----------------------------------
+			// "C:\\ABC\\DEF" -> "C:\\ABC"
+			// "C:\\ABC" -> "C:\\"
+			// "C:\\" -> null
+			// "" -> 例外
+			// null -> null
+
+			if (string.IsNullOrEmpty(path))
+				throw new Exception("パスから親パスに変換できません。" + path);
 
 			return path;
 		}
@@ -831,10 +884,18 @@ namespace Charlotte.Commons
 				if (n % 100 == 0)
 					ProcMain.WriteLog("パス名の衝突回避に時間が掛かっています。" + n);
 
-				newPath = SCommon.EraseExt(path) + "_" + n + Path.GetExtension(path);
+				newPath = SCommon.ChangeExt(path, "_" + n + Path.GetExtension(path));
 				n++;
 			}
 			return newPath;
+		}
+
+		// 注意：
+		// ChangeExt("C:\\xxx\\.zzz", "") -> "C:\\xxx"
+
+		public static string ChangeExt(string path, string ext)
+		{
+			return Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path) + ext);
 		}
 
 		#region ReadPart, WritePart
@@ -1583,10 +1644,10 @@ namespace Charlotte.Commons
 			S_GetString_SJISHalfCodeRange(0x5b, 0x60) +
 			S_GetString_SJISHalfCodeRange(0x7b, 0x7e);
 
-		public static string ASCII = DECIMAL + ALPHA + alpha + PUNCT; // == GetString_SJISHalfCodeRange(0x21, 0x7e)
+		public static string ASCII = DECIMAL + ALPHA + alpha + PUNCT; // == GetString_SJISHalfCodeRange(0x21, 0x7e) // 空白(0x20)を含まないことに注意
 		public static string KANA = S_GetString_SJISHalfCodeRange(0xa1, 0xdf);
 
-		public static string HALF = ASCII + KANA;
+		public static string HALF = ASCII + KANA; // 空白(0x20)を含まないことに注意
 
 		private static string S_GetString_SJISHalfCodeRange(int codeMin, int codeMax)
 		{
@@ -1774,7 +1835,10 @@ namespace Charlotte.Commons
 			return false;
 		}
 
-		public static bool HasSame<T>(IList<T> list, Comparison<T> comp)
+		// memo: @ 2022.10.31
+		// HasSame_Comp, HasSame を同じ名前にすると Comparision<T>, Func<T, T, bool> の型推論の失敗を誘発する。
+
+		public static bool HasSame_Comp<T>(IList<T> list, Comparison<T> comp)
 		{
 			return HasSame(list, (a, b) => comp(a, b) == 0);
 		}

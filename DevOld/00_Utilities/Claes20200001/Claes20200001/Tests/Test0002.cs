@@ -82,7 +82,9 @@ namespace Charlotte.Tests
 				cutFlag = true;
 			}
 			else
+			{
 				cutFlag = false;
+			}
 
 			Console.WriteLine(SCommon.Hex.ToString(data) + (cutFlag ? "..." : ""));
 		}

@@ -81,7 +81,7 @@ namespace Charlotte.GameCommons
 				//lines.Add("Donut3-SaveData"); // Dummy
 				//lines.Add("Donut3-SaveData"); // Dummy
 
-				lines = SCommon.E_AddRange(lines, AppSaveDataUtils.GetAppLines()).ToList();
+				lines.AddRange(AppSaveDataUtils.GetAppLines());
 
 				blocks.Add(DDUtils.SplitableJoin(lines.ToArray()));
 			}

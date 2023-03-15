@@ -75,25 +75,7 @@ namespace Charlotte.Games
 				}
 			}
 
-			// ★★★★★ *****PSH (<-このパターンで検索できるようにしておく)
-			// プレイヤー・ステータス反映(マップ入場時)
-			// その他の反映箇所：
-			// -- マップ退場時
-			// -- セーブ時
-			{
-				// すべきこと：
-				// -- ゲーム状態を this.Status から各方面に展開・反映する。
-
-				// 例：
-				//this.Player.Chara = this.Status.StartChara;
-				//this.Player.HP = this.Status.StartHP;
-				//this.Player.FacingLeft = this.Status.StartFacingLeft;
-				// --
-
-				this.Player.Chara = this.Status.StartChara;
-				this.Player.HP = this.Status.StartHP;
-				this.Player.FacingLeft = this.Status.StartFacingLeft;
-			}
+			GameStatusCopier.マップ入場時();
 
 			this.Wall = WallCatalog.Create(this.Map.WallName);
 
@@ -1002,25 +984,7 @@ namespace Charlotte.Games
 				DDCurtain.SetCurtain(0, -1.0);
 			}
 
-			// ★★★★★ *****PSH (<-このパターンで検索できるようにしておく)
-			// プレイヤー・ステータス反映(マップ退場時)
-			// その他の反映箇所：
-			// -- マップ入場時
-			// -- セーブ時
-			{
-				// すべきこと：
-				// -- 各方面に展開されているゲーム状態を this.Status に反映・格納する。
-
-				// 例：
-				//this.Status.StartChara = this.Player.Chara;
-				//this.Status.StartHP = this.Player.HP;
-				//this.Status.StartFacingLeft = this.Player.FacingLeft;
-				// --
-
-				this.Status.StartChara = this.Player.Chara;
-				this.Status.StartHP = this.Player.HP;
-				this.Status.StartFacingLeft = this.Player.FacingLeft;
-			}
+			GameStatusCopier.マップ退場時();
 
 			// ★★★ end of Perform() ★★★
 		}
