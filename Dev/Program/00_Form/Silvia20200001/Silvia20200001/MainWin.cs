@@ -27,7 +27,7 @@ namespace Charlotte
 
 		private void MainWin_Shown(object sender, EventArgs e)
 		{
-			PostShown.Perform(this);
+			// none
 		}
 	}
 }
