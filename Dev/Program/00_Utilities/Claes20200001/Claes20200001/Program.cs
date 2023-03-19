@@ -74,8 +74,6 @@ namespace Charlotte
 			//new Test0011().Test01(); // JsonNode
 			new Test0012().Test01(); // XMLNode
 			//new Test0013().Test01(); // CtrCipher
-			//new Test0014().Test01(); // Canvas
-			//new Test0014().Test02(); // Canvas
 
 			// --
 		}

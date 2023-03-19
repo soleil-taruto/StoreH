@@ -53,9 +53,7 @@ namespace Charlotte.Commons
 
 		public static RootInfo CreateProcessRoot()
 		{
-			// 環境変数 TMP のパスは ProcMain.CheckLogonUserAndTmp() で検査している。-- ProcMain.GUIMain() の場合のみ
-
-			return new RootInfo(Path.Combine(Environment.GetEnvironmentVariable("TMP"), ProcMain.APP_IDENT + "_" + Process.GetCurrentProcess().Id));
+			return new RootInfo(Path.Combine(Environment.GetEnvironmentVariable("TMP"), "{4c90ff11-7fe5-4664-a66d-62a440bb4826}_" + Process.GetCurrentProcess().Id));
 		}
 
 		private static ulong CtorCounter = 0UL;
