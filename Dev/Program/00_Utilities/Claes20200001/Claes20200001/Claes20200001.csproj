@@ -49,6 +49,8 @@
   <ItemGroup>
     <Compile Include="Common.cs" />
     <Compile Include="Commons\ArgsReader.cs" />
+    <Compile Include="Tests\Test0014.cs" />
+    <Compile Include="Utilities\Canvas.cs" />
     <Compile Include="Utilities\CsvFileReader.cs" />
     <Compile Include="Utilities\CsvFileWriter.cs" />
     <Compile Include="Commons\ProcMain.cs" />
@@ -76,6 +78,7 @@
     <Compile Include="Utilities\AESCipher.cs" />
     <Compile Include="Utilities\BitList.cs" />
     <Compile Include="Utilities\CtrCipher.cs" />
+    <Compile Include="Utilities\Drawings.cs" />
     <Compile Include="Utilities\RingCipherFile.cs" />
     <Compile Include="Utilities\HTTPClient.cs" />
     <Compile Include="Utilities\JsonNode.cs" />

@@ -31,7 +31,7 @@ namespace Charlotte.Commons
 				SelfFile = Assembly.GetEntryAssembly().Location;
 				SelfDir = Path.GetDirectoryName(SelfFile);
 
-				WorkingDir.Root = WorkingDir.CreateProcessRoot();
+				WorkingDir.Root = new WorkingDir.RootInfo();
 
 				ArgsReader = GetArgsReader();
 
