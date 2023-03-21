@@ -49,6 +49,17 @@
   <ItemGroup>
     <Compile Include="Common.cs" />
     <Compile Include="Commons\ArgsReader.cs" />
+    <Compile Include="Drawings\D2Point.cs" />
+    <Compile Include="Drawings\D2Size.cs" />
+    <Compile Include="Drawings\D3Color.cs" />
+    <Compile Include="Drawings\D4Color.cs" />
+    <Compile Include="Drawings\D4Rect.cs" />
+    <Compile Include="Drawings\I2Point.cs" />
+    <Compile Include="Drawings\I2Size.cs" />
+    <Compile Include="Drawings\I3Color.cs" />
+    <Compile Include="Drawings\I4Color.cs" />
+    <Compile Include="Drawings\I4Rect.cs" />
+    <Compile Include="Drawings\P4Poly.cs" />
     <Compile Include="Tests\Test0014.cs" />
     <Compile Include="Utilities\Canvas.cs" />
     <Compile Include="Utilities\CsvFileReader.cs" />
@@ -78,7 +89,6 @@
     <Compile Include="Utilities\AESCipher.cs" />
     <Compile Include="Utilities\BitList.cs" />
     <Compile Include="Utilities\CtrCipher.cs" />
-    <Compile Include="Utilities\Drawings.cs" />
     <Compile Include="Utilities\RingCipherFile.cs" />
     <Compile Include="Utilities\HTTPClient.cs" />
     <Compile Include="Utilities\JsonNode.cs" />

@@ -6,23 +6,24 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using Charlotte.Commons;
+using Charlotte.Drawings;
 
 namespace Charlotte.Utilities
 {
 	public class Canvas
 	{
-		private Drawings.I4Color[,] Dots;
+		private I4Color[,] Dots;
 		public int W { get; private set; }
 		public int H { get; private set; }
 
 		public Canvas(int w, int h)
 		{
-			this.Dots = new Drawings.I4Color[w, h];
+			this.Dots = new I4Color[w, h];
 			this.W = w;
 			this.H = h;
 		}
 
-		public Drawings.I4Color this[int x, int y]
+		public I4Color this[int x, int y]
 		{
 			get
 			{
@@ -54,7 +55,7 @@ namespace Charlotte.Utilities
 				{
 					Color color = bmp.GetPixel(x, y);
 
-					canvas[x, y] = new Drawings.I4Color(
+					canvas[x, y] = new I4Color(
 						color.R,
 						color.G,
 						color.B,
@@ -113,7 +114,7 @@ namespace Charlotte.Utilities
 		/// <param name="rect">描画したい領域</param>
 		/// <param name="blurLv">ぼかし量(0～)</param>
 		/// <returns>新しいキャンパス</returns>
-		public void DrawString(string text, int fontSize, string fontName, FontStyle fontStyle, Drawings.I3Color color, Drawings.I4Rect rect, int blurLv)
+		public void DrawString(string text, int fontSize, string fontName, FontStyle fontStyle, I3Color color, I4Rect rect, int blurLv)
 		{
 			int w;
 			int h;
@@ -128,16 +129,16 @@ namespace Charlotte.Utilities
 
 			Canvas canvas = new Canvas(w, h);
 
-			canvas.Fill(new Drawings.I4Color(0, 0, 0, 255));
-			canvas = canvas.DrawString(text, fontSize, fontName, fontStyle, new Drawings.I4Color(255, 255, 255, 255), 0, 0);
-			canvas = canvas.DS_SetMargin(v => v.R == 0, blurLv, new Drawings.I4Color(0, 0, 0, 255));
+			canvas.Fill(new I4Color(0, 0, 0, 255));
+			canvas = canvas.DrawString(text, fontSize, fontName, fontStyle, new I4Color(255, 255, 255, 255), 0, 0);
+			canvas = canvas.DS_SetMargin(v => v.R == 0, blurLv, new I4Color(0, 0, 0, 255));
 			canvas.DS_Blur(blurLv, color);
 			canvas = canvas.Expand(rect.W, rect.H);
 
 			this.DrawImage(canvas, rect.L, rect.T, true);
 		}
 
-		private Canvas DS_SetMargin(Predicate<Drawings.I4Color> matchOuter, int margin, Drawings.I4Color outerColor)
+		private Canvas DS_SetMargin(Predicate<I4Color> matchOuter, int margin, I4Color outerColor)
 		{
 			int x1 = int.MaxValue;
 			int y1 = int.MaxValue;
@@ -179,7 +180,7 @@ namespace Charlotte.Utilities
 			return dest;
 		}
 
-		private void DS_Blur(int blurLv, Drawings.I3Color color)
+		private void DS_Blur(int blurLv, I3Color color)
 		{
 			ProcMain.WriteLog("Canvas-DS_Blur-ST");
 
@@ -232,7 +233,7 @@ namespace Charlotte.Utilities
 			{
 				for (int y = 0; y < this.H; y++)
 				{
-					this[x, y] = new Drawings.I4Color(color.R, color.G, color.B, SCommon.ToInt(map[r, x, y] * 255.0));
+					this[x, y] = new I4Color(color.R, color.G, color.B, SCommon.ToInt(map[r, x, y] * 255.0));
 				}
 			}
 			ProcMain.WriteLog("Canvas-DS_Blur-ED");
@@ -254,7 +255,7 @@ namespace Charlotte.Utilities
 		/// <param name="x">描画位置_X-軸</param>
 		/// <param name="y">描画位置_Y-軸</param>
 		/// <returns>新しいキャンパス</returns>
-		public Canvas DrawString(string text, int fontSize, string fontName, FontStyle fontStyle, Drawings.I4Color color, int x, int y)
+		public Canvas DrawString(string text, int fontSize, string fontName, FontStyle fontStyle, I4Color color, int x, int y)
 		{
 			Bitmap bmp = this.ToBitmap();
 
@@ -284,14 +285,14 @@ namespace Charlotte.Utilities
 						if (src[x, y].A == 0)
 							continue; // 次のドットへ
 
-						Drawings.D4Color dCol = this[l + x, t + y].ToD4Color();
-						Drawings.D4Color sCol = src[x, y].ToD4Color();
+						D4Color dCol = this[l + x, t + y].ToD4Color();
+						D4Color sCol = src[x, y].ToD4Color();
 
 						double da = dCol.A * (1.0 - sCol.A);
 						double sa = sCol.A;
 						double xa = da + sa;
 
-						Drawings.D4Color xCol = new Drawings.D4Color(
+						D4Color xCol = new D4Color(
 							(dCol.R * da + sCol.R * sa) / xa,
 							(dCol.G * da + sCol.G * sa) / xa,
 							(dCol.B * da + sCol.B * sa) / xa,
@@ -362,7 +363,7 @@ namespace Charlotte.Utilities
 							int ixs = (int)xs;
 							int iys = (int)ys;
 
-							Drawings.I4Color sDot = this[ixs, iys];
+							I4Color sDot = this[ixs, iys];
 
 							r += sDot.A * sDot.R;
 							g += sDot.A * sDot.G;
@@ -377,7 +378,7 @@ namespace Charlotte.Utilities
 						b = SCommon.ToInt((double)b / a);
 						a = SCommon.ToInt((double)a / (xSampling * ySampling));
 					}
-					dest[x, y] = new Drawings.I4Color(r, g, b, a);
+					dest[x, y] = new I4Color(r, g, b, a);
 				}
 			}
 			ProcMain.WriteLog("Canvas-Expand-ED");
@@ -388,16 +389,16 @@ namespace Charlotte.Utilities
 		/// 指定された色でキャンバス全体を塗りつぶす。
 		/// </summary>
 		/// <param name="color">塗りつぶす色</param>
-		public void Fill(Drawings.I4Color color)
+		public void Fill(I4Color color)
 		{
-			this.FillRect(color, new Drawings.I4Rect(0, 0, this.W, this.H));
+			this.FillRect(color, new I4Rect(0, 0, this.W, this.H));
 		}
 
 		/// <summary>
 		/// 指定された色で矩形領域を塗りつぶす。
 		/// </summary>
 		/// <param name="color">塗りつぶす色</param>
-		public void FillRect(Drawings.I4Color color, Drawings.I4Rect rect)
+		public void FillRect(I4Color color, I4Rect rect)
 		{
 			for (int x = rect.L; x < rect.R; x++)
 			{
@@ -418,7 +419,7 @@ namespace Charlotte.Utilities
 		/// <param name="color">塗りつぶす色</param>
 		/// <param name="pt">円の中心</param>
 		/// <param name="r">円の半径</param>
-		public void FillCircle(Drawings.I4Color color, Drawings.I2Point pt, int r)
+		public void FillCircle(I4Color color, I2Point pt, int r)
 		{
 			int x1 = pt.X - r;
 			int x2 = pt.X + r;
@@ -436,7 +437,7 @@ namespace Charlotte.Utilities
 			{
 				for (int y = y1; y <= y2; y++)
 				{
-					double d = P_GetDistance(new Drawings.D2Point(x - pt.X, y - pt.Y));
+					double d = P_GetDistance(new D2Point(x - pt.X, y - pt.Y));
 
 					if (d < r + R_MARGIN)
 					{
@@ -446,17 +447,17 @@ namespace Charlotte.Utilities
 			}
 		}
 
-		private static double P_GetDistance(Drawings.D2Point pt)
+		private static double P_GetDistance(D2Point pt)
 		{
 			return Math.Sqrt(pt.X * pt.X + pt.Y * pt.Y);
 		}
 
 		public void Gradation(
-			Predicate<Drawings.I4Color> match,
-			Drawings.I4Color ltColor,
-			Drawings.I4Color rtColor,
-			Drawings.I4Color lbColor,
-			Drawings.I4Color rbColor
+			Predicate<I4Color> match,
+			I4Color ltColor,
+			I4Color rtColor,
+			I4Color lbColor,
+			I4Color rbColor
 			)
 		{
 			for (int y = 0; y < this.H; y++)
@@ -468,21 +469,21 @@ namespace Charlotte.Utilities
 						double xRate = (double)x / (this.W - 1);
 						double yRate = (double)y / (this.H - 1);
 
-						Drawings.D4Color tColor = new Drawings.D4Color(
+						D4Color tColor = new D4Color(
 							ltColor.R + xRate * (rtColor.R - ltColor.R),
 							ltColor.G + xRate * (rtColor.G - ltColor.G),
 							ltColor.B + xRate * (rtColor.B - ltColor.B),
 							ltColor.A + xRate * (rtColor.A - ltColor.A)
 							);
 
-						Drawings.D4Color bColor = new Drawings.D4Color(
+						D4Color bColor = new D4Color(
 							lbColor.R + xRate * (rbColor.R - lbColor.R),
 							lbColor.G + xRate * (rbColor.G - lbColor.G),
 							lbColor.B + xRate * (rbColor.B - lbColor.B),
 							lbColor.A + xRate * (rbColor.A - lbColor.A)
 							);
 
-						Drawings.I4Color destColor = new Drawings.I4Color(
+						I4Color destColor = new I4Color(
 							SCommon.ToInt(tColor.R + yRate * (bColor.R - tColor.R)),
 							SCommon.ToInt(tColor.G + yRate * (bColor.G - tColor.G)),
 							SCommon.ToInt(tColor.B + yRate * (bColor.B - tColor.B)),
@@ -495,7 +496,7 @@ namespace Charlotte.Utilities
 			}
 		}
 
-		public void FilterRect(Drawings.I4Rect rect, Func<Drawings.I4Color, int, int, Drawings.I4Color> filter)
+		public void FilterRect(I4Rect rect, Func<I4Color, int, int, I4Color> filter)
 		{
 			for (int x = rect.L; x < rect.R; x++)
 			{
@@ -506,12 +507,12 @@ namespace Charlotte.Utilities
 			}
 		}
 
-		public void FilterAllDot(Func<Drawings.I4Color, int, int, Drawings.I4Color> filter)
+		public void FilterAllDot(Func<I4Color, int, int, I4Color> filter)
 		{
-			this.FilterRect(new Drawings.I4Rect(0, 0, this.W, this.H), filter);
+			this.FilterRect(new I4Rect(0, 0, this.W, this.H), filter);
 		}
 
-		public Canvas GetSubImage(Drawings.I4Rect rect)
+		public Canvas GetSubImage(I4Rect rect)
 		{
 			Canvas dest = new Canvas(rect.W, rect.H);
 
@@ -527,12 +528,12 @@ namespace Charlotte.Utilities
 
 		public Canvas GetClone()
 		{
-			return this.GetSubImage(new Drawings.I4Rect(0, 0, this.W, this.H));
+			return this.GetSubImage(new I4Rect(0, 0, this.W, this.H));
 		}
 
 		public Canvas SetMargin(
-			Func<Drawings.I4Color, int, int, bool> matchOuter,
-			Drawings.I4Color outerColor,
+			Func<I4Color, int, int, bool> matchOuter,
+			I4Color outerColor,
 			int margin_l,
 			int margin_t,
 			int margin_r,
@@ -558,15 +559,15 @@ namespace Charlotte.Utilities
 				}
 			}
 
-			Drawings.I4Rect rect;
+			I4Rect rect;
 
 			if (x2 == -1) // ? 中身無し
 			{
-				rect = new Drawings.I4Rect(0, 0, 0, 0);
+				rect = new I4Rect(0, 0, 0, 0);
 			}
 			else
 			{
-				rect = Drawings.I4Rect.LTRB(x1, y1, x2 + 1, y2 + 1);
+				rect = I4Rect.LTRB(x1, y1, x2 + 1, y2 + 1);
 			}
 
 			Canvas dest = new Canvas(margin_l + rect.W + margin_r, margin_t + rect.H + margin_b);
@@ -577,7 +578,7 @@ namespace Charlotte.Utilities
 			return dest;
 		}
 
-		public Canvas SetMargin(Func<Drawings.I4Color, int, int, bool> matchOuter, Drawings.I4Color outerColor, int margin)
+		public Canvas SetMargin(Func<I4Color, int, int, bool> matchOuter, I4Color outerColor, int margin)
 		{
 			return this.SetMargin(matchOuter, outerColor, margin, margin, margin, margin);
 		}
