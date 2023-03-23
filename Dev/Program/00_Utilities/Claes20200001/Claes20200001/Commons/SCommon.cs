@@ -1604,6 +1604,10 @@ namespace Charlotte.Commons
 			return ENCODING_SJIS.GetString(buff);
 		}
 
+		public static string MBC_DECIMAL = "０１２３４５６７８９";
+		public static string MBC_ALPHA_UPPER = "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ";
+		public static string MBC_ALPHA_LOWER = "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ";
+
 		public static int Comp(string a, string b)
 		{
 			// MEMO: a.CompareTo(b) -- 三すくみの一件以来今でも信用できないので使わない。

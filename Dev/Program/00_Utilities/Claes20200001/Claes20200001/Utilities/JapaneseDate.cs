@@ -526,7 +526,7 @@ namespace Charlotte.Utilities
 
 		private static string P_RemoveBlank(string str)
 		{
-			return new string(str.Where(chr => ' ' < chr && chr != SCommon.MBC_SPACE[0]).ToArray());
+			return new string(str.Where(chr => ' ' < chr && chr != '　').ToArray());
 		}
 
 		private static string P_ZenDigAlpToHanDigAlp(string str)
@@ -537,8 +537,8 @@ namespace Charlotte.Utilities
 			}
 			for (int index = 0; index < 26; index++)
 			{
-				str = str.Replace(SCommon.MBC_ALPHA[index], SCommon.ALPHA[index]);
-				str = str.Replace(SCommon.mbc_alpha[index], SCommon.alpha[index]);
+				str = str.Replace(SCommon.MBC_ALPHA_UPPER[index], SCommon.ALPHA_UPPER[index]);
+				str = str.Replace(SCommon.MBC_ALPHA_LOWER[index], SCommon.ALPHA_LOWER[index]);
 			}
 			return str;
 		}
