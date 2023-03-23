@@ -16,11 +16,11 @@ namespace Charlotte.Commons
 	/// </summary>
 	public static class SCommon
 	{
-		private class S_AnonyDisposable : IDisposable
+		private class P_AnonyDisposable : IDisposable
 		{
 			private Action Routine;
 
-			public S_AnonyDisposable(Action routine)
+			public P_AnonyDisposable(Action routine)
 			{
 				this.Routine = routine;
 			}
@@ -37,7 +37,7 @@ namespace Charlotte.Commons
 
 		public static IDisposable GetAnonyDisposable(Action routine)
 		{
-			return new S_AnonyDisposable(routine);
+			return new P_AnonyDisposable(routine);
 		}
 
 		public static int Comp<T>(IList<T> a, IList<T> b, Comparison<T> comp)
@@ -1226,7 +1226,7 @@ namespace Charlotte.Commons
 						if (src.Length <= index) // ? 後半欠損
 							break;
 
-						if (!S_JChar.I.Contains(chr, src[index])) // ? 破損
+						if (!P_JChar.I.Contains(chr, src[index])) // ? 破損
 							continue;
 
 						dest.WriteByte(chr);
@@ -1273,21 +1273,21 @@ namespace Charlotte.Commons
 		/// <returns>SJIS(CP-932)の2バイト文字の列挙</returns>
 		public static IEnumerable<UInt16> GetJCharCodes()
 		{
-			for (UInt16 chr = S_JChar.CHR_MIN; chr <= S_JChar.CHR_MAX; chr++)
-				if (S_JChar.I.Contains(chr))
+			for (UInt16 chr = P_JChar.CHR_MIN; chr <= P_JChar.CHR_MAX; chr++)
+				if (P_JChar.I.Contains(chr))
 					yield return chr;
 		}
 
-		private class S_JChar
+		private class P_JChar
 		{
-			private static S_JChar _i = null;
+			private static P_JChar _i = null;
 
-			public static S_JChar I
+			public static P_JChar I
 			{
 				get
 				{
 					if (_i == null)
-						_i = new S_JChar();
+						_i = new P_JChar();
 
 					return _i;
 				}
@@ -1295,7 +1295,7 @@ namespace Charlotte.Commons
 
 			private UInt64[] ChrMap = new UInt64[0x10000 / 64];
 
-			private S_JChar()
+			private P_JChar()
 			{
 				this.AddAll();
 			}
@@ -1445,9 +1445,9 @@ namespace Charlotte.Commons
 			}
 		}
 
-		public static RandomUnit CRandom = new RandomUnit(new S_CSPRandomNumberGenerator());
+		public static RandomUnit CRandom = new RandomUnit(new P_CSPRandomNumberGenerator());
 
-		private class S_CSPRandomNumberGenerator : RandomUnit.IRandomNumberGenerator
+		private class P_CSPRandomNumberGenerator : RandomUnit.IRandomNumberGenerator
 		{
 			private RandomNumberGenerator Rng = new RNGCryptoServiceProvider();
 			private byte[] Cache = new byte[4096];
@@ -1523,8 +1523,8 @@ namespace Charlotte.Commons
 
 				foreach (byte chr in src)
 				{
-					buff.Append(hexadecimal[chr >> 4]);
-					buff.Append(hexadecimal[chr & 0x0f]);
+					buff.Append(HEXADECIMAL_LOWER[chr >> 4]);
+					buff.Append(HEXADECIMAL_LOWER[chr & 0x0f]);
 				}
 				return buff.ToString();
 			}
@@ -1548,7 +1548,7 @@ namespace Charlotte.Commons
 
 			private static int To4Bit(char chr)
 			{
-				int ret = hexadecimal.IndexOf(char.ToLower(chr));
+				int ret = HEXADECIMAL_LOWER.IndexOf(char.ToLower(chr));
 
 				if (ret == -1)
 					throw new ArgumentException("入力文字列に含まれる文字に問題があります。");
@@ -1564,72 +1564,42 @@ namespace Charlotte.Commons
 		public static string BINADECIMAL = "01";
 		public static string OCTODECIMAL = "012234567";
 		public static string DECIMAL = "0123456789";
-		public static string HEXADECIMAL = "0123456789ABCDEF";
-		public static string hexadecimal = "0123456789abcdef";
+		public static string HEXADECIMAL_UPPER = "0123456789ABCDEF";
+		public static string HEXADECIMAL_LOWER = "0123456789abcdef";
+		public static string ALPHA_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		public static string ALPHA_LOWER = "abcdefghijklmnopqrstuvwxyz";
 
-		public static string ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		public static string alpha = "abcdefghijklmnopqrstuvwxyz";
-		public static string PUNCT =
-			S_GetString_SJISHalfCodeRange(0x21, 0x2f) +
-			S_GetString_SJISHalfCodeRange(0x3a, 0x40) +
-			S_GetString_SJISHalfCodeRange(0x5b, 0x60) +
-			S_GetString_SJISHalfCodeRange(0x7b, 0x7e);
+		public static string ASCII
+		{
+			get
+			{
+				return GetString_SJISHalfRange(0x21, 0x7e); // 空白(0x20)を含まないことに注意
+			}
+		}
 
-		public static string ASCII = DECIMAL + ALPHA + alpha + PUNCT; // == GetString_SJISHalfCodeRange(0x21, 0x7e) // 空白(0x20)を含まないことに注意
-		public static string KANA = S_GetString_SJISHalfCodeRange(0xa1, 0xdf);
+		public static string KANA
+		{
+			get
+			{
+				return GetString_SJISHalfRange(0xa1, 0xdf);
+			}
+		}
 
-		public static string HALF = ASCII + KANA; // 空白(0x20)を含まないことに注意
+		public static string HALF
+		{
+			get
+			{
+				return ASCII + KANA; // 空白(0x20)を含まないことに注意
+			}
+		}
 
-		private static string S_GetString_SJISHalfCodeRange(int codeMin, int codeMax)
+		private static string GetString_SJISHalfRange(int codeMin, int codeMax)
 		{
 			byte[] buff = new byte[codeMax - codeMin + 1];
 
 			for (int code = codeMin; code <= codeMax; code++)
 			{
 				buff[code - codeMin] = (byte)code;
-			}
-			return ENCODING_SJIS.GetString(buff);
-		}
-
-		public static string MBC_DECIMAL = S_GetString_SJISCodeRange(0x82, 0x4f, 0x58);
-		public static string MBC_ALPHA = S_GetString_SJISCodeRange(0x82, 0x60, 0x79);
-		public static string mbc_alpha = S_GetString_SJISCodeRange(0x82, 0x81, 0x9a);
-		public static string MBC_SPACE = S_GetString_SJISCodeRange(0x81, 0x40, 0x40);
-		public static string MBC_PUNCT =
-			S_GetString_SJISCodeRange(0x81, 0x41, 0x7e) +
-			S_GetString_SJISCodeRange(0x81, 0x80, 0xac) +
-			S_GetString_SJISCodeRange(0x81, 0xb8, 0xbf) + // 集合
-			S_GetString_SJISCodeRange(0x81, 0xc8, 0xce) + // 論理
-			S_GetString_SJISCodeRange(0x81, 0xda, 0xe8) + // 数学
-			S_GetString_SJISCodeRange(0x81, 0xf0, 0xf7) +
-			S_GetString_SJISCodeRange(0x81, 0xfc, 0xfc) +
-			S_GetString_SJISCodeRange(0x83, 0x9f, 0xb6) + // ギリシャ語大文字
-			S_GetString_SJISCodeRange(0x83, 0xbf, 0xd6) + // ギリシャ語小文字
-			S_GetString_SJISCodeRange(0x84, 0x40, 0x60) + // キリル文字大文字
-			S_GetString_SJISCodeRange(0x84, 0x70, 0x7e) + // キリル文字小文字(1)
-			S_GetString_SJISCodeRange(0x84, 0x80, 0x91) + // キリル文字小文字(2)
-			S_GetString_SJISCodeRange(0x84, 0x9f, 0xbe) + // 枠線
-			S_GetString_SJISCodeRange(0x87, 0x40, 0x5d) + // 機種依存文字(1)
-			S_GetString_SJISCodeRange(0x87, 0x5f, 0x75) + // 機種依存文字(2)
-			S_GetString_SJISCodeRange(0x87, 0x7e, 0x7e) + // 機種依存文字(3)
-			S_GetString_SJISCodeRange(0x87, 0x80, 0x9c) + // 機種依存文字(4)
-			S_GetString_SJISCodeRange(0xee, 0xef, 0xfc); // 機種依存文字(5)
-
-		public static string MBC_CHOUONPU = S_GetString_SJISCodeRange(0x81, 0x5b, 0x5b); // 815b == 長音符 -- ひらがなとカタカナの長音符は同じ文字
-
-		public static string MBC_HIRA = S_GetString_SJISCodeRange(0x82, 0x9f, 0xf1) + MBC_CHOUONPU;
-		public static string MBC_KANA =
-			S_GetString_SJISCodeRange(0x83, 0x40, 0x7e) +
-			S_GetString_SJISCodeRange(0x83, 0x80, 0x96) + MBC_CHOUONPU;
-
-		private static string S_GetString_SJISCodeRange(int lead, int trailMin, int trailMax)
-		{
-			byte[] buff = new byte[(trailMax - trailMin + 1) * 2];
-
-			for (int trail = trailMin; trail <= trailMax; trail++)
-			{
-				buff[(trail - trailMin) * 2 + 0] = (byte)lead;
-				buff[(trail - trailMin) * 2 + 1] = (byte)trail;
 			}
 			return ENCODING_SJIS.GetString(buff);
 		}
@@ -1955,7 +1925,7 @@ namespace Charlotte.Commons
 
 				File.WriteAllLines(batFile, commands, ENCODING_SJIS);
 
-				StartProcess("cmd", "/c " + batFile, workingDir, winStyle).WaitForExit();
+				StartProcess("cmd", "/c \"" + batFile + "\"", workingDir, winStyle).WaitForExit();
 			}
 		}
 
@@ -2020,7 +1990,7 @@ namespace Charlotte.Commons
 
 			private Base64()
 			{
-				this.Chars = (SCommon.ALPHA + SCommon.alpha + SCommon.DECIMAL + "+/").ToArray();
+				this.Chars = (SCommon.ALPHA_UPPER + SCommon.ALPHA_LOWER + SCommon.DECIMAL + "+/").ToArray();
 				this.CharMap = new byte[(int)char.MaxValue + 1];
 
 				for (int index = 0; index <= (int)char.MaxValue; index++)
@@ -2531,6 +2501,64 @@ namespace Charlotte.Commons
 			{
 				throw null; // never
 			}
+		}
+
+		/// <summary>
+		/// リスト内の特定の位置をバイナリサーチによって取得する。
+		/// ★注意：指定されたリストを自動的にソートしない。
+		/// 比較メソッド：
+		/// -- 少なくとも以下のとおりの比較結果となること。
+		/// ---- 目的位置の左側の要素 &lt; 目的位置の要素
+		/// ---- 目的位置の左側の要素 &lt; 目的位置の右側の要素
+		/// ---- 目的位置の要素 == 目的位置の要素
+		/// ---- 目的位置の要素 &lt; 目的位置の右側の要素
+		/// </summary>
+		/// <typeparam name="T">要素の型</typeparam>
+		/// <param name="list">検索対象のリスト</param>
+		/// <param name="targetValue">範囲内の値</param>
+		/// <param name="comp">比較メソッド</param>
+		/// <returns>目的位置(見つからない場合(-1))</returns>
+		public static int GetIndex<T>(IList<T> list, T targetValue, Comparison<T> comp)
+		{
+			return GetIndex(list, element => comp(element, targetValue));
+		}
+
+		/// <summary>
+		/// リスト内の特定の位置をバイナリサーチによって取得する。
+		/// ★注意：指定されたリストを自動的にソートしない。
+		/// 判定メソッド：
+		/// -- 目的位置の左側の要素であれば負の値を返す。
+		/// -- 目的位置の右側の要素であれば正の値を返す。
+		/// -- 目的位置の要素であれば 0 を返す。
+		/// </summary>
+		/// <typeparam name="T">要素の型</typeparam>
+		/// <param name="list">検索対象のリスト</param>
+		/// <param name="comp">判定メソッド</param>
+		/// <returns>目的位置(見つからない場合(-1))</returns>
+		public static int GetIndex<T>(IList<T> list, Func<T, int> comp)
+		{
+			int l = -1;
+			int r = list.Count;
+
+			while (l + 1 < r)
+			{
+				int m = (l + r) / 2;
+				int ret = comp(list[m]);
+
+				if (ret < 0)
+				{
+					l = m;
+				}
+				else if (0 < ret)
+				{
+					r = m;
+				}
+				else
+				{
+					return m;
+				}
+			}
+			return -1; // not found
 		}
 
 		/// <summary>
