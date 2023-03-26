@@ -1561,8 +1561,6 @@ namespace Charlotte.Commons
 
 		public static Encoding ENCODING_SJIS = Encoding.GetEncoding(932);
 
-		public static string BINADECIMAL = "01";
-		public static string OCTODECIMAL = "012234567";
 		public static string DECIMAL = "0123456789";
 		public static string HEXADECIMAL_UPPER = "0123456789ABCDEF";
 		public static string HEXADECIMAL_LOWER = "0123456789abcdef";
@@ -1604,9 +1602,127 @@ namespace Charlotte.Commons
 			return ENCODING_SJIS.GetString(buff);
 		}
 
-		public static string MBC_DECIMAL = "０１２３４５６７８９";
-		public static string MBC_ALPHA_UPPER = "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ";
-		public static string MBC_ALPHA_LOWER = "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ";
+		public static string MBC_DECIMAL
+		{
+			get
+			{
+				return ToAsciiFull(DECIMAL);
+			}
+		}
+
+		public static string MBC_HEXADECIMAL_UPPER
+		{
+			get
+			{
+				return ToAsciiFull(HEXADECIMAL_UPPER);
+			}
+		}
+
+		public static string MBC_HEXADECIMAL_LOWER
+		{
+			get
+			{
+				return ToAsciiFull(HEXADECIMAL_LOWER);
+			}
+		}
+
+		public static string MBC_ALPHA_UPPER
+		{
+			get
+			{
+				return ToAsciiFull(ALPHA_UPPER);
+			}
+		}
+
+		public static string MBC_ALPHA_LOWER
+		{
+			get
+			{
+				return ToAsciiFull(ALPHA_LOWER);
+			}
+		}
+
+		public static string MBC_ASCII
+		{
+			get
+			{
+				return ToAsciiFull(ASCII);
+			}
+		}
+
+		#region ToAsciiFull, ToAsciiHalf
+
+		/// <summary>
+		/// 文字列中のアスキーコードの文字(0x20～0x7e)を半角から全角に変換する。
+		/// それ以外の文字は変換しない。
+		/// </summary>
+		/// <param name="str">文字列</param>
+		/// <returns>変換後の文字列</returns>
+		public static string ToAsciiFull(string str)
+		{
+			char[] buff = new char[str.Length];
+
+			for (int index = 0; index < str.Length; index++)
+				buff[index] = ToAsciiFull(str[index]);
+
+			return new string(buff);
+		}
+
+		/// <summary>
+		/// 文字列中のアスキーコードの文字(0x20～0x7e)を全角から半角に変換する。
+		/// それ以外の文字は変換しない。
+		/// </summary>
+		/// <param name="str">文字列</param>
+		/// <returns>変換後の文字列</returns>
+		public static string ToAsciiHalf(string str)
+		{
+			char[] buff = new char[str.Length];
+
+			for (int index = 0; index < str.Length; index++)
+				buff[index] = ToAsciiHalf(str[index]);
+
+			return new string(buff);
+		}
+
+		/// <summary>
+		/// アスキーコードの文字(0x20～0x7e)を半角から全角に変換する。
+		/// それ以外の文字はそのまま返す。
+		/// </summary>
+		/// <param name="chr">文字</param>
+		/// <returns>変換後の文字</returns>
+		public static char ToAsciiFull(char chr)
+		{
+			if (chr == (char)0x20)
+			{
+				chr = (char)0x3000;
+			}
+			else if (0x21 <= chr && chr <= 0x7e)
+			{
+				chr += (char)0xfee0;
+			}
+			return chr;
+		}
+
+		/// <summary>
+		/// アスキーコードの文字(0x20～0x7e)を全角から半角に変換する。
+		/// それ以外の文字はそのまま返す。
+		/// </summary>
+		/// <param name="chr">文字</param>
+		/// <returns>変換後の文字</returns>
+		public static char ToAsciiHalf(char chr)
+		{
+			if (chr == (char)0x3000)
+			{
+				chr = (char)0x20;
+			}
+			else if (0xff01 <= chr && chr <= 0xff5e)
+			{
+				chr -= (char)0xfee0;
+			}
+			return chr;
+		}
+
+		#endregion
 
 		public static int Comp(string a, string b)
 		{
