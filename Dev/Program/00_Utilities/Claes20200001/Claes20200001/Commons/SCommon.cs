@@ -411,12 +411,12 @@ namespace Charlotte.Commons
 		}
 
 		/// <summary>
-		/// 列挙をゲッターメソッドでラップします。
+		/// 列挙をGetterメソッドでラップします。
 		/// 例：{ A, B, C } -> 呼び出し毎に右の順で戻り値を返す { A, B, C, default(T), default(T), default(T), ... }
 		/// </summary>
 		/// <typeparam name="T">要素の型</typeparam>
 		/// <param name="src">列挙</param>
-		/// <returns>ゲッターメソッド</returns>
+		/// <returns>Getterメソッド</returns>
 		public static Func<T> Supplier<T>(IEnumerable<T> src)
 		{
 			IEnumerator<T> reader = src.GetEnumerator();

@@ -14,6 +14,8 @@ namespace Charlotte.GUICommons
 {
 	public static class GUIProcMain
 	{
+		public static DateTime BuiltDateTime;
+
 		public static void GUIMain(Func<Form> getMainForm)
 		{
 			ProcMain.WriteLog = message => { };
@@ -22,7 +24,13 @@ namespace Charlotte.GUICommons
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler((sender, e) => ErrorTermination(e.ExceptionObject));
 			SystemEvents.SessionEnding += new SessionEndingEventHandler((sender, e) => ProgramTermination());
 
-			KeepSingleInstance(() =>
+			uint peTimeDateStamp = GetPETimeDateStamp(ProcMain.SelfFile);
+
+			BuiltDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+				.AddSeconds(peTimeDateStamp)
+				.ToLocalTime();
+
+			KeepSingleInstance(peTimeDateStamp, () =>
 			{
 				Application.EnableVisualStyles();
 				Application.SetCompatibleTextRenderingDefault(false);
@@ -47,12 +55,10 @@ namespace Charlotte.GUICommons
 			Environment.Exit(1);
 		}
 
-		private static void KeepSingleInstance(Action routine)
+		private static void KeepSingleInstance(uint peTimeDateStamp, Action routine)
 		{
 			// HACK: 別々のプログラムが偶然同じビルド時刻になってまうと、それらは同時に実行できなくなる。
 			// -- レアケースなので看過する。
-
-			uint peTimeDateStamp = GetPETimeDateStamp(ProcMain.SelfFile);
 
 			Mutex procMutex = new Mutex(
 				false,
@@ -79,6 +85,7 @@ namespace Charlotte.GUICommons
 					out createdNew,
 					security
 					);
+
 				bool globalLockFailed = false;
 
 				if (globalProcMutex.WaitOne(0))
@@ -97,7 +104,7 @@ namespace Charlotte.GUICommons
 
 				if (globalLockFailed)
 				{
-					// memo: ローカル側ロック解除前に表示すること。
+					// memo: ローカル側ロック(procMutex)解除前に表示すること。
 					// -- プロセスを同時に複数起動したとき、このダイアログを複数表示させないため。
 					//
 					MessageBox.Show(
