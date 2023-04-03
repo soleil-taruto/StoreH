@@ -85,6 +85,7 @@ namespace Charlotte.WebServices
 		public IEnumerable<int> TryRecv(byte[] data, int offset, int size, Action<int> a_return)
 		{
 			DateTime startedTime = DateTime.Now;
+			double idleSecWarnLmt = 10.0;
 
 			for (; ; )
 			{
@@ -99,9 +100,10 @@ namespace Charlotte.WebServices
 					{
 						throw new Exception("受信失敗(切断)");
 					}
-					if (10.0 <= (DateTime.Now - startedTime).TotalSeconds) // 長い無通信時間をモニタする。
+					if (idleSecWarnLmt <= (DateTime.Now - startedTime).TotalSeconds) // 長い無通信時間をモニタする。
 					{
 						SockCommon.WriteLog(SockCommon.ErrorLevel_e.WARNING, "IDLE-RECV " + (DateTime.Now - startedTime).TotalSeconds.ToString("F3"));
+						idleSecWarnLmt += 60.0;
 					}
 					a_return(recvSize);
 					break;
@@ -157,6 +159,7 @@ namespace Charlotte.WebServices
 		private IEnumerable<int> TrySend(byte[] data, int offset, int size, Action<int> a_return)
 		{
 			DateTime startedTime = DateTime.Now;
+			double idleSecWarnLmt = 10.0;
 
 			for (; ; )
 			{
@@ -171,9 +174,10 @@ namespace Charlotte.WebServices
 					{
 						throw new Exception("送信失敗(切断)");
 					}
-					if (10.0 <= (DateTime.Now - startedTime).TotalSeconds) // 長い無通信時間をモニタする。
+					if (idleSecWarnLmt <= (DateTime.Now - startedTime).TotalSeconds) // 長い無通信時間をモニタする。
 					{
 						SockCommon.WriteLog(SockCommon.ErrorLevel_e.WARNING, "IDLE-SEND " + (DateTime.Now - startedTime).TotalSeconds.ToString("F3"));
+						idleSecWarnLmt += 60.0;
 					}
 					a_return(sentSize);
 					break;

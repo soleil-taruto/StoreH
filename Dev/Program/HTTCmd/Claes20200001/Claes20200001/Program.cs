@@ -96,7 +96,7 @@ namespace Charlotte
 				HTTPServerChannel.ResponseTimeoutMillis = -1;
 				HTTPServerChannel.FirstLineTimeoutMillis = 2000;
 				HTTPServerChannel.IdleTimeoutMillis = 600000; // 10 min
-				HTTPServerChannel.BodySizeMax = 0; // 要求Body拒否
+				HTTPServerChannel.BodySizeMax = 0;
 
 				SockCommon.TimeWaitMonitor.CTR_ROT_SEC = 60;
 				SockCommon.TimeWaitMonitor.COUNTER_NUM = 5;
