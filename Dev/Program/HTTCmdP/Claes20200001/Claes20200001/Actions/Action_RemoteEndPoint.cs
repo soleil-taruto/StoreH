@@ -18,6 +18,7 @@ namespace Charlotte.Actions
 			channel.ResStatus = 200;
 			channel.ResHeaderPairs.Add(new string[] { "Content-Type", "text/plain; charset=US-ASCII" });
 			channel.ResBody = new byte[][] { Encoding.ASCII.GetBytes(address) };
+			channel.ResBodyLength = -1L;
 		}
 	}
 }

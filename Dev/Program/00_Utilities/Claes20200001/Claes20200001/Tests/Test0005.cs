@@ -38,6 +38,7 @@ namespace Charlotte.Tests
 						channel.ResHeaderPairs.Add(new string[] { "Content-Type", "text/plain; charset=US-ASCII" });
 						channel.ResHeaderPairs.Add(new string[] { "X-ABC", "123" });
 						channel.ResBody = new byte[][] { Encoding.ASCII.GetBytes("Hello, Happy World!") };
+						channel.ResBodyLength = -1L;
 					}
 				},
 			};

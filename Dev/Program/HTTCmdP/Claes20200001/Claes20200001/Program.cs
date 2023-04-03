@@ -277,6 +277,7 @@ namespace Charlotte
 					channel.ResStatus = 301;
 					channel.ResHeaderPairs.Add(new string[] { "Location", "http://" + hostName + channel.PathQuery });
 					channel.ResBody = null;
+					channel.ResBodyLength = -1L;
 
 					goto endFunc;
 				}
@@ -333,6 +334,7 @@ namespace Charlotte
 				channel.ResStatus = 301;
 				channel.ResHeaderPairs.Add(new string[] { "Location", "http://" + host + "/" + string.Join("", relPath.Split('\\').Select(v => EncodeUrl(v) + "/")) });
 				channel.ResBody = null;
+				channel.ResBodyLength = -1L;
 
 				goto endFunc;
 			}
@@ -345,17 +347,20 @@ namespace Charlotte
 				channel.ResStatus = 200;
 				channel.ResHeaderPairs.Add(new string[] { "Content-Type", ContentTypeCollection.I.GetContentType(Path.GetExtension(path)) });
 				channel.ResBody = E_ReadFile(path);
+				channel.ResBodyLength = new FileInfo(path).Length; // HACK
 			}
 			else
 			{
 				channel.ResStatus = 404;
 				//channel.ResHeaderPairs.Add();
 				channel.ResBody = null;
+				channel.ResBodyLength = -1L;
 
 				if (!head && this.Page404File != null)
 				{
 					channel.ResHeaderPairs.Add(new string[] { "Content-Type", "text/html" });
 					channel.ResBody = E_ReadFile(this.Page404File);
+					channel.ResBodyLength = new FileInfo(this.Page404File).Length; // HACK
 				}
 			}
 			if (head && channel.ResBody != null)
