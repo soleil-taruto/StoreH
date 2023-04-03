@@ -344,10 +344,13 @@ namespace Charlotte
 			}
 			else if (File.Exists(path))
 			{
+				string file = path;
+				long fileSize = new FileInfo(file).Length;
+
 				channel.ResStatus = 200;
 				channel.ResHeaderPairs.Add(new string[] { "Content-Type", ContentTypeCollection.I.GetContentType(Path.GetExtension(path)) });
-				channel.ResBody = E_ReadFile(path);
-				channel.ResBodyLength = new FileInfo(path).Length; // HACK
+				channel.ResBody = E_ReadFile(file, fileSize);
+				channel.ResBodyLength = fileSize;
 			}
 			else
 			{
@@ -358,9 +361,12 @@ namespace Charlotte
 
 				if (!head && this.Page404File != null)
 				{
+					string file = this.Page404File;
+					long fileSize = new FileInfo(file).Length;
+
 					channel.ResHeaderPairs.Add(new string[] { "Content-Type", "text/html" });
-					channel.ResBody = E_ReadFile(this.Page404File);
-					channel.ResBodyLength = new FileInfo(this.Page404File).Length; // HACK
+					channel.ResBody = E_ReadFile(file, fileSize);
+					channel.ResBodyLength = fileSize;
 				}
 			}
 			if (head && channel.ResBody != null)
@@ -406,10 +412,8 @@ namespace Charlotte
 			return buff.ToString();
 		}
 
-		private static IEnumerable<byte[]> E_ReadFile(string file)
+		private static IEnumerable<byte[]> E_ReadFile(string file, long fileSize)
 		{
-			long fileSize = new FileInfo(file).Length;
-
 			for (long offset = 0L; offset < fileSize; )
 			{
 				int readSize = (int)Math.Min(fileSize - offset, (long)(512 * 1024));
