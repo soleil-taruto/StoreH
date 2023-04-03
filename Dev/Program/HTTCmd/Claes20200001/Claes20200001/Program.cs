@@ -90,7 +90,7 @@ namespace Charlotte
 
 				SockChannel.ThreadTimeoutMillis = 100;
 
-				HTTPServer.KeepAliveTimeoutMillis = 5000;
+				HTTPServer.KeepAliveTimeoutMillis = 0;// 5000;
 
 				HTTPServerChannel.RequestTimeoutMillis = 10000; // 10 sec
 				HTTPServerChannel.ResponseTimeoutMillis = -1;
