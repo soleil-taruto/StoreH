@@ -72,6 +72,8 @@ namespace Charlotte
 			{
 				SockCommon.WriteLog(SockCommon.ErrorLevel_e.FATAL, e);
 			}
+
+			Thread.Sleep(500); // コマンド画面が一瞬で消える対策
 		}
 
 		private void Main5(ArgsReader ar)
