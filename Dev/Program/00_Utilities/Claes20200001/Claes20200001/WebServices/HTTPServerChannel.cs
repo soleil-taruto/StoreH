@@ -141,7 +141,7 @@ namespace Charlotte.WebServices
 
 		private IEnumerable<int> RecvLine(Action<string> a_return)
 		{
-			const int LINE_LEN_MAX = 512000;
+			const int LINE_LEN_MAX = 128 * 1024;
 
 			List<byte> buff = new List<byte>(LINE_LEN_MAX);
 
@@ -173,8 +173,8 @@ namespace Charlotte.WebServices
 
 		private IEnumerable<int> RecvHeader()
 		{
-			const int HEADERS_LEN_MAX = 612000;
-			const int WEIGHT = 1000;
+			const int HEADERS_LEN_MAX = 128 * 1024 + 65536;
+			const int WEIGHT = 256;
 
 			int roughHeaderLength = 0;
 
@@ -263,7 +263,7 @@ namespace Charlotte.WebServices
 
 		private IEnumerable<int> RecvBody()
 		{
-			const int READ_SIZE_MAX = 2000000; // 2 MB
+			const int READ_SIZE_MAX = 1024 * 1024;
 
 			HTTPBodyOutputStream buff = this.Channel.BodyOutputStream;
 

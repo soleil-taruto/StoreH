@@ -406,7 +406,7 @@ namespace Charlotte
 
 			for (long offset = 0L; offset < fileSize; )
 			{
-				int readSize = (int)Math.Min(fileSize - offset, 2000000L);
+				int readSize = (int)Math.Min(fileSize - offset, (long)(512 * 1024));
 				byte[] buff = new byte[readSize];
 
 				//SockCommon.WriteLog(SockCommon.ErrorLevel_e.INFO, "READ " + offset + " " + readSize + " " + fileSize + " " + (offset * 100.0 / fileSize).ToString("F2") + " " + ((offset + readSize) * 100.0 / fileSize).ToString("F2")); // 頻出するので抑止

@@ -246,7 +246,7 @@ namespace Charlotte.WebServices
 			}
 		}
 
-		public static void Shuffle_7<T>(IList<T> list)
+		public static void ShuffleP4<T>(IList<T> list)
 		{
 			if (list.Count < 14)
 			{
@@ -254,9 +254,9 @@ namespace Charlotte.WebServices
 			}
 			else
 			{
-				for (int n = 1; n <= 7; n++)
+				for (int index = 0; index < 7; index++)
 				{
-					SCommon.Swap(list, SCommon.CRandom.GetInt(list.Count - n), list.Count - n);
+					SCommon.Swap(list, index, SCommon.CRandom.GetInt(list.Count));
 				}
 			}
 		}
