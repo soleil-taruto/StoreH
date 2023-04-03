@@ -90,7 +90,7 @@ namespace Charlotte
 
 				SockChannel.ThreadTimeoutMillis = 100;
 
-				HTTPServer.KeepAliveTimeoutMillis = 0;// 5000;
+				HTTPServer.KeepAliveTimeoutMillis = 5000;
 
 				HTTPServerChannel.RequestTimeoutMillis = 10000; // 10 sec
 				HTTPServerChannel.ResponseTimeoutMillis = -1;
@@ -160,6 +160,12 @@ namespace Charlotte
 
 								continue;
 							}
+							if (ar.ArgIs("/C"))
+							{
+								this.ResChunkMode = true;
+								ProcMain.WriteLog("ResChunkMode ENABLED");
+								continue;
+							}
 							break;
 						}
 					}
@@ -206,6 +212,7 @@ namespace Charlotte
 		private string DocRoot;
 		private Dictionary<string, string> Host2DocRoot = null;
 		private string Page404File = null;
+		private bool ResChunkMode = false;
 
 		private void P_Connected(HTTPServerChannel channel)
 		{
@@ -305,7 +312,7 @@ namespace Charlotte
 				channel.ResStatus = 200;
 				channel.ResHeaderPairs.Add(new string[] { "Content-Type", ContentTypeCollection.I.GetContentType(Path.GetExtension(path)) });
 				channel.ResBody = E_ReadFile(file, fileSize);
-				channel.ResBodyLength = fileSize;
+				channel.ResBodyLength = this.ResChunkMode ? -1L : fileSize;
 			}
 			else
 			{
@@ -321,7 +328,7 @@ namespace Charlotte
 
 					channel.ResHeaderPairs.Add(new string[] { "Content-Type", "text/html" });
 					channel.ResBody = E_ReadFile(file, fileSize);
-					channel.ResBodyLength = fileSize;
+					channel.ResBodyLength = this.ResChunkMode ? -1L : fileSize;
 				}
 			}
 			if (head && channel.ResBody != null)
