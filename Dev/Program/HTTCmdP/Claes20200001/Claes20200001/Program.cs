@@ -224,7 +224,7 @@ namespace Charlotte
 		{
 			SockCommon.WriteLog(SockCommon.ErrorLevel_e.INFO, "クライアント：" + channel.Channel.Handler.RemoteEndPoint);
 
-			if (30 < channel.Method.Length) // rough limit
+			if (10 < channel.Method.Length) // rough limit
 				throw new Exception("Received method is too long");
 
 			SockCommon.WriteLog(SockCommon.ErrorLevel_e.INFO, "要求メソッド：" + channel.Method);
@@ -382,6 +382,7 @@ namespace Charlotte
 				SockCommon.WriteLog(SockCommon.ErrorLevel_e.INFO, "RES-HEADER " + pair[0] + " = " + pair[1]);
 
 			SockCommon.WriteLog(SockCommon.ErrorLevel_e.INFO, "RES-BODY " + (channel.ResBody != null));
+			SockCommon.WriteLog(SockCommon.ErrorLevel_e.INFO, "RES-BODY-LENGTH " + channel.ResBodyLength);
 		}
 
 		private static string GetHeaderValue(HTTPServerChannel channel, string name)

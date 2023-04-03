@@ -72,10 +72,6 @@ namespace Charlotte
 			{
 				SockCommon.WriteLog(SockCommon.ErrorLevel_e.FATAL, e);
 			}
-
-			// 実行ファイルのダブルクリックやドキュメントルート(フォルダ)のドラッグアンドドロップで起動して
-			// エラーになった場合、一瞬でコンソールが閉じてしまうので、少しだけ待つ。
-			Thread.Sleep(500);
 		}
 
 		private void Main5(ArgsReader ar)
@@ -100,7 +96,7 @@ namespace Charlotte
 				HTTPServerChannel.ResponseTimeoutMillis = -1;
 				HTTPServerChannel.FirstLineTimeoutMillis = 2000;
 				HTTPServerChannel.IdleTimeoutMillis = 600000; // 10 min
-				HTTPServerChannel.BodySizeMax = 0;
+				HTTPServerChannel.BodySizeMax = 0; // 要求Body拒否
 
 				SockCommon.TimeWaitMonitor.CTR_ROT_SEC = 60;
 				SockCommon.TimeWaitMonitor.COUNTER_NUM = 5;
@@ -221,12 +217,18 @@ namespace Charlotte
 			SockCommon.WriteLog(SockCommon.ErrorLevel_e.INFO, "要求メソッド：" + channel.Method);
 
 			bool head;
-			if (channel.Method == "GET")
-				head = false;
-			else if (channel.Method == "HEAD")
+			if (channel.Method == "HEAD")
+			{
 				head = true;
+			}
+			else if (channel.Method == "GET")
+			{
+				head = false;
+			}
 			else
+			{
 				throw new Exception("Unsupported method: " + channel.Method);
+			}
 
 			string docRoot = this.DocRoot;
 			string host = GetHeaderValue(channel, "Host");
