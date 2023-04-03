@@ -117,6 +117,10 @@
 　　　⇒ リクエストされたパスが見つからなかった場合に表示される所謂オリジナル４０４ページを設定します。
 　　　　ステータスコード = 404, Content-Type: text/html と共に HTML-FILE の内容を応答します。
 
+	/C
+
+　　　⇒ 大きなファイルを応答する場合 Chunked-Encoding を使用します。
+
 
 　実行例
 
@@ -136,7 +140,11 @@
 
 　　　-- /N のみ
 
-　　HTTCmd.exe C:\www\DocRoot 80 /K /T C:\www\ContentTypes.tsv /H C:\www\DocRoots.tsv /N C:\www\404.html
+　　HTTCmd.exe C:\www\DocRoot 80 /C
+
+　　　-- /C のみ
+
+　　HTTCmd.exe C:\www\DocRoot 80 /K /T C:\www\ContentTypes.tsv /H C:\www\DocRoots.tsv /N C:\www\404.html /C
 
 　　　-- 全部
 

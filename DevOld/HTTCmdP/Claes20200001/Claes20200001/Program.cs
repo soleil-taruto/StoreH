@@ -224,7 +224,7 @@ namespace Charlotte
 		{
 			SockCommon.WriteLog(SockCommon.ErrorLevel_e.INFO, "クライアント：" + channel.Channel.Handler.RemoteEndPoint);
 
-			if (30 < channel.Method.Length) // rough limit
+			if (10 < channel.Method.Length) // rough limit
 				throw new Exception("Received method is too long");
 
 			SockCommon.WriteLog(SockCommon.ErrorLevel_e.INFO, "要求メソッド：" + channel.Method);
@@ -277,6 +277,7 @@ namespace Charlotte
 					channel.ResStatus = 301;
 					channel.ResHeaderPairs.Add(new string[] { "Location", "http://" + hostName + channel.PathQuery });
 					channel.ResBody = null;
+					channel.ResBodyLength = -1L;
 
 					goto endFunc;
 				}
@@ -333,6 +334,7 @@ namespace Charlotte
 				channel.ResStatus = 301;
 				channel.ResHeaderPairs.Add(new string[] { "Location", "http://" + host + "/" + string.Join("", relPath.Split('\\').Select(v => EncodeUrl(v) + "/")) });
 				channel.ResBody = null;
+				channel.ResBodyLength = -1L;
 
 				goto endFunc;
 			}
@@ -342,20 +344,29 @@ namespace Charlotte
 			}
 			else if (File.Exists(path))
 			{
+				string file = path;
+				long fileSize = new FileInfo(file).Length;
+
 				channel.ResStatus = 200;
 				channel.ResHeaderPairs.Add(new string[] { "Content-Type", ContentTypeCollection.I.GetContentType(Path.GetExtension(path)) });
-				channel.ResBody = E_ReadFile(path);
+				channel.ResBody = E_ReadFile(file, fileSize);
+				channel.ResBodyLength = fileSize;
 			}
 			else
 			{
 				channel.ResStatus = 404;
 				//channel.ResHeaderPairs.Add();
 				channel.ResBody = null;
+				channel.ResBodyLength = -1L;
 
 				if (!head && this.Page404File != null)
 				{
+					string file = this.Page404File;
+					long fileSize = new FileInfo(file).Length;
+
 					channel.ResHeaderPairs.Add(new string[] { "Content-Type", "text/html" });
-					channel.ResBody = E_ReadFile(this.Page404File);
+					channel.ResBody = E_ReadFile(file, fileSize);
+					channel.ResBodyLength = fileSize;
 				}
 			}
 			if (head && channel.ResBody != null)
@@ -377,6 +388,7 @@ namespace Charlotte
 				SockCommon.WriteLog(SockCommon.ErrorLevel_e.INFO, "RES-HEADER " + pair[0] + " = " + pair[1]);
 
 			SockCommon.WriteLog(SockCommon.ErrorLevel_e.INFO, "RES-BODY " + (channel.ResBody != null));
+			SockCommon.WriteLog(SockCommon.ErrorLevel_e.INFO, "RES-BODY-LENGTH " + channel.ResBodyLength);
 		}
 
 		private static string GetHeaderValue(HTTPServerChannel channel, string name)
@@ -400,13 +412,11 @@ namespace Charlotte
 			return buff.ToString();
 		}
 
-		private static IEnumerable<byte[]> E_ReadFile(string file)
+		private static IEnumerable<byte[]> E_ReadFile(string file, long fileSize)
 		{
-			long fileSize = new FileInfo(file).Length;
-
 			for (long offset = 0L; offset < fileSize; )
 			{
-				int readSize = (int)Math.Min(fileSize - offset, 2000000L);
+				int readSize = (int)Math.Min(fileSize - offset, (long)(512 * 1024));
 				byte[] buff = new byte[readSize];
 
 				//SockCommon.WriteLog(SockCommon.ErrorLevel_e.INFO, "READ " + offset + " " + readSize + " " + fileSize + " " + (offset * 100.0 / fileSize).ToString("F2") + " " + ((offset + readSize) * 100.0 / fileSize).ToString("F2")); // 頻出するので抑止

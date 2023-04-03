@@ -35,6 +35,7 @@ namespace Charlotte.Actions
 			channel.ResStatus = 200;
 			channel.ResHeaderPairs.Add(new string[] { "Content-Type", "text/html; charset=UTF-8" });
 			channel.ResBody = new byte[][] { Encoding.UTF8.GetBytes(resText) };
+			channel.ResBodyLength = -1L;
 		}
 
 		private static string GetHeaderValue(HTTPServerChannel channel, string name)

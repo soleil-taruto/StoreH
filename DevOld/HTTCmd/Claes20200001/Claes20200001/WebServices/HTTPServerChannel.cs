@@ -141,7 +141,7 @@ namespace Charlotte.WebServices
 
 		private IEnumerable<int> RecvLine(Action<string> a_return)
 		{
-			const int LINE_LEN_MAX = 512000;
+			const int LINE_LEN_MAX = 128 * 1024;
 
 			List<byte> buff = new List<byte>(LINE_LEN_MAX);
 
@@ -173,8 +173,8 @@ namespace Charlotte.WebServices
 
 		private IEnumerable<int> RecvHeader()
 		{
-			const int HEADERS_LEN_MAX = 612000;
-			const int WEIGHT = 1000;
+			const int HEADERS_LEN_MAX = 128 * 1024 + 65536;
+			const int WEIGHT = 256;
 
 			int roughHeaderLength = 0;
 
@@ -263,7 +263,7 @@ namespace Charlotte.WebServices
 
 		private IEnumerable<int> RecvBody()
 		{
-			const int READ_SIZE_MAX = 2000000; // 2 MB
+			const int READ_SIZE_MAX = 1024 * 1024;
 
 			HTTPBodyOutputStream buff = this.Channel.BodyOutputStream;
 
@@ -363,7 +363,8 @@ namespace Charlotte.WebServices
 
 		public int ResStatus = 200;
 		public List<string[]> ResHeaderPairs = new List<string[]>();
-		public IEnumerable<byte[]> ResBody = null; // ゼロバイトの要素を含んでも良い。null-のときゼロバイトの応答ボディを応答する。
+		public IEnumerable<byte[]> ResBody = null; // ゼロバイトの要素を含んでも良い。null のときゼロバイトの応答ボディを応答する。
+		public long ResBodyLength = -1L; // 応答ボディの長さをセットすること。ResBodyLength == -1L のとき場合によってチャンクで応答する。
 
 		// <-- HTTPConnected 内で(必要に応じて)設定しなければならないフィールド
 
@@ -383,6 +384,24 @@ namespace Charlotte.WebServices
 			{
 				foreach (var relay in this.EndHeader())
 					yield return relay;
+			}
+			else if (this.ResBodyLength != -1L)
+			{
+				foreach (var relay in this.SendLine("Content-Length: " + this.ResBodyLength)
+					.Concat(this.EndHeader()))
+					yield return relay;
+
+				long sentLength = 0L;
+
+				foreach (byte[] resBodyPart in this.ResBody)
+				{
+					foreach (var relay in this.Channel.Send(resBodyPart))
+						yield return relay;
+
+					sentLength += resBodyPart.Length;
+				}
+				if (sentLength != this.ResBodyLength)
+					throw new Exception("Bad ResBodyLength");
 			}
 			else
 			{
