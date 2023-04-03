@@ -60,6 +60,8 @@ namespace Charlotte.GUICommons
 			// HACK: 別々のプログラムが偶然同じビルド時刻になってまうと、それらは同時に実行できなくなる。
 			// -- レアケースなので看過する。
 
+			// HACK: 同じアプリケーションでもビルドしなおすと(バージョンが違うと)排他制御が効かなくなる。
+
 			Mutex procMutex = new Mutex(
 				false,
 				"{62f72aca-dc8c-432e-b00d-e589dc2bf9fa}_" + peTimeDateStamp
