@@ -171,6 +171,16 @@ namespace Charlotte
 								ProcMain.WriteLog("ProgramDataFolder.RootDir: " + ProgramDataFolder.RootDir);
 								continue;
 							}
+							if (ar.ArgIs("/D"))
+							{
+								Common.PageDownloadFile = SCommon.MakeFullPath(ar.NextArg());
+								ProcMain.WriteLog("PageDownloadFile: " + Common.PageDownloadFile);
+
+								if (!File.Exists(Common.PageDownloadFile))
+									throw new Exception("PageDownloadFile is not found");
+
+								continue;
+							}
 							break;
 						}
 					}
@@ -186,7 +196,7 @@ namespace Charlotte
 				ProcMain.WriteLog("DocRoot: " + this.DocRoot);
 				ProcMain.WriteLog("PortNo: " + hs.PortNo);
 
-				hs.Perform();
+				hs.Run();
 
 				ProcMain.WriteLog("HTTCmd-P-End");
 			}

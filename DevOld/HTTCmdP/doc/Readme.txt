@@ -41,6 +41,12 @@ OPTIONS
 	デフォルトのルートフォルダは C:\temp\HTTCmdP_ProgramData です。
 	存在しない場合、起動時にフォルダを作成します。
 
+/D HTML-FILE
+
+	ダウンロードページを設定します。
+	文字コード：UTF-8
+	置き換え：${download-url}　⇒　ダウンロードURL
+
 
 ----
 BatchService

@@ -181,7 +181,7 @@ namespace Charlotte
 				ProcMain.WriteLog("DocRoot: " + this.DocRoot);
 				ProcMain.WriteLog("PortNo: " + hs.PortNo);
 
-				hs.Perform();
+				hs.Run();
 
 				ProcMain.WriteLog("HTTCmd-End");
 			}
