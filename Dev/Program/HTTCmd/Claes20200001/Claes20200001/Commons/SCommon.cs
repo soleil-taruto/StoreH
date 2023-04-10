@@ -335,22 +335,48 @@ namespace Charlotte.Commons
 
 		public static Dictionary<string, V> CreateDictionary<V>()
 		{
-			return new Dictionary<string, V>(new IECompString());
+			return new Dictionary<string, V>(new EqualityComparerString());
 		}
 
 		public static Dictionary<string, V> CreateDictionaryIgnoreCase<V>()
 		{
-			return new Dictionary<string, V>(new IECompStringIgnoreCase());
+			return new Dictionary<string, V>(new EqualityComparerStringIgnoreCase());
 		}
 
 		public static HashSet<string> CreateSet()
 		{
-			return new HashSet<string>(new IECompString());
+			return new HashSet<string>(new EqualityComparerString());
 		}
 
 		public static HashSet<string> CreateSetIgnoreCase()
 		{
-			return new HashSet<string>(new IECompStringIgnoreCase());
+			return new HashSet<string>(new EqualityComparerStringIgnoreCase());
+		}
+
+		private class EqualityComparerString : IEqualityComparer<string>
+		{
+			public bool Equals(string a, string b)
+			{
+				return a == b;
+			}
+
+			public int GetHashCode(string a)
+			{
+				return a.GetHashCode();
+			}
+		}
+
+		private class EqualityComparerStringIgnoreCase : IEqualityComparer<string>
+		{
+			public bool Equals(string a, string b)
+			{
+				return a.ToLower() == b.ToLower();
+			}
+
+			public int GetHashCode(string a)
+			{
+				return a.ToLower().GetHashCode();
+			}
 		}
 
 		/// <summary>
@@ -1048,7 +1074,7 @@ namespace Charlotte.Commons
 				int value = int.Parse(str);
 
 				if (value < minval || maxval < value)
-					throw null;
+					throw new Exception("Value out of range");
 
 				return value;
 			}
@@ -1065,7 +1091,7 @@ namespace Charlotte.Commons
 				long value = long.Parse(str);
 
 				if (value < minval || maxval < value)
-					throw null;
+					throw new Exception("Value out of range");
 
 				return value;
 			}
@@ -1736,32 +1762,6 @@ namespace Charlotte.Commons
 			return Comp(a.ToLower(), b.ToLower());
 		}
 
-		public class IECompString : IEqualityComparer<string>
-		{
-			public bool Equals(string a, string b)
-			{
-				return a == b;
-			}
-
-			public int GetHashCode(string a)
-			{
-				return a.GetHashCode();
-			}
-		}
-
-		public class IECompStringIgnoreCase : IEqualityComparer<string>
-		{
-			public bool Equals(string a, string b)
-			{
-				return a.ToLower() == b.ToLower();
-			}
-
-			public int GetHashCode(string a)
-			{
-				return a.ToLower().GetHashCode();
-			}
-		}
-
 		public static bool EqualsIgnoreCase(string a, string b)
 		{
 			return a.ToLower() == b.ToLower();
@@ -1792,21 +1792,12 @@ namespace Charlotte.Commons
 			return str.ToLower().IndexOf(char.ToLower(chr));
 		}
 
-		public static int IndexOf(IList<string> strs, string str)
-		{
-			for (int index = 0; index < strs.Count; index++)
-				if (strs[index] == str)
-					return index;
-
-			return -1; // not found
-		}
-
 		public static int IndexOfIgnoreCase(IList<string> strs, string str)
 		{
-			string lStr = str.ToLower();
+			string lwrStr = str.ToLower();
 
 			for (int index = 0; index < strs.Count; index++)
-				if (strs[index].ToLower() == lStr)
+				if (strs[index].ToLower() == lwrStr)
 					return index;
 
 			return -1; // not found
@@ -1857,9 +1848,9 @@ namespace Charlotte.Commons
 		}
 
 		// memo: @ 2022.10.31
-		// HasSame_Comp, HasSame を同じ名前にすると Comparision<T>, Func<T, T, bool> の型推論の失敗を誘発する。
+		// HasSameComp, HasSame を同じ名前にすると Comparision<T>, Func<T, T, bool> の型推論の失敗を誘発する。
 
-		public static bool HasSame_Comp<T>(IList<T> list, Comparison<T> comp)
+		public static bool HasSameComp<T>(IList<T> list, Comparison<T> comp)
 		{
 			return HasSame(list, (a, b) => comp(a, b) == 0);
 		}
@@ -2635,7 +2626,7 @@ namespace Charlotte.Commons
 		/// </summary>
 		/// <typeparam name="T">要素の型</typeparam>
 		/// <param name="list">検索対象のリスト</param>
-		/// <param name="targetValue">範囲内の値</param>
+		/// <param name="targetValue">目的の値</param>
 		/// <param name="comp">比較メソッド</param>
 		/// <returns>目的位置(見つからない場合(-1))</returns>
 		public static int GetIndex<T>(IList<T> list, T targetValue, Comparison<T> comp)
