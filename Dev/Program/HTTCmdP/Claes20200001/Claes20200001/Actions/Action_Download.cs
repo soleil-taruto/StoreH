@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Charlotte.Commons;
 using Charlotte.WebServices;
+using System.IO;
 
 namespace Charlotte.Actions
 {
@@ -15,7 +16,11 @@ namespace Charlotte.Actions
 			string downloadPath = GetDownloadPath(channel);
 			string downloadUrl = "http://" + host + downloadPath;
 
-			string resText = string.Format(@"<html>
+			string resText;
+
+			if (Common.PageDownloadFile == null)
+			{
+				resText = string.Format(@"<html>
 <head>
 <title>ダウンロード</title>
 </head>
@@ -28,9 +33,15 @@ namespace Charlotte.Actions
 </body>
 </html>
 "
-				, downloadUrl
-				, downloadUrl
-				);
+					, downloadUrl
+					, downloadUrl
+					);
+			}
+			else
+			{
+				resText = File.ReadAllText(Common.PageDownloadFile, Encoding.UTF8)
+					.Replace("${download-url}", downloadUrl);
+			}
 
 			channel.ResStatus = 200;
 			channel.ResHeaderPairs.Add(new string[] { "Content-Type", "text/html; charset=UTF-8" });

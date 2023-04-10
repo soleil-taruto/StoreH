@@ -13,5 +13,11 @@ namespace Charlotte
 		/// URLに使用できないコントロール文字(水平タブ)で初期化しておく。
 		/// </summary>
 		public static string BatchServiceCredentials = "\t";
+
+		/// <summary>
+		/// ダウンロードページのテンプレートファイル
+		/// null == 未指定
+		/// </summary>
+		public static string PageDownloadFile = null;
 	}
 }
