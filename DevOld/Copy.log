@@ -14,6 +14,12 @@ T C:\home\GitHub\StoreH\DevOld\HTTCmdP\dat
 > C:\home\GitHub\StoreH\DevOld\HTTCmdP\doc
 < C:\DevBin\20230403_Program\HTTCmdP\out
 T C:\home\GitHub\StoreH\DevOld\HTTCmdP\out
+< C:\DevBin\20230410_MakeResourceCluster\Claes20200001
+> C:\home\GitHub\StoreH\DevOld\MakeResourceCluster\Claes20200001
+< C:\DevBin\20230410_MakeResourceCluster\doc
+> C:\home\GitHub\StoreH\DevOld\MakeResourceCluster\doc
+< C:\DevBin\20230410_MakeResourceCluster\out
+T C:\home\GitHub\StoreH\DevOld\MakeResourceCluster\out
 < C:\DevBin\20230315_Test20221129\Claes20200001
 > C:\home\GitHub\StoreH\DevOld\Test20221129\Claes20200001
 < C:\DevBin\20230315_Test20221129\doc
