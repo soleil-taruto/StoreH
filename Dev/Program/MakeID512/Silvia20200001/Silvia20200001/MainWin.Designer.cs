@@ -61,7 +61,7 @@
 			// 
 			this.BtnB6288.Font = new System.Drawing.Font("メイリオ", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.BtnB6288.ForeColor = System.Drawing.Color.Navy;
-			this.BtnB6288.Location = new System.Drawing.Point(12, 66);
+			this.BtnB6288.Location = new System.Drawing.Point(12, 45);
 			this.BtnB6288.Name = "BtnB6288";
 			this.BtnB6288.Size = new System.Drawing.Size(200, 55);
 			this.BtnB6288.TabIndex = 1;
@@ -73,7 +73,7 @@
 			// 
 			this.BtnB16128L.Font = new System.Drawing.Font("メイリオ", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.BtnB16128L.ForeColor = System.Drawing.Color.Navy;
-			this.BtnB16128L.Location = new System.Drawing.Point(630, 66);
+			this.BtnB16128L.Location = new System.Drawing.Point(630, 45);
 			this.BtnB16128L.Name = "BtnB16128L";
 			this.BtnB16128L.Size = new System.Drawing.Size(200, 55);
 			this.BtnB16128L.TabIndex = 6;
@@ -85,7 +85,7 @@
 			// 
 			this.BtnB10155.Font = new System.Drawing.Font("メイリオ", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.BtnB10155.ForeColor = System.Drawing.Color.Navy;
-			this.BtnB10155.Location = new System.Drawing.Point(836, 66);
+			this.BtnB10155.Location = new System.Drawing.Point(836, 45);
 			this.BtnB10155.Name = "BtnB10155";
 			this.BtnB10155.Size = new System.Drawing.Size(200, 55);
 			this.BtnB10155.TabIndex = 8;
@@ -97,7 +97,7 @@
 			// 
 			this.BtnB36100U.Font = new System.Drawing.Font("メイリオ", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.BtnB36100U.ForeColor = System.Drawing.Color.Navy;
-			this.BtnB36100U.Location = new System.Drawing.Point(218, 66);
+			this.BtnB36100U.Location = new System.Drawing.Point(218, 45);
 			this.BtnB36100U.Name = "BtnB36100U";
 			this.BtnB36100U.Size = new System.Drawing.Size(200, 55);
 			this.BtnB36100U.TabIndex = 2;
@@ -107,7 +107,7 @@
 			// 
 			// BtnB36100L
 			// 
-			this.BtnB36100L.Location = new System.Drawing.Point(218, 127);
+			this.BtnB36100L.Location = new System.Drawing.Point(218, 106);
 			this.BtnB36100L.Name = "BtnB36100L";
 			this.BtnB36100L.Size = new System.Drawing.Size(200, 55);
 			this.BtnB36100L.TabIndex = 3;
@@ -118,7 +118,7 @@
 			// BtnClear
 			// 
 			this.BtnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.BtnClear.Location = new System.Drawing.Point(1072, 66);
+			this.BtnClear.Location = new System.Drawing.Point(1072, 45);
 			this.BtnClear.Name = "BtnClear";
 			this.BtnClear.Size = new System.Drawing.Size(100, 55);
 			this.BtnClear.TabIndex = 9;
@@ -130,7 +130,7 @@
 			// 
 			this.BtnB26110U.Font = new System.Drawing.Font("メイリオ", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.BtnB26110U.ForeColor = System.Drawing.Color.Navy;
-			this.BtnB26110U.Location = new System.Drawing.Point(424, 66);
+			this.BtnB26110U.Location = new System.Drawing.Point(424, 45);
 			this.BtnB26110U.Name = "BtnB26110U";
 			this.BtnB26110U.Size = new System.Drawing.Size(200, 55);
 			this.BtnB26110U.TabIndex = 4;
@@ -142,7 +142,7 @@
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Status});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 199);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 179);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(1184, 22);
 			this.statusStrip1.TabIndex = 10;
@@ -158,7 +158,7 @@
 			// 
 			// BtnB26110L
 			// 
-			this.BtnB26110L.Location = new System.Drawing.Point(424, 127);
+			this.BtnB26110L.Location = new System.Drawing.Point(424, 106);
 			this.BtnB26110L.Name = "BtnB26110L";
 			this.BtnB26110L.Size = new System.Drawing.Size(200, 55);
 			this.BtnB26110L.TabIndex = 5;
@@ -168,7 +168,7 @@
 			// 
 			// BtnB16128U
 			// 
-			this.BtnB16128U.Location = new System.Drawing.Point(630, 127);
+			this.BtnB16128U.Location = new System.Drawing.Point(630, 106);
 			this.BtnB16128U.Name = "BtnB16128U";
 			this.BtnB16128U.Size = new System.Drawing.Size(200, 55);
 			this.BtnB16128U.TabIndex = 7;
@@ -180,7 +180,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1184, 221);
+			this.ClientSize = new System.Drawing.Size(1184, 201);
 			this.Controls.Add(this.BtnB16128U);
 			this.Controls.Add(this.BtnB26110L);
 			this.Controls.Add(this.statusStrip1);
