@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using Charlotte.Commons;
 using Charlotte.Drawings;
 using Charlotte.GameCommons;
+using Charlotte.GameConfigs;
 
 namespace Charlotte.GameCommons
 {
@@ -41,11 +42,12 @@ namespace Charlotte.GameCommons
 
 		public static Thread Th;
 		public static bool AliveFlag = true;
+		public static EventWaitHandle MainThStandby = new EventWaitHandle(false, EventResetMode.AutoReset);
 
 		private static object SYNCROOT = new object();
 		private static bool ChangeFlag = false;
 		private static I4Rect P_TargetMonitor;
-		private static string P_Message = null;
+		private static string P_Message;
 
 		/// <summary>
 		/// メッセージの表示・非表示を行う。
@@ -61,9 +63,14 @@ namespace Charlotte.GameCommons
 				P_TargetMonitor = DD.TargetMonitor;
 				P_Message = message;
 			}
+
+			MainThStandby.Set();
 		}
 
-		private static LibbonDialog Instance = null;
+		private static EventWaitHandle EvShowed = new EventWaitHandle(false, EventResetMode.AutoReset);
+		private static EventWaitHandle EvClosed = new EventWaitHandle(false, EventResetMode.AutoReset);
+
+		private static LibbonDialog Instance = null; // 注意：参照・変更はメインスレッド内で行う。
 
 		public static void MainTh()
 		{
@@ -71,46 +78,56 @@ namespace Charlotte.GameCommons
 			{
 				if (ChangeFlag)
 				{
+					I4Rect targetMonitor;
+					string message;
+
 					lock (SYNCROOT)
 					{
 						ChangeFlag = false;
+						targetMonitor = P_TargetMonitor;
+						message = P_Message;
+					}
 
+					P_Close();
+
+					if (!string.IsNullOrEmpty(message))
+					{
 						DD.RunOnUIThread(() =>
 						{
-							P_Hide();
-
-							if (!string.IsNullOrEmpty(P_Message))
-							{
-								Instance = new LibbonDialog();
-								Instance.TargetMonitor = P_TargetMonitor;
-								Instance.Message = P_Message;
-								Instance.Show();
-							}
+							Instance = new LibbonDialog();
+							Instance.TargetMonitor = targetMonitor;
+							Instance.Message = message;
+							Instance.Show();
 						});
+
+						EvShowed.WaitOne();
+
+						Thread.Sleep(500); // リボンの最短表示時間待ち
 					}
-					Thread.Sleep(500); // リボンの最短表示時間待ち
+				}
+
+				MainThStandby.WaitOne();
+			}
+
+			P_Close();
+		}
+
+		private static void P_Close()
+		{
+			DD.RunOnUIThread(() =>
+			{
+				if (Instance == null)
+				{
+					EvClosed.Set();
 				}
 				else
 				{
-					Thread.Sleep(100); // ループ待機待ち
+					Instance.Close();
+					Instance = null;
 				}
-			}
-
-			DD.RunOnUIThread(() =>
-			{
-				P_Hide();
 			});
 
-			Thread.Sleep(100); // リボンが閉じるのを待つ // HACK: 同期していない。
-		}
-
-		private static void P_Hide()
-		{
-			if (Instance != null)
-			{
-				Instance.Close();
-				Instance = null;
-			}
+			EvClosed.WaitOne();
 		}
 
 		private I4Rect TargetMonitor;
@@ -139,10 +156,10 @@ namespace Charlotte.GameCommons
 			else
 				fontSize = 48f; // 想定フォントサイズ
 
-			this.BackColor = Color.FromArgb(0, 64, 64);
+			this.BackColor = GameConfig.LibbonBackColor;
 			this.FormBorderStyle = FormBorderStyle.None;
 			this.MessageLabel.Font = new Font("メイリオ", fontSize);
-			this.MessageLabel.ForeColor = Color.FromArgb(255, 255, 255);
+			this.MessageLabel.ForeColor = GameConfig.LibbonForeColor;
 			this.MessageLabel.Text = this.Message;
 
 			const int MARGIN = 30;
@@ -153,6 +170,13 @@ namespace Charlotte.GameCommons
 			this.Top = (this.TargetMonitor.H - this.Height) / 2;
 			this.MessageLabel.Left = (this.Width - this.MessageLabel.Width) / 2;
 			this.MessageLabel.Top = MARGIN;
+
+			EvShowed.Set();
+		}
+
+		private void LibbonDialog_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			EvClosed.Set();
 		}
 	}
 }

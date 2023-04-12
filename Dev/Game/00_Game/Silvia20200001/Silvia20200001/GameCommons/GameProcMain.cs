@@ -10,15 +10,15 @@ using DxLibDLL;
 using Charlotte.Commons;
 using Charlotte.Drawings;
 using Charlotte.GUICommons;
-using Charlotte.GameSettings;
+using Charlotte.GameConfigs;
 
 namespace Charlotte.GameCommons
 {
 	public static class GameProcMain
 	{
-		private static Action GameStarted;
+		private static Action Initialized;
 
-		public static void GameMain(Form mainForm, Action userGameMain)
+		public static void GameMain(Form mainForm, Action tabascoFire)
 		{
 			DD.RunOnUIThread = GetRunOnUIThread(mainForm);
 
@@ -26,20 +26,20 @@ namespace Charlotte.GameCommons
 			{
 				bool aliving = true;
 
-				GameStarted = () =>
+				Initialized = () =>
 				{
-					mainForm.BeginInvoke((MethodInvoker)delegate
+					DD.RunOnUIThread(() =>
 					{
 						if (aliving)
 							mainForm.Visible = false;
 					});
 
-					userGameMain();
+					tabascoFire();
 				};
 
 				Main2();
 
-				mainForm.BeginInvoke((MethodInvoker)delegate
+				DD.RunOnUIThread(() =>
 				{
 					aliving = false;
 					mainForm.Close();
@@ -124,6 +124,7 @@ namespace Charlotte.GameCommons
 			finally
 			{
 				LibbonDialog.AliveFlag = false;
+				LibbonDialog.MainThStandby.Set();
 				LibbonDialog.Th.Join();
 			}
 		}
@@ -132,16 +133,19 @@ namespace Charlotte.GameCommons
 		{
 			string logSaveDir;
 			string logFile;
+			string saveDataFile;
 
 			if (ProcMain.DEBUG)
 			{
 				logSaveDir = @"C:\temp";
 				logFile = @"C:\temp\Game.log";
+				saveDataFile = @"C:\temp\SaveData.dat";
 			}
 			else
 			{
 				logSaveDir = new WorkingDir().GetPath(".");
 				logFile = Path.Combine(ProcMain.SelfDir, "Game.log");
+				saveDataFile = Path.Combine(ProcMain.SelfDir, "SaveData.dat");
 			}
 
 			File.WriteAllBytes(logFile, SCommon.EMPTY_BYTES);
@@ -151,18 +155,18 @@ namespace Charlotte.GameCommons
 				File.AppendAllText(logFile, "[" + DateTime.Now + "] " + message + "\r\n", Encoding.UTF8);
 			};
 
-			Keyboard.Initialize();
-
-			string saveDataFile = Path.Combine(ProcMain.SelfDir, "SaveData.dat");
+			foreach (string requiredFileName in new string[] { "DxLib.dll", "DxLibDotNet.dll" })
+				if (!File.Exists(Path.Combine(ProcMain.SelfDir, requiredFileName)))
+					throw new Exception("no file: " + requiredFileName);
 
 			if (File.Exists(saveDataFile))
-				GameSetting.Deserialize(File.ReadAllText(saveDataFile, Encoding.ASCII));
+				GameSetting.Deserialize(Encoding.ASCII.GetString(DU.Hasher.UnaddHash(File.ReadAllBytes(saveDataFile))));
 			else
 				GameSetting.Initialize();
 
 			DD.Save = () =>
 			{
-				File.WriteAllText(saveDataFile, GameSetting.Serialize(), Encoding.ASCII);
+				File.WriteAllBytes(saveDataFile, DU.Hasher.AddHash(Encoding.ASCII.GetBytes(GameSetting.Serialize())));
 			};
 
 			DD.Finalizers.Add(DD.Save);
@@ -208,6 +212,7 @@ namespace Charlotte.GameCommons
 
 			// DXLib 初期化 ここまで
 
+			Keyboard.Initialize();
 			Pad.Initialize();
 
 			if (GameSetting.FullScreen)
@@ -227,7 +232,7 @@ namespace Charlotte.GameCommons
 
 			DD.SetLibbon(null);
 
-			GameStarted();
+			Initialized();
 		}
 
 		/// <summary>

@@ -328,6 +328,55 @@ namespace Charlotte.GameCommons
 			return count == 1 || POUND_FIRST_DELAY < count && (count - POUND_FIRST_DELAY) % POUND_DELAY == 1;
 		}
 
+		public static class Hasher
+		{
+			private static byte[] MAGIC_HEADER = Encoding.ASCII.GetBytes("Gattonero20230405_Hasher_MAGIC_HEADER_{59c1c8b8-f0db-4c11-8af6-1590b89342dc}_");
+			private const int HASH_SIZE = 20;
+
+			public static byte[] AddHash(byte[] data)
+			{
+				if (data == null)
+					throw new Exception("Bad data");
+
+				return SCommon.Join(new byte[][] { data, GetHash(data) });
+			}
+
+			public static byte[] UnaddHash(byte[] data)
+			{
+				try
+				{
+					return UnaddHash_Main(data);
+				}
+				catch (Exception e)
+				{
+					throw new Exception("読み込まれたデータは破損しているかバージョンが異なります。", e);
+				}
+			}
+
+			private static byte[] UnaddHash_Main(byte[] data)
+			{
+				if (data == null)
+					throw new Exception("Bad data");
+
+				if (data.Length < HASH_SIZE)
+					throw new Exception("Bad Length");
+
+				byte[] rDat = data.Take(data.Length - HASH_SIZE).ToArray();
+				byte[] hash = data.Skip(data.Length - HASH_SIZE).ToArray();
+				byte[] recalcedHash = GetHash(rDat);
+
+				if (SCommon.Comp(hash, recalcedHash) != 0)
+					throw new Exception("Bad hash");
+
+				return rDat;
+			}
+
+			private static byte[] GetHash(byte[] data)
+			{
+				return Encoding.ASCII.GetBytes(SCommon.Base64.I.Encode(SCommon.GetSHA512(new byte[][] { MAGIC_HEADER, data }).Take(15).ToArray()));
+			}
+		}
+
 		// TODO: 以下DDへ移動するかもしれない。
 
 		public static IEnumerable<T> Reverse<T>(IList<T> list)
@@ -397,7 +446,7 @@ namespace Charlotte.GameCommons
 		/// <param name="tasks">タスクリスト</param>
 		public static void ExecuteTasks(List<Func<bool>> tasks)
 		{
-			for (int index = 0; index < tasks.Count; )
+			for (int index = 0; index < tasks.Count; index++)
 			{
 				if (!tasks[index]())
 				{
