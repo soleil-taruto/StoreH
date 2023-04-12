@@ -10,29 +10,12 @@ using System.IO;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using Charlotte.Commons;
+using Charlotte.GUICommons;
 
 namespace Charlotte
 {
 	public partial class MainWin : Form
 	{
-		#region WndProc
-
-		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-		protected override void WndProc(ref Message m)
-		{
-			const int WM_SYSCOMMAND = 0x112;
-			const long SC_CLOSE = 0xF060L;
-
-			if (m.Msg == WM_SYSCOMMAND && (m.WParam.ToInt64() & 0xFFF0L) == SC_CLOSE)
-			{
-				this.BeginInvoke((MethodInvoker)this.CloseWindow);
-				return;
-			}
-			base.WndProc(ref m);
-		}
-
-		#endregion
-
 		public MainWin()
 		{
 			InitializeComponent();
@@ -43,50 +26,28 @@ namespace Charlotte
 
 		private void MainWin_Load(object sender, EventArgs e)
 		{
-			Ground.I = new Ground();
+			// none
 		}
 
 		private void MainWin_Shown(object sender, EventArgs e)
 		{
-			Common.PostShown(this);
 			this.BtnMkPwDig.Focus();
-			this.EM.StartTimer();
-		}
-
-		private void MainWin_FormClosed(object sender, FormClosedEventArgs e)
-		{
-			this.EM.EndTimer(); // 念のため
-		}
-
-		private void CloseWindow()
-		{
-			this.EM.EndTimer();
-			this.Close();
-		}
-
-		private Common.EventManager EM = new Common.EventManager();
-
-		private void MainTimer_Tick(object sender, EventArgs e)
-		{
-			this.EM.EventHandlerForTimer(() =>
-			{
-				// nop
-			});
+			GUICommon.PostShown(this);
 		}
 
 		private void BtnMkPw_Click(object sender, EventArgs e)
 		{
-			this.MakePassword(new string[] { SCommon.DECIMAL, SCommon.ALPHA, SCommon.alpha }, 22);
+			this.MakePassword(new string[] { SCommon.DECIMAL, SCommon.ALPHA_UPPER, SCommon.ALPHA_LOWER }, 22);
 		}
 
 		private void BtnMkPwUpr_Click(object sender, EventArgs e)
 		{
-			this.MakePassword(new string[] { SCommon.DECIMAL, SCommon.ALPHA }, 25);
+			this.MakePassword(new string[] { SCommon.DECIMAL, SCommon.ALPHA_UPPER }, 25);
 		}
 
 		private void BtnMkPwLwr_Click(object sender, EventArgs e)
 		{
-			this.MakePassword(new string[] { SCommon.DECIMAL, SCommon.alpha }, 25);
+			this.MakePassword(new string[] { SCommon.DECIMAL, SCommon.ALPHA_LOWER }, 25);
 		}
 
 		private void BtnMkPwDig_Click(object sender, EventArgs e)
@@ -96,7 +57,7 @@ namespace Charlotte
 
 		private void MkRand_Click(object sender, EventArgs e)
 		{
-			this.MakePassword(new string[] { SCommon.hexadecimal }, 32);
+			this.MakePassword(new string[] { SCommon.HEXADECIMAL_LOWER }, 32);
 		}
 
 		/// <summary>
@@ -192,7 +153,7 @@ namespace Charlotte
 
 		private void BtnMkPwLen_Click(object sender, EventArgs e)
 		{
-			this.MakePassword(new string[] { SCommon.DECIMAL, SCommon.ALPHA, SCommon.alpha }, (int)this.SpecPasswordLength.Value);
+			this.MakePassword(new string[] { SCommon.DECIMAL, SCommon.ALPHA_UPPER, SCommon.ALPHA_LOWER }, (int)this.SpecPasswordLength.Value);
 		}
 	}
 }

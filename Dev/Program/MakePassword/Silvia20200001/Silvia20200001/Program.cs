@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Charlotte.Commons;
+using Charlotte.GUICommons;
 
 namespace Charlotte
 {
@@ -14,7 +14,10 @@ namespace Charlotte
 		[STAThread]
 		static void Main()
 		{
-			ProcMain.GUIMain(() => new MainWin());
+			ProcMain.CUIMain(ar =>
+			{
+				GUIProcMain.GUIMain(() => new MainWin());
+			});
 		}
 	}
 }

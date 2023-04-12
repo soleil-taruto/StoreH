@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.IO;
 using System.IO.Compression;
-using System.Threading;
 using System.Diagnostics;
 using System.Security.Cryptography;
 
@@ -16,11 +16,11 @@ namespace Charlotte.Commons
 	/// </summary>
 	public static class SCommon
 	{
-		private class S_AnonyDisposable : IDisposable
+		private class P_AnonyDisposable : IDisposable
 		{
 			private Action Routine;
 
-			public S_AnonyDisposable(Action routine)
+			public P_AnonyDisposable(Action routine)
 			{
 				this.Routine = routine;
 			}
@@ -37,7 +37,7 @@ namespace Charlotte.Commons
 
 		public static IDisposable GetAnonyDisposable(Action routine)
 		{
-			return new S_AnonyDisposable(routine);
+			return new P_AnonyDisposable(routine);
 		}
 
 		public static int Comp<T>(IList<T> a, IList<T> b, Comparison<T> comp)
@@ -335,24 +335,54 @@ namespace Charlotte.Commons
 
 		public static Dictionary<string, V> CreateDictionary<V>()
 		{
-			return new Dictionary<string, V>(new IECompString());
+			return new Dictionary<string, V>(new EqualityComparerString());
 		}
 
 		public static Dictionary<string, V> CreateDictionaryIgnoreCase<V>()
 		{
-			return new Dictionary<string, V>(new IECompStringIgnoreCase());
+			return new Dictionary<string, V>(new EqualityComparerStringIgnoreCase());
 		}
 
 		public static HashSet<string> CreateSet()
 		{
-			return new HashSet<string>(new IECompString());
+			return new HashSet<string>(new EqualityComparerString());
 		}
 
 		public static HashSet<string> CreateSetIgnoreCase()
 		{
-			return new HashSet<string>(new IECompStringIgnoreCase());
+			return new HashSet<string>(new EqualityComparerStringIgnoreCase());
 		}
 
+		private class EqualityComparerString : IEqualityComparer<string>
+		{
+			public bool Equals(string a, string b)
+			{
+				return a == b;
+			}
+
+			public int GetHashCode(string a)
+			{
+				return a.GetHashCode();
+			}
+		}
+
+		private class EqualityComparerStringIgnoreCase : IEqualityComparer<string>
+		{
+			public bool Equals(string a, string b)
+			{
+				return a.ToLower() == b.ToLower();
+			}
+
+			public int GetHashCode(string a)
+			{
+				return a.ToLower().GetHashCode();
+			}
+		}
+
+		/// <summary>
+		/// とても小さい正数として慣習的に決めた値
+		/// ・doubleの許容誤差として
+		/// </summary>
 		public const double MICRO = 1.0 / IMAX;
 
 		private static void CheckNaN(double value)
@@ -407,12 +437,12 @@ namespace Charlotte.Commons
 		}
 
 		/// <summary>
-		/// 列挙をゲッターメソッドでラップします。
+		/// 列挙をGetterメソッドでラップします。
 		/// 例：{ A, B, C } -> 呼び出し毎に右の順で戻り値を返す { A, B, C, default(T), default(T), default(T), ... }
 		/// </summary>
 		/// <typeparam name="T">要素の型</typeparam>
 		/// <param name="src">列挙</param>
-		/// <returns>ゲッターメソッド</returns>
+		/// <returns>Getterメソッド</returns>
 		public static Func<T> Supplier<T>(IEnumerable<T> src)
 		{
 			IEnumerator<T> reader = src.GetEnumerator();
@@ -431,7 +461,7 @@ namespace Charlotte.Commons
 			};
 		}
 
-		// memo: list を変更するので IList<T> list にはできないよ！
+		// memo: list の長さを変更するので IList<T> list にはできないよ！
 		//
 		public static T DesertElement<T>(List<T> list, int index)
 		{
@@ -447,15 +477,30 @@ namespace Charlotte.Commons
 
 		public static T FastDesertElement<T>(List<T> list, int index)
 		{
-			T ret = UnaddElement(list);
+			T ret;
 
-			if (index < list.Count)
+			if (index == list.Count - 1) // ? 終端の要素
 			{
-				T ret2 = list[index];
-				list[index] = ret;
-				ret = ret2;
+				ret = UnaddElement(list);
+			}
+			else
+			{
+				ret = list[index];
+				list[index] = UnaddElement(list);
 			}
 			return ret;
+		}
+
+		public static T RefElement<T>(IList<T> list, int index, T defval)
+		{
+			if (index < list.Count)
+			{
+				return list[index];
+			}
+			else
+			{
+				return defval;
+			}
 		}
 
 		private const int IO_TRY_MAX = 10;
@@ -560,9 +605,20 @@ namespace Charlotte.Commons
 				File.Copy(file, Path.Combine(wDir, Path.GetFileName(file)));
 		}
 
-		public static string EraseExt(string path)
+		public static void CopyPath(string rPath, string wPath)
 		{
-			return Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
+			if (Directory.Exists(rPath))
+			{
+				SCommon.CopyDir(rPath, wPath);
+			}
+			else if (File.Exists(rPath))
+			{
+				File.Copy(rPath, wPath);
+			}
+			else
+			{
+				throw new Exception("コピー元パスが存在しません。");
+			}
 		}
 
 		public static string ChangeRoot(string path, string oldRoot, string rootNew)
@@ -580,7 +636,7 @@ namespace Charlotte.Commons
 			return path.Substring(oldRoot.Length);
 		}
 
-		public static string PutYen(string path)
+		private static string PutYen(string path)
 		{
 			return Put_INE(path, "\\");
 		}
@@ -639,6 +695,24 @@ namespace Charlotte.Commons
 			path = Path.GetFullPath(path);
 			path = PutYen(path) + ".";
 			path = Path.GetFullPath(path);
+
+			return path;
+		}
+
+		public static string ToParentPath(string path)
+		{
+			path = Path.GetDirectoryName(path);
+
+			// path -> Path.GetDirectoryName(path)
+			// -----------------------------------
+			// "C:\\ABC\\DEF" -> "C:\\ABC"
+			// "C:\\ABC" -> "C:\\"
+			// "C:\\" -> null
+			// "" -> 例外
+			// null -> null
+
+			if (string.IsNullOrEmpty(path))
+				throw new Exception("パスから親パスに変換できません。" + path);
 
 			return path;
 		}
@@ -757,6 +831,30 @@ namespace Charlotte.Commons
 			return ToFairRelPath(path, dirSize) == path;
 		}
 
+		public static string ToCreatablePath(string path)
+		{
+			string newPath = path;
+			int n = 1;
+
+			while (File.Exists(newPath) || Directory.Exists(newPath))
+			{
+				if (n % 100 == 0)
+					ProcMain.WriteLog("パス名の衝突回避に時間が掛かっています。" + n);
+
+				newPath = SCommon.ChangeExt(path, "_" + n + Path.GetExtension(path));
+				n++;
+			}
+			return newPath;
+		}
+
+		// 注意：
+		// ChangeExt("C:\\xxx\\.zzz", "") -> "C:\\xxx"
+
+		public static string ChangeExt(string path, string ext)
+		{
+			return Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path) + ext);
+		}
+
 		#region ReadPart, WritePart
 
 		public static int ReadPartInt(Stream reader)
@@ -823,7 +921,7 @@ namespace Charlotte.Commons
 		{
 			if (reader.Read(buff, offset, count) != count)
 			{
-				throw new Exception("データの途中でファイルの終端に到達しました。");
+				throw new Exception("データの途中でストリームの終端に到達しました。");
 			}
 		}
 
@@ -976,7 +1074,7 @@ namespace Charlotte.Commons
 				int value = int.Parse(str);
 
 				if (value < minval || maxval < value)
-					throw null;
+					throw new Exception("Value out of range");
 
 				return value;
 			}
@@ -993,7 +1091,7 @@ namespace Charlotte.Commons
 				long value = long.Parse(str);
 
 				if (value < minval || maxval < value)
-					throw null;
+					throw new Exception("Value out of range");
 
 				return value;
 			}
@@ -1154,7 +1252,7 @@ namespace Charlotte.Commons
 						if (src.Length <= index) // ? 後半欠損
 							break;
 
-						if (!S_JChar.I.Contains(chr, src[index])) // ? 破損
+						if (!P_JChar.I.Contains(chr, src[index])) // ? 破損
 							continue;
 
 						dest.WriteByte(chr);
@@ -1166,8 +1264,13 @@ namespace Charlotte.Commons
 			}
 		}
 
+		// memo: SJIS(CP-932)の中にサロゲートペアは無い。
+		// -- なので以下は保証される。
+		// ---- SCommon.GetJChars().Length == SCommon.GetJCharCodes().Count()
+
 		/// <summary>
 		/// SJIS(CP-932)の2バイト文字を全て返す。
+		/// 戻り値の文字コード：Unicode
 		/// </summary>
 		/// <returns>SJIS(CP-932)の2バイト文字の文字列</returns>
 		public static string GetJChars()
@@ -1177,6 +1280,7 @@ namespace Charlotte.Commons
 
 		/// <summary>
 		/// SJIS(CP-932)の2バイト文字を全て返す。
+		/// 戻り値の文字コード：SJIS
 		/// </summary>
 		/// <returns>SJIS(CP-932)の2バイト文字のバイト列</returns>
 		public static IEnumerable<byte> GetJCharBytes()
@@ -1190,25 +1294,26 @@ namespace Charlotte.Commons
 
 		/// <summary>
 		/// SJIS(CP-932)の2バイト文字を全て返す。
+		/// 戻り値の文字コード：SJIS
 		/// </summary>
 		/// <returns>SJIS(CP-932)の2バイト文字の列挙</returns>
 		public static IEnumerable<UInt16> GetJCharCodes()
 		{
-			for (UInt16 chr = S_JChar.CHR_MIN; chr <= S_JChar.CHR_MAX; chr++)
-				if (S_JChar.I.Contains(chr))
+			for (UInt16 chr = P_JChar.CHR_MIN; chr <= P_JChar.CHR_MAX; chr++)
+				if (P_JChar.I.Contains(chr))
 					yield return chr;
 		}
 
-		private class S_JChar
+		private class P_JChar
 		{
-			private static S_JChar _i = null;
+			private static P_JChar _i = null;
 
-			public static S_JChar I
+			public static P_JChar I
 			{
 				get
 				{
 					if (_i == null)
-						_i = new S_JChar();
+						_i = new P_JChar();
 
 					return _i;
 				}
@@ -1216,7 +1321,7 @@ namespace Charlotte.Commons
 
 			private UInt64[] ChrMap = new UInt64[0x10000 / 64];
 
-			private S_JChar()
+			private P_JChar()
 			{
 				this.AddAll();
 			}
@@ -1366,9 +1471,9 @@ namespace Charlotte.Commons
 			}
 		}
 
-		public static RandomUnit CRandom = new RandomUnit(new S_CSPRandomNumberGenerator());
+		public static RandomUnit CRandom = new RandomUnit(new P_CSPRandomNumberGenerator());
 
-		private class S_CSPRandomNumberGenerator : RandomUnit.IRandomNumberGenerator
+		private class P_CSPRandomNumberGenerator : RandomUnit.IRandomNumberGenerator
 		{
 			private RandomNumberGenerator Rng = new RNGCryptoServiceProvider();
 			private byte[] Cache = new byte[4096];
@@ -1412,7 +1517,8 @@ namespace Charlotte.Commons
 		{
 			return GetSHA512(writePart =>
 			{
-				SCommon.ReadToEnd(reader, (buff, offset, count) => writePart(buff, offset, count));
+				SCommon.ReadToEnd(reader, writePart);
+				//SCommon.ReadToEnd(reader, (buff, offset, count) => writePart(buff, offset, count)); // old
 			});
 		}
 
@@ -1443,8 +1549,8 @@ namespace Charlotte.Commons
 
 				foreach (byte chr in src)
 				{
-					buff.Append(hexadecimal[chr >> 4]);
-					buff.Append(hexadecimal[chr & 0x0f]);
+					buff.Append(HEXADECIMAL_LOWER[chr >> 4]);
+					buff.Append(HEXADECIMAL_LOWER[chr & 0x0f]);
 				}
 				return buff.ToString();
 			}
@@ -1468,7 +1574,7 @@ namespace Charlotte.Commons
 
 			private static int To4Bit(char chr)
 			{
-				int ret = hexadecimal.IndexOf(char.ToLower(chr));
+				int ret = HEXADECIMAL_LOWER.IndexOf(char.ToLower(chr));
 
 				if (ret == -1)
 					throw new ArgumentException("入力文字列に含まれる文字に問題があります。");
@@ -1481,26 +1587,37 @@ namespace Charlotte.Commons
 
 		public static Encoding ENCODING_SJIS = Encoding.GetEncoding(932);
 
-		public static string BINADECIMAL = "01";
-		public static string OCTODECIMAL = "012234567";
 		public static string DECIMAL = "0123456789";
-		public static string HEXADECIMAL = "0123456789ABCDEF";
-		public static string hexadecimal = "0123456789abcdef";
+		public static string HEXADECIMAL_UPPER = "0123456789ABCDEF";
+		public static string HEXADECIMAL_LOWER = "0123456789abcdef";
+		public static string ALPHA_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		public static string ALPHA_LOWER = "abcdefghijklmnopqrstuvwxyz";
 
-		public static string ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		public static string alpha = "abcdefghijklmnopqrstuvwxyz";
-		public static string PUNCT =
-			S_GetString_SJISHalfCodeRange(0x21, 0x2f) +
-			S_GetString_SJISHalfCodeRange(0x3a, 0x40) +
-			S_GetString_SJISHalfCodeRange(0x5b, 0x60) +
-			S_GetString_SJISHalfCodeRange(0x7b, 0x7e);
+		public static string ASCII
+		{
+			get
+			{
+				return GetString_SJISHalfRange(0x21, 0x7e); // 空白(0x20)を含まないことに注意
+			}
+		}
 
-		public static string ASCII = DECIMAL + ALPHA + alpha + PUNCT; // == GetString_SJISHalfCodeRange(0x21, 0x7e)
-		public static string KANA = S_GetString_SJISHalfCodeRange(0xa1, 0xdf);
+		public static string KANA
+		{
+			get
+			{
+				return GetString_SJISHalfRange(0xa1, 0xdf);
+			}
+		}
 
-		public static string HALF = ASCII + KANA;
+		public static string HALF
+		{
+			get
+			{
+				return ASCII + KANA; // 空白(0x20)を含まないことに注意
+			}
+		}
 
-		private static string S_GetString_SJISHalfCodeRange(int codeMin, int codeMax)
+		private static string GetString_SJISHalfRange(int codeMin, int codeMax)
 		{
 			byte[] buff = new byte[codeMax - codeMin + 1];
 
@@ -1511,48 +1628,127 @@ namespace Charlotte.Commons
 			return ENCODING_SJIS.GetString(buff);
 		}
 
-		public static string MBC_DECIMAL = S_GetString_SJISCodeRange(0x82, 0x4f, 0x58);
-		public static string MBC_ALPHA = S_GetString_SJISCodeRange(0x82, 0x60, 0x79);
-		public static string mbc_alpha = S_GetString_SJISCodeRange(0x82, 0x81, 0x9a);
-		public static string MBC_SPACE = S_GetString_SJISCodeRange(0x81, 0x40, 0x40);
-		public static string MBC_PUNCT =
-			S_GetString_SJISCodeRange(0x81, 0x41, 0x7e) +
-			S_GetString_SJISCodeRange(0x81, 0x80, 0xac) +
-			S_GetString_SJISCodeRange(0x81, 0xb8, 0xbf) + // 集合
-			S_GetString_SJISCodeRange(0x81, 0xc8, 0xce) + // 論理
-			S_GetString_SJISCodeRange(0x81, 0xda, 0xe8) + // 数学
-			S_GetString_SJISCodeRange(0x81, 0xf0, 0xf7) +
-			S_GetString_SJISCodeRange(0x81, 0xfc, 0xfc) +
-			S_GetString_SJISCodeRange(0x83, 0x9f, 0xb6) + // ギリシャ語大文字
-			S_GetString_SJISCodeRange(0x83, 0xbf, 0xd6) + // ギリシャ語小文字
-			S_GetString_SJISCodeRange(0x84, 0x40, 0x60) + // キリル文字大文字
-			S_GetString_SJISCodeRange(0x84, 0x70, 0x7e) + // キリル文字小文字(1)
-			S_GetString_SJISCodeRange(0x84, 0x80, 0x91) + // キリル文字小文字(2)
-			S_GetString_SJISCodeRange(0x84, 0x9f, 0xbe) + // 枠線
-			S_GetString_SJISCodeRange(0x87, 0x40, 0x5d) + // 機種依存文字(1)
-			S_GetString_SJISCodeRange(0x87, 0x5f, 0x75) + // 機種依存文字(2)
-			S_GetString_SJISCodeRange(0x87, 0x7e, 0x7e) + // 機種依存文字(3)
-			S_GetString_SJISCodeRange(0x87, 0x80, 0x9c) + // 機種依存文字(4)
-			S_GetString_SJISCodeRange(0xee, 0xef, 0xfc); // 機種依存文字(5)
-
-		public static string MBC_CHOUONPU = S_GetString_SJISCodeRange(0x81, 0x5b, 0x5b); // 815b == 長音符 -- ひらがなとカタカナの長音符は同じ文字
-
-		public static string MBC_HIRA = S_GetString_SJISCodeRange(0x82, 0x9f, 0xf1) + MBC_CHOUONPU;
-		public static string MBC_KANA =
-			S_GetString_SJISCodeRange(0x83, 0x40, 0x7e) +
-			S_GetString_SJISCodeRange(0x83, 0x80, 0x96) + MBC_CHOUONPU;
-
-		private static string S_GetString_SJISCodeRange(int lead, int trailMin, int trailMax)
+		public static string MBC_DECIMAL
 		{
-			byte[] buff = new byte[(trailMax - trailMin + 1) * 2];
-
-			for (int trail = trailMin; trail <= trailMax; trail++)
+			get
 			{
-				buff[(trail - trailMin) * 2 + 0] = (byte)lead;
-				buff[(trail - trailMin) * 2 + 1] = (byte)trail;
+				return ToAsciiFull(DECIMAL);
 			}
-			return ENCODING_SJIS.GetString(buff);
 		}
+
+		public static string MBC_HEXADECIMAL_UPPER
+		{
+			get
+			{
+				return ToAsciiFull(HEXADECIMAL_UPPER);
+			}
+		}
+
+		public static string MBC_HEXADECIMAL_LOWER
+		{
+			get
+			{
+				return ToAsciiFull(HEXADECIMAL_LOWER);
+			}
+		}
+
+		public static string MBC_ALPHA_UPPER
+		{
+			get
+			{
+				return ToAsciiFull(ALPHA_UPPER);
+			}
+		}
+
+		public static string MBC_ALPHA_LOWER
+		{
+			get
+			{
+				return ToAsciiFull(ALPHA_LOWER);
+			}
+		}
+
+		public static string MBC_ASCII
+		{
+			get
+			{
+				return ToAsciiFull(ASCII);
+			}
+		}
+
+		#region ToAsciiFull, ToAsciiHalf
+
+		/// <summary>
+		/// 文字列中のアスキーコードの文字(0x20～0x7e)を半角から全角に変換する。
+		/// それ以外の文字は変換しない。
+		/// </summary>
+		/// <param name="str">文字列</param>
+		/// <returns>変換後の文字列</returns>
+		public static string ToAsciiFull(string str)
+		{
+			char[] buff = new char[str.Length];
+
+			for (int index = 0; index < str.Length; index++)
+				buff[index] = ToAsciiFull(str[index]);
+
+			return new string(buff);
+		}
+
+		/// <summary>
+		/// 文字列中のアスキーコードの文字(0x20～0x7e)を全角から半角に変換する。
+		/// それ以外の文字は変換しない。
+		/// </summary>
+		/// <param name="str">文字列</param>
+		/// <returns>変換後の文字列</returns>
+		public static string ToAsciiHalf(string str)
+		{
+			char[] buff = new char[str.Length];
+
+			for (int index = 0; index < str.Length; index++)
+				buff[index] = ToAsciiHalf(str[index]);
+
+			return new string(buff);
+		}
+
+		/// <summary>
+		/// アスキーコードの文字(0x20～0x7e)を半角から全角に変換する。
+		/// それ以外の文字はそのまま返す。
+		/// </summary>
+		/// <param name="chr">文字</param>
+		/// <returns>変換後の文字</returns>
+		public static char ToAsciiFull(char chr)
+		{
+			if (chr == (char)0x20)
+			{
+				chr = (char)0x3000;
+			}
+			else if (0x21 <= chr && chr <= 0x7e)
+			{
+				chr += (char)0xfee0;
+			}
+			return chr;
+		}
+
+		/// <summary>
+		/// アスキーコードの文字(0x20～0x7e)を全角から半角に変換する。
+		/// それ以外の文字はそのまま返す。
+		/// </summary>
+		/// <param name="chr">文字</param>
+		/// <returns>変換後の文字</returns>
+		public static char ToAsciiHalf(char chr)
+		{
+			if (chr == (char)0x3000)
+			{
+				chr = (char)0x20;
+			}
+			else if (0xff01 <= chr && chr <= 0xff5e)
+			{
+				chr -= (char)0xfee0;
+			}
+			return chr;
+		}
+
+		#endregion
 
 		public static int Comp(string a, string b)
 		{
@@ -1564,32 +1760,6 @@ namespace Charlotte.Commons
 		public static int CompIgnoreCase(string a, string b)
 		{
 			return Comp(a.ToLower(), b.ToLower());
-		}
-
-		public class IECompString : IEqualityComparer<string>
-		{
-			public bool Equals(string a, string b)
-			{
-				return a == b;
-			}
-
-			public int GetHashCode(string a)
-			{
-				return a.GetHashCode();
-			}
-		}
-
-		public class IECompStringIgnoreCase : IEqualityComparer<string>
-		{
-			public bool Equals(string a, string b)
-			{
-				return a.ToLower() == b.ToLower();
-			}
-
-			public int GetHashCode(string a)
-			{
-				return a.ToLower().GetHashCode();
-			}
 		}
 
 		public static bool EqualsIgnoreCase(string a, string b)
@@ -1622,21 +1792,12 @@ namespace Charlotte.Commons
 			return str.ToLower().IndexOf(char.ToLower(chr));
 		}
 
-		public static int IndexOf(IList<string> strs, string str)
-		{
-			for (int index = 0; index < strs.Count; index++)
-				if (strs[index] == str)
-					return index;
-
-			return -1; // not found
-		}
-
 		public static int IndexOfIgnoreCase(IList<string> strs, string str)
 		{
-			string lStr = str.ToLower();
+			string lwrStr = str.ToLower();
 
 			for (int index = 0; index < strs.Count; index++)
-				if (strs[index].ToLower() == lStr)
+				if (strs[index].ToLower() == lwrStr)
 					return index;
 
 			return -1; // not found
@@ -1686,11 +1847,19 @@ namespace Charlotte.Commons
 			return false;
 		}
 
-		public static bool HasSame<T>(IList<T> list, Comparison<T> comp)
+		// memo: @ 2022.10.31
+		// HasSameComp, HasSame を同じ名前にすると Comparision<T>, Func<T, T, bool> の型推論の失敗を誘発する。
+
+		public static bool HasSameComp<T>(IList<T> list, Comparison<T> comp)
+		{
+			return HasSame(list, (a, b) => comp(a, b) == 0);
+		}
+
+		public static bool HasSame<T>(IList<T> list, Func<T, T, bool> match)
 		{
 			for (int r = 1; r < list.Count; r++)
 				for (int l = 0; l < r; l++)
-					if (comp(list[l], list[r]) == 0)
+					if (match(list[l], list[r]))
 						return true;
 
 			return false;
@@ -1820,6 +1989,10 @@ namespace Charlotte.Commons
 			};
 		}
 
+		// memo: GetLimitedReader は総読み込みサイズの下限を制限しない。
+		// -- 総読み込みサイズ上限・下限ともに length としたい場合は以下のようにする。
+		// ---- SCommon.GetLimitedReader(SCommon.GetReader(reader), length)
+
 		public static Read_d GetLimitedReader(Read_d reader, long remaining)
 		{
 			return (buff, offset, count) =>
@@ -1829,20 +2002,41 @@ namespace Charlotte.Commons
 
 				count = (int)Math.Min((long)count, remaining);
 				count = reader(buff, offset, count);
-				remaining -= (long)count;
+
+				if (count <= 0) // ? これ以上読み込めない
+					remaining = 0L;
+				else
+					remaining -= (long)count;
+
+				return count;
+			};
+		}
+
+		public static Read_d GetReader(Read_d reader)
+		{
+			return (buff, offset, count) =>
+			{
+				if (reader(buff, offset, count) != count)
+				{
+					throw new Exception("データの途中でストリームの終端に到達しました。");
+				}
 				return count;
 			};
 		}
 
 		public static void Batch(IList<string> commands, string workingDir = "", StartProcessWindowStyle_e winStyle = StartProcessWindowStyle_e.INVISIBLE)
 		{
+			// Batch-名は何でも良い。
+			// 折角なので何かの時のためにタスマネから目視で発見・判別し易い名前にしておく。
+			const string BATCH_NAME = "ChocolateCupCakeRecipe.bat";
+
 			using (WorkingDir wd = new WorkingDir())
 			{
-				string batFile = wd.GetPath("a.bat");
+				string batFile = wd.GetPath(BATCH_NAME);
 
 				File.WriteAllLines(batFile, commands, ENCODING_SJIS);
 
-				StartProcess("cmd", "/c " + batFile, workingDir, winStyle).WaitForExit();
+				StartProcess("cmd", "/c \"" + batFile + "\"", workingDir, winStyle).WaitForExit();
 			}
 		}
 
@@ -1907,8 +2101,11 @@ namespace Charlotte.Commons
 
 			private Base64()
 			{
-				this.Chars = (SCommon.ALPHA + SCommon.alpha + SCommon.DECIMAL + "+/").ToArray();
+				this.Chars = (SCommon.ALPHA_UPPER + SCommon.ALPHA_LOWER + SCommon.DECIMAL + "+/").ToArray();
 				this.CharMap = new byte[(int)char.MaxValue + 1];
+
+				for (int index = 0; index <= (int)char.MaxValue; index++)
+					this.CharMap[index] = 0xff;
 
 				for (int index = 0; index < 64; index++)
 					this.CharMap[this.Chars[index]] = (byte)index;
@@ -1979,29 +2176,20 @@ namespace Charlotte.Commons
 			/// <summary>
 			/// Base64を元のバイト列に変換します。
 			/// 対応フォーマット：
-			/// -- Base64 Encode -- 但し改行を含まないこと。パディング無しでも良い。
+			/// -- Base64 Encode -- パディング無しでも良い。余計な空白・改行が含まれていても良い。
 			/// -- Base64 URL Encode
 			/// </summary>
 			/// <param name="src">Base64</param>
 			/// <returns>元のバイト列</returns>
 			public byte[] Decode(string src)
 			{
-				while (src.Length % 4 != 0)
-					src += CHAR_PADDING;
-
-				int destSize = (src.Length / 4) * 3;
-
-				if (destSize != 0)
+				// パディング除去
+				// 空白・改行などの不要な文字を除去する。
 				{
-					if (src[src.Length - 2] == CHAR_PADDING)
-					{
-						destSize -= 2;
-					}
-					else if (src[src.Length - 1] == CHAR_PADDING)
-					{
-						destSize--;
-					}
+					src = new string(src.Where(v => this.CharMap[(int)v] != 0xff).ToArray());
 				}
+
+				int destSize = (int)(((long)src.Length * 3) / 4);
 				byte[] dest = new byte[destSize];
 				int writer = 0;
 				int index = 0;
@@ -2113,8 +2301,9 @@ namespace Charlotte.Commons
 					ret += m * 31;
 				}
 				else
+				{
 					ret += (m - 1) * 31;
-
+				}
 				ret += d - 1;
 				ret *= 24;
 				ret += h;
@@ -2329,9 +2518,9 @@ namespace Charlotte.Commons
 				return a.GetValueForCompare() != b.GetValueForCompare();
 			}
 
-			public override bool Equals(object other)
+			public override bool Equals(object another)
 			{
-				return other is SimpleDateTime && this == (SimpleDateTime)other;
+				return another is SimpleDateTime && this == (SimpleDateTime)another;
 			}
 
 			public override int GetHashCode()
@@ -2423,6 +2612,238 @@ namespace Charlotte.Commons
 			{
 				throw null; // never
 			}
+		}
+
+		/// <summary>
+		/// リスト内の特定の位置をバイナリサーチによって取得する。
+		/// ★注意：指定されたリストを自動的にソートしない。
+		/// 比較メソッド：
+		/// -- 少なくとも以下のとおりの比較結果となること。
+		/// ---- 目的位置の左側の要素 &lt; 目的位置の要素
+		/// ---- 目的位置の左側の要素 &lt; 目的位置の右側の要素
+		/// ---- 目的位置の要素 == 目的位置の要素
+		/// ---- 目的位置の要素 &lt; 目的位置の右側の要素
+		/// </summary>
+		/// <typeparam name="T">要素の型</typeparam>
+		/// <param name="list">検索対象のリスト</param>
+		/// <param name="targetValue">目的の値</param>
+		/// <param name="comp">比較メソッド</param>
+		/// <returns>目的位置(見つからない場合(-1))</returns>
+		public static int GetIndex<T>(IList<T> list, T targetValue, Comparison<T> comp)
+		{
+			return GetIndex(list, element => comp(element, targetValue));
+		}
+
+		/// <summary>
+		/// リスト内の特定の位置をバイナリサーチによって取得する。
+		/// ★注意：指定されたリストを自動的にソートしない。
+		/// 判定メソッド：
+		/// -- 目的位置の左側の要素であれば負の値を返す。
+		/// -- 目的位置の右側の要素であれば正の値を返す。
+		/// -- 目的位置の要素であれば 0 を返す。
+		/// </summary>
+		/// <typeparam name="T">要素の型</typeparam>
+		/// <param name="list">検索対象のリスト</param>
+		/// <param name="comp">判定メソッド</param>
+		/// <returns>目的位置(見つからない場合(-1))</returns>
+		public static int GetIndex<T>(IList<T> list, Func<T, int> comp)
+		{
+			int l = -1;
+			int r = list.Count;
+
+			while (l + 1 < r)
+			{
+				int m = (l + r) / 2;
+				int ret = comp(list[m]);
+
+				if (ret < 0)
+				{
+					l = m;
+				}
+				else if (0 < ret)
+				{
+					r = m;
+				}
+				else
+				{
+					return m;
+				}
+			}
+			return -1; // not found
+		}
+
+		/// <summary>
+		/// リスト内の範囲(開始位置と終了位置)を取得する。
+		/// 戻り値を range とすると
+		/// for (int index = range[0] + 1; index &lt; range[1]; index++) { T element = list[index]; ... }
+		/// と廻すことで範囲内の要素を走査できる。
+		/// ★注意：指定されたリストを自動的にソートしない。
+		/// 比較メソッド：
+		/// -- 少なくとも以下のとおりの比較結果となること。
+		/// ---- 範囲の左側の要素 &lt; 範囲内の要素
+		/// ---- 範囲の左側の要素 &lt; 範囲の右側の要素
+		/// ---- 範囲内の要素 == 範囲内の要素
+		/// ---- 範囲内の要素 &lt; 範囲の右側の要素
+		/// 範囲：
+		/// -- new int[] { l, r }
+		/// ---- l == 範囲の開始位置の一つ前の位置_リストの最初の要素が範囲内である場合 -1 となる。
+		/// ---- r == 範囲の終了位置の一つ後の位置_リストの最後の要素が範囲内である場合 list.Count となる。
+		/// </summary>
+		/// <typeparam name="T">要素の型</typeparam>
+		/// <param name="list">検索対象のリスト</param>
+		/// <param name="targetValue">範囲内の値</param>
+		/// <param name="comp">比較メソッド</param>
+		/// <returns>範囲</returns>
+		public static int[] GetRange<T>(IList<T> list, T targetValue, Comparison<T> comp)
+		{
+			return GetRange(list, element => comp(element, targetValue));
+		}
+
+		/// <summary>
+		/// リスト内の範囲(開始位置と終了位置)を取得する。
+		/// 戻り値を range とすると
+		/// for (int index = range[0] + 1; index &lt; range[1]; index++) { T element = list[index]; ... }
+		/// と廻すことで範囲内の要素を走査できる。
+		/// ★注意：指定されたリストを自動的にソートしない。
+		/// 判定メソッド：
+		/// -- 範囲の左側の要素であれば負の値を返す。
+		/// -- 範囲の右側の要素であれば正の値を返す。
+		/// -- 範囲内の要素であれば 0 を返す。
+		/// 範囲：
+		/// -- new int[] { l, r }
+		/// ---- l == 範囲の開始位置の一つ前の位置_リストの最初の要素が範囲内である場合 -1 となる。
+		/// ---- r == 範囲の終了位置の一つ後の位置_リストの最後の要素が範囲内である場合 list.Count となる。
+		/// </summary>
+		/// <typeparam name="T">要素の型</typeparam>
+		/// <param name="list">検索対象のリスト</param>
+		/// <param name="comp">判定メソッド</param>
+		/// <returns>範囲</returns>
+		public static int[] GetRange<T>(IList<T> list, Func<T, int> comp)
+		{
+			int l = -1;
+			int r = list.Count;
+
+			while (l + 1 < r)
+			{
+				int m = (l + r) / 2;
+				int ret = comp(list[m]);
+
+				if (ret < 0)
+				{
+					l = m;
+				}
+				else if (0 < ret)
+				{
+					r = m;
+				}
+				else
+				{
+					l = GetLeft(list, l, m, element => comp(element) < 0);
+					r = GetLeft(list, m, r, element => comp(element) == 0) + 1;
+					break;
+				}
+			}
+			return new int[] { l, r };
+		}
+
+		private static int GetLeft<T>(IList<T> list, int l, int r, Predicate<T> isLeft)
+		{
+			while (l + 1 < r)
+			{
+				int m = (l + r) / 2;
+				bool ret = isLeft(list[m]);
+
+				if (ret)
+				{
+					l = m;
+				}
+				else
+				{
+					r = m;
+				}
+			}
+			return l;
+		}
+
+		public static Exception ToThrow(Action routine)
+		{
+			try
+			{
+				routine();
+			}
+			catch (Exception ex)
+			{
+				return ex;
+			}
+			throw new Exception("例外を投げませんでした。");
+		}
+
+		public static void ToThrowPrint(Action routine)
+		{
+			Console.WriteLine("想定された例外：" + ToThrow(routine).Message);
+		}
+
+		#region GetOutputDir
+
+		// memo:
+		// 慣習的に C:\1, C:\2, C:\3, ... C:\999 をテンポラリ・暗黙の出力先として使用している。
+		// https://github.com/stackprobe/Factory/blob/master/DevTools/zz.bat -- 定期的に全削除する運用 -- 際限なく溜まらない想定
+		// あくまで個人的な慣習なので、使用する際は注意すること。
+
+		private static string GOD_Dir;
+
+		public static string GetOutputDir()
+		{
+			if (GOD_Dir == null)
+				GOD_Dir = GetOutputDir_Main();
+
+			return GOD_Dir;
+		}
+
+		private static string GetOutputDir_Main()
+		{
+			for (int c = 1; c <= 999; c++)
+			{
+				string dir = "C:\\" + c;
+
+				if (
+					!Directory.Exists(dir) &&
+					!File.Exists(dir)
+					)
+				{
+					SCommon.CreateDir(dir);
+					return dir;
+				}
+			}
+			throw new Exception("C:\\1 ～ 999 は使用できません。");
+		}
+
+		public static void OpenOutputDir()
+		{
+			SCommon.Batch(new string[] { "START " + GetOutputDir() });
+		}
+
+		public static void OpenOutputDirIfCreated()
+		{
+			if (GOD_Dir != null)
+			{
+				OpenOutputDir();
+			}
+		}
+
+		private static int NOP_Count = 0;
+
+		public static string NextOutputPath()
+		{
+			return Path.Combine(GetOutputDir(), (++NOP_Count).ToString("D4"));
+		}
+
+		#endregion
+
+		public static void Pause()
+		{
+			Console.WriteLine("Press ENTER key.");
+			Console.ReadLine();
 		}
 	}
 }

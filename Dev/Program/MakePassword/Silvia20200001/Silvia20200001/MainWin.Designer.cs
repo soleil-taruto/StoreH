@@ -28,9 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWin));
-			this.MainTimer = new System.Windows.Forms.Timer(this.components);
 			this.PasswordText = new System.Windows.Forms.TextBox();
 			this.BtnMkPwDig = new System.Windows.Forms.Button();
 			this.BtnMkPwUpr = new System.Windows.Forms.Button();
@@ -49,11 +47,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.SpecPasswordLength)).BeginInit();
 			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// MainTimer
-			// 
-			this.MainTimer.Enabled = true;
-			this.MainTimer.Tick += new System.EventHandler(this.MainTimer_Tick);
 			// 
 			// PasswordText
 			// 
@@ -241,7 +234,6 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "パスワード作成";
 			this.TopMost = true;
-			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWin_FormClosed);
 			this.Load += new System.EventHandler(this.MainWin_Load);
 			this.Shown += new System.EventHandler(this.MainWin_Shown);
 			this.groupBox1.ResumeLayout(false);
@@ -256,7 +248,6 @@
 
 		#endregion
 
-		private System.Windows.Forms.Timer MainTimer;
 		private System.Windows.Forms.TextBox PasswordText;
 		private System.Windows.Forms.Button BtnMkPwDig;
 		private System.Windows.Forms.Button BtnMkPwUpr;

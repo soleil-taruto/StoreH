@@ -13,29 +13,25 @@ namespace Charlotte.Commons
 
 		public class RootInfo
 		{
-			private string Dir;
-			private bool Created = false;
-
-			public RootInfo(string dir)
-			{
-				this.Dir = dir;
-			}
+			private string Dir = null;
 
 			public string GetDir()
 			{
-				if (!this.Created)
+				if (this.Dir == null)
 				{
-					SCommon.DeletePath(this.Dir);
-					SCommon.CreateDir(this.Dir);
+					string dir = GetRootDir();
 
-					this.Created = true;
+					SCommon.DeletePath(dir);
+					SCommon.CreateDir(dir);
+
+					this.Dir = dir;
 				}
 				return this.Dir;
 			}
 
 			public void Delete()
 			{
-				if (this.Created)
+				if (this.Dir != null)
 				{
 					try
 					{
@@ -46,19 +42,17 @@ namespace Charlotte.Commons
 						ProcMain.WriteLog(e);
 					}
 
-					this.Created = false;
+					this.Dir = null;
 				}
 			}
 		}
 
-		public static RootInfo CreateProcessRoot()
+		private static string GetRootDir()
 		{
-			// 環境変数 TMP のパスは ProcMain.CheckLogonUserAndTmp() で検査している。-- ProcMain.GUIMain() の場合のみ
-
-			return new RootInfo(Path.Combine(Environment.GetEnvironmentVariable("TMP"), ProcMain.APP_IDENT + "_" + Process.GetCurrentProcess().Id));
+			return Path.Combine(Environment.GetEnvironmentVariable("TMP"), "Claes20200001_{4c90ff11-7fe5-4664-a66d-62a440bb4826}_" + Process.GetCurrentProcess().Id);
 		}
 
-		private static long CtorCounter = 0L;
+		private static ulong CtorCounter = 0UL;
 
 		private string Dir = null;
 
@@ -69,7 +63,7 @@ namespace Charlotte.Commons
 				if (Root == null)
 					throw new Exception("Root is null");
 
-				this.Dir = Path.Combine(Root.GetDir(), "$" + CtorCounter++);
+				this.Dir = Path.Combine(Root.GetDir(), (CtorCounter++).ToString("x16"));
 
 				SCommon.CreateDir(this.Dir);
 			}
@@ -81,11 +75,11 @@ namespace Charlotte.Commons
 			return Path.Combine(this.GetDir(), localName);
 		}
 
-		private long PathCounter = 0L;
+		private ulong PathCounter = 0UL;
 
 		public string MakePath()
 		{
-			return this.GetPath("$" + this.PathCounter++);
+			return this.GetPath((this.PathCounter++).ToString("x16"));
 		}
 
 		public void Dispose()
