@@ -20,6 +20,7 @@ namespace Charlotte
 		{
 			InitializeComponent();
 
+			this.Size = new Size(this.Size.Width + 200, this.Size.Height);
 			this.MinimumSize = this.Size;
 			this.Status.Text = "";
 		}
@@ -31,94 +32,122 @@ namespace Charlotte
 
 		private void MainWin_Shown(object sender, EventArgs e)
 		{
-			this.BtnMkPwDig.Focus();
+			this.BtnB6288.Focus();
 			GUICommon.PostShown(this);
 		}
 
-		private void BtnMkPw_Click(object sender, EventArgs e)
+		private void BtnB6288_Click(object sender, EventArgs e)
 		{
-			this.MakePassword(new string[] { SCommon.DECIMAL, SCommon.ALPHA_UPPER, SCommon.ALPHA_LOWER }, 22);
-		}
-
-		private void BtnMkPwUpr_Click(object sender, EventArgs e)
-		{
-			this.MakePassword(new string[] { SCommon.DECIMAL, SCommon.ALPHA_UPPER }, 25);
-		}
-
-		private void BtnMkPwLwr_Click(object sender, EventArgs e)
-		{
-			this.MakePassword(new string[] { SCommon.DECIMAL, SCommon.ALPHA_LOWER }, 25);
-		}
-
-		private void BtnMkPwDig_Click(object sender, EventArgs e)
-		{
-			this.MakePassword(new string[] { SCommon.DECIMAL }, 40);
-		}
-
-		private void MkRand_Click(object sender, EventArgs e)
-		{
-			this.MakePassword(new string[] { SCommon.HEXADECIMAL_LOWER }, 32);
-		}
-
-		/// <summary>
-		/// パスワードを生成して画面にセットする。
-		/// </summary>
-		/// <param name="chrSets">文字セットのリスト</param>
-		/// <param name="length">パスワードの長さ</param>
-		private void MakePassword(string[] chrSets, int length)
-		{
-			string password;
-
-			do
-			{
-				password = this.TryMakePassword(string.Join("", chrSets), length);
-			}
-			while (!this.CheckPassword(chrSets, password));
-
-			this.SetPassword(password);
-		}
-
-		private string TryMakePassword(string chrSet, int length)
-		{
-			return new string(
-				Enumerable.Range(0, length)
-					.Select(dummy => SCommon.CRandom.ChooseOne(chrSet.ToArray()))
-					.ToArray()
+			this.MakeID(
+				"{b6288-######################-######################-######################-######################}",
+				SCommon.ALPHA_UPPER + SCommon.ALPHA_LOWER + SCommon.DECIMAL
 				);
 		}
 
-		private bool CheckPassword(string[] chrSets, string password)
+		private void BtnB36100U_Click(object sender, EventArgs e)
 		{
-			foreach (string chrSet in chrSets)
-				if (!chrSet.Any(chr => password.Contains(chr)))
-					return false;
+			this.MakeID(
+				"{B36C-#########################-#########################-#########################-#########################}",
+				SCommon.ALPHA_UPPER + SCommon.DECIMAL
+				);
+		}
 
-			return true;
+		private void BtnB36100L_Click(object sender, EventArgs e)
+		{
+			this.MakeID(
+				"{b36c-#########################-#########################-#########################-#########################}",
+				SCommon.ALPHA_LOWER + SCommon.DECIMAL
+				);
+		}
+
+		private void BtnB26110U_Click(object sender, EventArgs e)
+		{
+			this.MakeID(
+				"{AZCX-######################-######################-######################-######################-######################}",
+				SCommon.ALPHA_UPPER
+				);
+		}
+
+		private void BtnB26110L_Click(object sender, EventArgs e)
+		{
+			this.MakeID(
+				"{azcx-######################-######################-######################-######################-######################}",
+				SCommon.ALPHA_LOWER
+				);
+		}
+
+		private void BtnB16128L_Click(object sender, EventArgs e)
+		{
+			this.MakeID(
+				"{bf80-################################-################################-################################-################################}",
+				SCommon.HEXADECIMAL_LOWER
+				);
+		}
+
+		private void BtnB16128U_Click(object sender, EventArgs e)
+		{
+			this.MakeID(
+				"{BF80-################################-################################-################################-################################}",
+				SCommon.HEXADECIMAL_UPPER
+				);
+		}
+
+		private void BtnB10155_Click(object sender, EventArgs e)
+		{
+			this.MakeID(
+				"{10155-###############################-###############################-###############################-###############################-###############################}",
+				SCommon.DECIMAL
+				);
 		}
 
 		/// <summary>
-		/// 生成したパスワードを画面にセットする。
+		/// 識別子を生成して画面にセットする。
 		/// </summary>
-		/// <param name="password">生成したパスワード</param>
-		private void SetPassword(string password)
+		/// <param name="format"></param>
+		/// <param name="chrSet"></param>
+		private void MakeID(string format, string chrSet)
 		{
-			// 画面にパスワードを表示する。
-			this.PasswordText.Text = password;
+			this.SetID(this.MakeID_Main(format, chrSet));
+		}
+
+		private string MakeID_Main(string format, string chrSet)
+		{
+			StringBuilder buff = new StringBuilder();
+			char[] chrSetChrs = chrSet.ToArray();
+
+			foreach (char chr in format)
+			{
+				if (chr == '#')
+					buff.Append(SCommon.CRandom.ChooseOne(chrSetChrs));
+				else
+					buff.Append(chr);
+			}
+			return buff.ToString();
+		}
+
+		/// <summary>
+		/// 生成した識別子を画面にセットする。
+		/// </summary>
+		/// <param name="ident">生成した識別子</param>
+		private void SetID(string ident)
+		{
+			// 画面に識別子を表示する。
+			this.IdentText.Text = ident;
 
 			// ついでにクリップボードにもコピーする。
-			Clipboard.SetText(password);
+			Clipboard.SetText(ident);
 
 			// ステータス表示
-			this.SetStatus("生成したパスワードをクリップボードにコピーしました。");
+			this.SetStatus("生成した識別子をクリップボードにコピーしました。");
 		}
 
 		/// <summary>
 		/// パスワードをクリアする。
 		/// </summary>
-		private void ClearPassword()
+		private void ClearID()
 		{
 			// 画面にセットしたパスワードをクリアする。
-			this.PasswordText.Text = "";
+			this.IdentText.Text = "";
 
 			// ついでにクリップボードもクリアする。
 			Clipboard.Clear();
@@ -132,28 +161,18 @@ namespace Charlotte
 			this.Status.Text = "[" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + "] " + text;
 		}
 
-		private void PasswordText_KeyPress(object sender, KeyPressEventArgs e)
+		private void IdentText_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			if (e.KeyChar == 1) // ? ctrl_a
 			{
-				this.PasswordText.SelectAll();
+				this.IdentText.SelectAll();
 				e.Handled = true;
 			}
 		}
 
 		private void BtnClear_Click(object sender, EventArgs e)
 		{
-			this.ClearPassword();
-		}
-
-		private void BtnMkUUID_Click(object sender, EventArgs e)
-		{
-			this.SetPassword(Guid.NewGuid().ToString("B"));
-		}
-
-		private void BtnMkPwLen_Click(object sender, EventArgs e)
-		{
-			this.MakePassword(new string[] { SCommon.DECIMAL, SCommon.ALPHA_UPPER, SCommon.ALPHA_LOWER }, (int)this.SpecPasswordLength.Value);
+			this.ClearID();
 		}
 	}
 }

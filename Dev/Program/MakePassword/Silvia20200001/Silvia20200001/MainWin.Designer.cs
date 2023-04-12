@@ -63,6 +63,7 @@
 			// 
 			// BtnMkPwDig
 			// 
+			this.BtnMkPwDig.Font = new System.Drawing.Font("メイリオ", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.BtnMkPwDig.ForeColor = System.Drawing.Color.Navy;
 			this.BtnMkPwDig.Location = new System.Drawing.Point(12, 66);
 			this.BtnMkPwDig.Name = "BtnMkPwDig";
@@ -94,6 +95,7 @@
 			// 
 			// BtnMkPw
 			// 
+			this.BtnMkPw.Font = new System.Drawing.Font("メイリオ", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.BtnMkPw.ForeColor = System.Drawing.Color.Navy;
 			this.BtnMkPw.Location = new System.Drawing.Point(218, 66);
 			this.BtnMkPw.Name = "BtnMkPw";
@@ -105,6 +107,8 @@
 			// 
 			// BtnMkUUID
 			// 
+			this.BtnMkUUID.Font = new System.Drawing.Font("メイリオ", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+			this.BtnMkUUID.ForeColor = System.Drawing.Color.Navy;
 			this.BtnMkUUID.Location = new System.Drawing.Point(424, 127);
 			this.BtnMkUUID.Name = "BtnMkUUID";
 			this.BtnMkUUID.Size = new System.Drawing.Size(200, 55);
@@ -182,7 +186,6 @@
 			// 
 			// BtnMkPwLen
 			// 
-			this.BtnMkPwLen.ForeColor = System.Drawing.Color.Navy;
 			this.BtnMkPwLen.Location = new System.Drawing.Point(20, 26);
 			this.BtnMkPwLen.Name = "BtnMkPwLen";
 			this.BtnMkPwLen.Size = new System.Drawing.Size(200, 55);
