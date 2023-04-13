@@ -39,7 +39,7 @@ namespace Charlotte
 		private void BtnB6288_Click(object sender, EventArgs e)
 		{
 			this.MakeID(
-				"{b6288-######################-######################-######################-######################}",
+				"{B62ee-######################-######################-######################-######################}",
 				SCommon.ALPHA_UPPER + SCommon.ALPHA_LOWER + SCommon.DECIMAL
 				);
 		}
