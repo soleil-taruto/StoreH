@@ -27,7 +27,7 @@ MakeID512.exe
 
 B-62-88 ÅÀ
 
-	{b6288-YYYYYYYYYYYYYYYYYYYYYY-YYYYYYYYYYYYYYYYYYYYYY-YYYYYYYYYYYYYYYYYYYYYY-YYYYYYYYYYYYYYYYYYYYYY}
+	{B62ee-YYYYYYYYYYYYYYYYYYYYYY-YYYYYYYYYYYYYYYYYYYYYY-YYYYYYYYYYYYYYYYYYYYYY-YYYYYYYYYYYYYYYYYYYYYY}
 	       ~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~
 	               22ï∂éö                 22ï∂éö                 22ï∂éö                 22ï∂éö
 
@@ -102,7 +102,7 @@ B-10-155 ÅÀ
 
 B-62-88 ÅÀ
 
-	{b6288-jQF9fLirqvlCWWnWHVoN0v-OrqKW0g6WBOIP8U1f5HVFw-pyHQWCGQTa265yzQwI9N49-zmuWTfRCdkdaOGu4Rm47n2}
+	{B62ee-jQF9fLirqvlCWWnWHVoN0v-OrqKW0g6WBOIP8U1f5HVFw-pyHQWCGQTa265yzQwI9N49-zmuWTfRCdkdaOGu4Rm47n2}
 
 B-36-100-U ÅÀ
 
