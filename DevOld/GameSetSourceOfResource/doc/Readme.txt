@@ -21,5 +21,5 @@ GameSetSourceOfResource.exe 入力リソースDIR 入力マニュアルファイル 出力ファイル
 
 GameSetSourceOfResource.exe C:\Dev\Game\00_Game\Resource C:\Dev\Game\00_Game\doc\Readme.txt C:\temp\Readme.txt
 
-GameSetSourceOfResource.exe .\Resource .\doc\Readme.txt *
+GameSetSourceOfResource.exe .\Resource .\out\Readme.txt *
 
