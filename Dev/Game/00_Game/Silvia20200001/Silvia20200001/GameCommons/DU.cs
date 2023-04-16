@@ -5,12 +5,12 @@ using System.Text;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using DxLibDLL;
 using Charlotte.Commons;
 using Charlotte.Drawings;
-using System.Reflection;
 
 namespace Charlotte.GameCommons
 {
@@ -217,9 +217,9 @@ namespace Charlotte.GameCommons
 
 			return new Picture.PictureDataInfo()
 			{
+				Handle = handle,
 				W = w,
 				H = h,
-				Handle = handle,
 			};
 		}
 
@@ -227,9 +227,11 @@ namespace Charlotte.GameCommons
 
 		public static void AddFontFile(string resPath)
 		{
-			string file = DU.WD.GetPath(Path.GetFileName(resPath));
+			string dir = DU.WD.MakePath();
+			string file = Path.Combine(dir, Path.GetFileName(resPath));
 			byte[] fileData = DD.GetResFileData(resPath);
 
+			SCommon.CreateDir(dir);
 			File.WriteAllBytes(file, fileData);
 
 			P_AddFontFile(file);
