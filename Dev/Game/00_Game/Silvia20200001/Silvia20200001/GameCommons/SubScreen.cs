@@ -8,6 +8,11 @@ using Charlotte.Drawings;
 
 namespace Charlotte.GameCommons
 {
+	/// <summary>
+	/// スクリーン
+	/// このクラスのインスタンスはプロセスで有限個であること。
+	/// 原則的に任意のクラスの静的フィールドとして植え込むこと。
+	/// </summary>
 	public class SubScreen
 	{
 		private static List<SubScreen> Instances = new List<SubScreen>();
@@ -42,7 +47,7 @@ namespace Charlotte.GameCommons
 		{
 			if (this.Handle == -1)
 			{
-				this.Handle = DX.MakeScreen(this.W, this.H, 1); // 幅, 高さ, 画像の透明度を有効にするか/1:有効/0:無効
+				this.Handle = DX.MakeScreen(this.W, this.H, 0); // 幅, 高さ, 画像の透明度を有効にするか/1:有効/0:無効
 
 				if (this.Handle == -1) // ? 失敗
 					throw new Exception("MakeScreen failed");
@@ -58,19 +63,28 @@ namespace Charlotte.GameCommons
 					throw new Exception("DeleteGraph failed");
 
 				this.Handle = -1;
+
+				if (this.Picture != null)
+					this.Picture.Unload();
 			}
 		}
+
+		public static SubScreen CurrentDrawScreen = null; // null == DX.DX_SCREEN_BACK
 
 		public void ChangeDrawScreenToThis()
 		{
 			if (DX.SetDrawScreen(this.GetHandle()) != 0) // ? 失敗
 				throw new Exception("SetDrawScreen failed");
+
+			CurrentDrawScreen = this;
 		}
 
 		public static void ChangeDrawScreenToBack()
 		{
 			if (DX.SetDrawScreen(DX.DX_SCREEN_BACK) != 0) // ? 失敗
 				throw new Exception("SetDrawScreen failed");
+
+			CurrentDrawScreen = null;
 		}
 
 		private Picture Picture = null;
@@ -82,5 +96,17 @@ namespace Charlotte.GameCommons
 
 			return this.Picture;
 		}
+
+		public bool IsLoaded()
+		{
+			return this.Handle != -1;
+		}
+
+		public static IEnumerable<SubScreen> GetAllSubScreen()
+		{
+			return Instances.ToArray(); // 念のためリストの複製を返す。
+		}
+
+		public object StoredObject = null;
 	}
 }

@@ -4,13 +4,24 @@ using System.Linq;
 using System.Text;
 using DxLibDLL;
 using Charlotte.Commons;
-using Charlotte.GameConfigs;
 
 namespace Charlotte.GameCommons
 {
+	/// <summary>
+	/// 音楽リソース
+	/// このクラスのインスタンスはプロセスで有限個であること。
+	/// 原則的に以下のクラスの静的フィールドとして植え込むこと。
+	/// -- Musics
+	/// </summary>
 	public class Music
 	{
 		private static List<Music> Instances = new List<Music>();
+
+		public static void TouchAll()
+		{
+			foreach (Music instance in Instances)
+				instance.GetHandle();
+		}
 
 		/// <summary>
 		/// このメソッド実行時、全てのインスタンスは再生終了(未再生・停止)していること。
@@ -98,13 +109,13 @@ namespace Charlotte.GameCommons
 
 		public static void EachFrame()
 		{
-			if (!DU.ExecuteTaskSequence(TaskSequence) && Playing != null) // ? アイドル状態 && 再生中
+			if (!DD.ExecuteTaskSequence(TaskSequence) && Playing != null) // ? アイドル状態 && 再生中
 			{
-				int volume = DU.RateToByte(GameSetting.MusicVolume);
+				int volume = DD.RateToByte(GameSetting.MusicVolume);
 
 				if (LastVolume != volume) // ? 前回の音量と違う -> 音量が変更されたので、新しい音量を適用する。
 				{
-					if (DX.ChangeVolumeSoundMem(DU.RateToByte(GameSetting.MusicVolume), Playing.GetHandle()) != 0) // ? 失敗
+					if (DX.ChangeVolumeSoundMem(DD.RateToByte(GameSetting.MusicVolume), Playing.GetHandle()) != 0) // ? 失敗
 						throw new Exception("ChangeVolumeSoundMem failed");
 
 					LastVolume = volume;
@@ -124,11 +135,11 @@ namespace Charlotte.GameCommons
 			}
 		}
 
-		public static void Fadeout()
+		public static void Fadeout(int frameMax = 60)
 		{
 			if (Playing != null)
 			{
-				TaskSequence.AddLast(SCommon.Supplier(Playing.E_Fadeout()));
+				TaskSequence.AddLast(SCommon.Supplier(Playing.E_Fadeout(frameMax)));
 				Playing = null;
 			}
 		}
@@ -147,15 +158,15 @@ namespace Charlotte.GameCommons
 			yield return true;
 			yield return true;
 
-			if (DX.ChangeVolumeSoundMem(DU.RateToByte(GameSetting.MusicVolume), this.GetHandle()) != 0) // ? 失敗
+			if (DX.ChangeVolumeSoundMem(DD.RateToByte(GameSetting.MusicVolume), this.GetHandle()) != 0) // ? 失敗
 				throw new Exception("ChangeVolumeSoundMem failed");
 		}
 
-		private IEnumerable<bool> E_Fadeout()
+		private IEnumerable<bool> E_Fadeout(int frameMax)
 		{
-			foreach (DD.Scene scene in DD.CreateScene(30))
+			foreach (Scene scene in Scene.Create(frameMax))
 			{
-				if (DX.ChangeVolumeSoundMem(DU.RateToByte(GameSetting.MusicVolume * (1.0 - scene.Rate)), this.GetHandle()) != 0) // ? 失敗
+				if (DX.ChangeVolumeSoundMem(DD.RateToByte(GameSetting.MusicVolume * (1.0 - scene.Rate)), this.GetHandle()) != 0) // ? 失敗
 					throw new Exception("ChangeVolumeSoundMem failed");
 
 				yield return true;

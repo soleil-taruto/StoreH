@@ -10,7 +10,6 @@ using DxLibDLL;
 using Charlotte.Commons;
 using Charlotte.Drawings;
 using Charlotte.GUICommons;
-using Charlotte.GameConfigs;
 
 namespace Charlotte.GameCommons
 {
@@ -18,7 +17,7 @@ namespace Charlotte.GameCommons
 	{
 		private static Action Initialized;
 
-		public static void GameMain(Form mainForm, Action tabascoFire)
+		public static void GameMain(Form mainForm)
 		{
 			DD.RunOnUIThread = GetRunOnUIThread(mainForm);
 
@@ -33,8 +32,6 @@ namespace Charlotte.GameCommons
 						if (aliving)
 							mainForm.Visible = false;
 					});
-
-					tabascoFire();
 				};
 
 				Main2();
@@ -143,9 +140,11 @@ namespace Charlotte.GameCommons
 			}
 			else
 			{
-				logSaveDir = new WorkingDir().GetPath(".");
+				logSaveDir = DU.WD.MakePath();
 				logFile = Path.Combine(ProcMain.SelfDir, "Game.log");
 				saveDataFile = Path.Combine(ProcMain.SelfDir, "SaveData.dat");
+
+				SCommon.CreateDir(logSaveDir);
 			}
 
 			File.WriteAllBytes(logFile, SCommon.EMPTY_BYTES);
@@ -172,7 +171,7 @@ namespace Charlotte.GameCommons
 			DD.Finalizers.Add(DD.Save);
 
 			DD.MainWindowTitle =
-				Path.GetFileNameWithoutExtension(ProcMain.SelfFile)
+				GameConfig.GameTitle
 				+ " / "
 				+ GUIProcMain.BuiltDateTime.ToString("yyyy-MM-dd-HH-mm-ss");
 
@@ -208,7 +207,7 @@ namespace Charlotte.GameCommons
 			DX.SetDrawScreen(DX.DX_SCREEN_BACK);
 			DX.SetDrawMode(DX.DX_DRAWMODE_ANISOTROPIC);
 			DX.SetWindowSizeChangeEnableFlag(0); // ウィンドウの右下をドラッグでサイズ変更/1:する/0:しない
-			DX.SetMouseDispFlag(1); // マウスカーソルを表示/1:する/0:しない
+			DX.SetMouseDispFlag(GameSetting.MouseCursorShow ? 1 : 0); // マウスカーソルを表示/1:する/0:しない
 
 			// DXLib 初期化 ここまで
 
@@ -223,7 +222,6 @@ namespace Charlotte.GameCommons
 			DD.MainScreenDrawRect = new I4Rect(0, 0, DD.RealScreenSize.W, DD.RealScreenSize.H);
 			DD.MainScreen = new SubScreen(GameConfig.ScreenSize.W, GameConfig.ScreenSize.H);
 			DD.LastMainScreen = new SubScreen(GameConfig.ScreenSize.W, GameConfig.ScreenSize.H);
-			DD.KeptMainScreen = new SubScreen(GameConfig.ScreenSize.W, GameConfig.ScreenSize.H);
 
 			foreach (string resPath in GameConfig.FontFileResPaths)
 				DU.AddFontFile(resPath);
@@ -233,19 +231,20 @@ namespace Charlotte.GameCommons
 			DD.SetLibbon(null);
 
 			Initialized();
+
+			TabascoPizzaSausage.Run();
 		}
 
 		/// <summary>
 		/// ゲーム画面サイズを変更する。
-		/// 以下を経由して呼び出すこと。
+		/// このクラス以外からは以下を経由して呼び出すこと。
 		/// -- DD.SetRealScreenSize()
 		/// </summary>
 		/// <param name="w">幅</param>
 		/// <param name="h">高さ</param>
-		/// <param name="onBoot">リボンを表示するか</param>
 		public static void SetRealScreenSize(int w, int h)
 		{
-			DX.SetDrawScreen(DX.DX_SCREEN_BACK);
+			DU.StoreAllSubScreen();
 
 			Picture.UnloadAll();
 			SubScreen.UnloadAll();
@@ -257,7 +256,9 @@ namespace Charlotte.GameCommons
 			DX.SetDrawScreen(DX.DX_SCREEN_BACK);
 			DX.SetDrawMode(DX.DX_DRAWMODE_ANISOTROPIC);
 			DX.SetWindowSizeChangeEnableFlag(0);
-			DX.SetMouseDispFlag(1);
+			DX.SetMouseDispFlag(GameSetting.MouseCursorShow ? 1 : 0);
+
+			DU.RestoreAllSubScreen();
 
 			int l = DD.TargetMonitor.L + (DD.TargetMonitor.W - w) / 2;
 			int t = DD.TargetMonitor.T + (DD.TargetMonitor.H - h) / 2;

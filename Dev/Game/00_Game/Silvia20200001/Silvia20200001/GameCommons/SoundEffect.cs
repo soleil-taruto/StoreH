@@ -4,13 +4,24 @@ using System.Linq;
 using System.Text;
 using DxLibDLL;
 using Charlotte.Commons;
-using Charlotte.GameConfigs;
 
 namespace Charlotte.GameCommons
 {
+	/// <summary>
+	/// 効果音リソース
+	/// このクラスのインスタンスはプロセスで有限個であること。
+	/// 原則的に以下のクラスの静的フィールドとして植え込むこと。
+	/// -- SoundEffects
+	/// </summary>
 	public class SoundEffect
 	{
 		private static List<SoundEffect> Instances = new List<SoundEffect>();
+
+		public static void TouchAll()
+		{
+			foreach (SoundEffect instance in Instances)
+				instance.LoadIfNeeded();
+		}
 
 		/// <summary>
 		/// このメソッド実行時、全てのインスタンスは再生終了(未再生・停止)していること。
@@ -76,7 +87,7 @@ namespace Charlotte.GameCommons
 			{
 				// HACK: 再生中にアンロードされることを想定していない。
 
-				foreach (HandleInfo handle in DU.Reverse(this.Handles)) // 拡張したハンドルから削除しなければならない。なので逆順
+				foreach (HandleInfo handle in DD.Reverse(this.Handles)) // 拡張したハンドルから削除しなければならない。なので逆順
 					if (DX.DeleteSoundMem(handle.Value) != 0) // ? 失敗
 						throw new Exception("DeleteSoundMem failed");
 
@@ -163,7 +174,7 @@ namespace Charlotte.GameCommons
 
 		private static void ChangeVolumeIfNeeded(HandleInfo handle)
 		{
-			int volume = DU.RateToByte(GameSetting.SEVolume);
+			int volume = DD.RateToByte(GameSetting.SEVolume);
 
 			if (handle.LastVolume != volume) // ? 前回の音量と違う -> 音量が変更されたので、新しい音量を適用する。
 			{

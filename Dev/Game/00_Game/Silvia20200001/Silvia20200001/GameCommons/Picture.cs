@@ -7,9 +7,21 @@ using Charlotte.Commons;
 
 namespace Charlotte.GameCommons
 {
+	/// <summary>
+	/// 画像リソース
+	/// このクラスのインスタンスはプロセスで有限個であること。
+	/// 原則的に以下のクラスの静的フィールドとして植え込むこと。
+	/// -- Pictures
+	/// </summary>
 	public class Picture
 	{
 		private static List<Picture> Instances = new List<Picture>();
+
+		public static void TouchAll()
+		{
+			foreach (Picture instance in Instances)
+				instance.GetHandle();
+		}
 
 		public static void UnloadAll()
 		{
@@ -30,7 +42,7 @@ namespace Charlotte.GameCommons
 		private PictureDataInfo PictureData = null;
 
 		/// <summary>
-		/// リソースから画像をロードする。
+		/// リソースから画像を作成する。
 		/// </summary>
 		/// <param name="resPath">リソースのパス</param>
 		public Picture(string resPath)
@@ -46,7 +58,23 @@ namespace Charlotte.GameCommons
 		}
 
 		/// <summary>
-		/// アンロード不要な画像をロードする。
+		/// ローダーを指定して画像を作成する。
+		/// </summary>
+		/// <param name="loader">ローダー</param>
+		public Picture(Func<PictureDataInfo> loader)
+		{
+			this.PictureDataGetter = loader;
+			this.HandleUnloader = handle =>
+			{
+				if (DX.DeleteGraph(handle) != 0) // ? 失敗
+					throw new Exception("DeleteGraph failed");
+			};
+
+			Instances.Add(this);
+		}
+
+		/// <summary>
+		/// アンロード不要な画像を作成する。
 		/// </summary>
 		/// <param name="w">幅</param>
 		/// <param name="h">高さ</param>

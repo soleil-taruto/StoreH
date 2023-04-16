@@ -7,7 +7,6 @@ using System.IO;
 using DxLibDLL;
 using Charlotte.Commons;
 using Charlotte.Drawings;
-using Charlotte.GameConfigs;
 
 namespace Charlotte.GameCommons
 {
@@ -25,7 +24,6 @@ namespace Charlotte.GameCommons
 		public static I4Rect MainScreenDrawRect;
 		public static SubScreen MainScreen;
 		public static SubScreen LastMainScreen;
-		public static SubScreen KeptMainScreen;
 		public static int ProcFrame;
 		public static int FreezeInputFrame;
 		public static bool WindowIsActive;
@@ -101,21 +99,11 @@ namespace Charlotte.GameCommons
 		/// -- 明度をセットする。
 		/// </summary>
 		/// <param name="color">明度</param>
-		public static void SetBright(I3Color color)
-		{
-			SetBright(color.ToD3Color());
-		}
-
-		/// <summary>
-		/// 描画設定：
-		/// -- 明度をセットする。
-		/// </summary>
-		/// <param name="color">明度</param>
 		public static void SetBright(D3Color color)
 		{
-			DrawSetting.R = DU.RateToByte(color.R);
-			DrawSetting.G = DU.RateToByte(color.G);
-			DrawSetting.B = DU.RateToByte(color.B);
+			DrawSetting.R = DD.RateToByte(color.R);
+			DrawSetting.G = DD.RateToByte(color.G);
+			DrawSetting.B = DD.RateToByte(color.B);
 		}
 
 		/// <summary>
@@ -125,7 +113,7 @@ namespace Charlotte.GameCommons
 		/// <param name="a">不透明度</param>
 		public static void SetAlpha(double a)
 		{
-			DrawSetting.A = DU.RateToByte(a);
+			DrawSetting.A = DD.RateToByte(a);
 		}
 
 		/// <summary>
@@ -164,17 +152,6 @@ namespace Charlotte.GameCommons
 		/// 描画する。
 		/// </summary>
 		/// <param name="picture">画像</param>
-		/// <param name="x">描画する位置の中心座標(X位置)</param>
-		/// <param name="y">描画する位置の中心座標(Y位置)</param>
-		public static void Draw(Picture picture, double x, double y)
-		{
-			Draw(picture, new D2Point(x, y));
-		}
-
-		/// <summary>
-		/// 描画する。
-		/// </summary>
-		/// <param name="picture">画像</param>
 		/// <param name="pt">描画する位置の中心座標</param>
 		public static void Draw(Picture picture, D2Point pt)
 		{
@@ -197,17 +174,6 @@ namespace Charlotte.GameCommons
 		public static void DrawSimple(Picture picture, D2Point pt)
 		{
 			Draw(picture, D4Rect.XYWH(pt.X, pt.Y, picture.W, picture.H));
-		}
-
-		/// <summary>
-		/// 描画する。
-		/// 描画設定の回転・拡大率は適用されない。
-		/// </summary>
-		/// <param name="picture">画像</param>
-		/// <param name="rect">描画する領域</param>
-		public static void Draw(Picture picture, I4Rect rect)
-		{
-			Draw(picture, rect.ToD4Rect());
 		}
 
 		/// <summary>
@@ -391,12 +357,9 @@ namespace Charlotte.GameCommons
 
 			public static void Print(string line)
 			{
-				int x = L + X;
-				int y = T + Y;
+				DrawString(line, L + X, T + Y);
 
-				DrawString(line, x, y);
-
-				x += GetWidth(line);
+				X += GetWidth(line);
 			}
 
 			private static void DrawString(string line, int x, int y)
@@ -413,9 +376,9 @@ namespace Charlotte.GameCommons
 			private static void DrawString_Main(string line, int x, int y, I3Color color)
 			{
 				if (FontSize == -1)
-					DX.DrawString(x, y, line, DU.ToDXColor(color));
+					DX.DrawString(x, y, line, DD.ToDXColor(color));
 				else
-					DX.DrawStringToHandle(x, y, line, DU.ToDXColor(color), DU.GetFontHandle(FontName, FontSize), 0u, 0);
+					DX.DrawStringToHandle(x, y, line, DD.ToDXColor(color), DU.GetFontHandle(FontName, FontSize), 0u, 0);
 			}
 
 			private static int GetWidth(string line)
@@ -438,8 +401,8 @@ namespace Charlotte.GameCommons
 
 		public static void EachFrame()
 		{
-			DU.ExecuteTasks(DD.EL);
-			DU.ExecuteTasks(DD.TL);
+			DD.ExecuteTasks(DD.EL);
+			DD.ExecuteTasks(DD.TL);
 
 			DD.Curtain.EachFrame();
 			Music.EachFrame();
@@ -447,8 +410,8 @@ namespace Charlotte.GameCommons
 
 			SubScreen.ChangeDrawScreenToBack();
 
-			DD.SetBright(new I3Color(0, 0, 0));
-			DD.Draw(Pictures.WhiteBox, new D4Rect(0.0, 0.0, DD.RealScreenSize.W, DD.RealScreenSize.H));
+			DD.SetBright(new I3Color(0, 0, 0).ToD3Color());
+			DD.Draw(Pictures.WhiteBox, new I4Rect(0, 0, DD.RealScreenSize.W, DD.RealScreenSize.H).ToD4Rect());
 
 			int mag = DD.MainScreenDrawRect.W / GameConfig.ScreenSize.W;
 
@@ -472,9 +435,9 @@ namespace Charlotte.GameCommons
 				throw new DU.CoffeeBreak();
 			}
 
-			// ALT + ENTER -> フルスクリーンの切り替え
+			// F11キー押下 -> フルスクリーンの切り替え
 			//
-			if ((1 <= Keyboard.GetInput(DX.KEY_INPUT_LALT) || 1 <= Keyboard.GetInput(DX.KEY_INPUT_RALT)) && Keyboard.GetInput(DX.KEY_INPUT_RETURN) == 1)
+			if (Keyboard.GetInput(DX.KEY_INPUT_F11) == 1)
 			{
 				// ? 現在フルスクリーン -> フルスクリーン解除
 				if (
@@ -490,14 +453,13 @@ namespace Charlotte.GameCommons
 					DD.SetRealScreenSize(DD.TargetMonitor.W, DD.TargetMonitor.H);
 					GameSetting.FullScreen = true;
 				}
-				DD.FreezeInput(30); // エンターキー押下がゲームに影響しないように
 			}
 
 			SCommon.Swap(ref DD.MainScreen, ref DD.LastMainScreen);
 			DD.MainScreen.ChangeDrawScreenToThis();
 
 			ProcFrame++;
-			DU.Countdown(ref FreezeInputFrame);
+			DD.Countdown(ref FreezeInputFrame);
 			WindowIsActive = DX.GetActiveFlag() != 0;
 
 			if (SCommon.IMAX < ProcFrame) // 192.9 days limit
@@ -510,11 +472,6 @@ namespace Charlotte.GameCommons
 			DX.ClearDrawScreen();
 		}
 
-		public static void KeepLastMainScreen()
-		{
-			SCommon.Swap(ref DD.LastMainScreen, ref DD.KeptMainScreen);
-		}
-
 		private static long HzChaserTime;
 
 		private static void Keep60Hz()
@@ -522,7 +479,7 @@ namespace Charlotte.GameCommons
 			long currentTime = DU.GetCurrentTime();
 
 			HzChaserTime += 16L;
-			HzChaserTime = SCommon.ToRange(HzChaserTime, currentTime - 100L, currentTime + 100L);
+			HzChaserTime = SCommon.ToRange(HzChaserTime, currentTime - 80L, currentTime + 80L); // 前後5フレームに収める。
 
 			while (currentTime < HzChaserTime)
 			{
@@ -541,6 +498,9 @@ namespace Charlotte.GameCommons
 
 		public static void SetRealScreenSize(int w, int h)
 		{
+			if (DD.RealScreenSize.W == w && DD.RealScreenSize.H == h) // ? 今のサイズと同じ
+				return;
+
 			DD.TargetMonitor = DU.GetTargetMonitor();
 			DD.SetLibbon("ゲーム画面のサイズと位置を調整しています...");
 
@@ -559,20 +519,26 @@ namespace Charlotte.GameCommons
 			if (whiteLevel < 0.0)
 			{
 				DD.SetAlpha(-whiteLevel);
-				DD.SetBright(new I3Color(0, 0, 0));
+				DD.SetBright(new I3Color(0, 0, 0).ToD3Color());
 			}
 			else
 			{
 				DD.SetAlpha(whiteLevel);
 			}
-			DD.Draw(Pictures.WhiteBox, new I4Rect(0, 0, GameConfig.ScreenSize.W, GameConfig.ScreenSize.H));
+			DD.Draw(Pictures.WhiteBox, new I4Rect(0, 0, GameConfig.ScreenSize.W, GameConfig.ScreenSize.H).ToD4Rect());
 		}
 
-		public static void SetCurtain(double destWhiteLevel)
+		public static void SetCurtain(double whiteLevel)
+		{
+			Curtain.CurrWhiteLevel = whiteLevel;
+			Curtain.NextWhiteLevels.Clear();
+		}
+
+		public static void SetCurtainTarget(double destWhiteLevel, int frameMax = 30)
 		{
 			Curtain.NextWhiteLevels.Clear();
 
-			foreach (DD.Scene scene in DD.CreateScene(30))
+			foreach (Scene scene in Scene.Create(frameMax))
 			{
 				Curtain.NextWhiteLevels.Enqueue(DD.AToBRate(Curtain.CurrWhiteLevel, destWhiteLevel, scene.Rate));
 			}
@@ -590,32 +556,6 @@ namespace Charlotte.GameCommons
 					CurrWhiteLevel = NextWhiteLevels.Dequeue();
 				}
 				DD.DrawCurtain(CurrWhiteLevel);
-			}
-		}
-
-		public class Scene
-		{
-			public int Numer;
-			public int Denom;
-
-			public double Rate
-			{
-				get
-				{
-					return (double)this.Numer / this.Denom;
-				}
-			}
-		}
-
-		public static IEnumerable<Scene> CreateScene(int denom)
-		{
-			for (int numer = 0; numer <= denom; numer++)
-			{
-				yield return new Scene()
-				{
-					Numer = numer,
-					Denom = denom,
-				};
 			}
 		}
 
@@ -853,6 +793,130 @@ namespace Charlotte.GameCommons
 			exterior.T = rect.T - (exterior.H - rect.H) * (1.0 - slideRate);
 
 			return exterior;
+		}
+
+		public static IEnumerable<T> Reverse<T>(IList<T> list)
+		{
+			for (int index = list.Count - 1; 0 <= index; index--)
+			{
+				yield return list[index];
+			}
+		}
+
+		/// <summary>
+		/// レートを十億分率に変換する。
+		/// </summary>
+		/// <param name="rate">レート</param>
+		/// <returns>十億分率</returns>
+		public static int RateToPPB(double rate)
+		{
+			return SCommon.ToRange(SCommon.ToInt(rate * SCommon.IMAX), 0, SCommon.IMAX);
+		}
+
+		/// <summary>
+		/// 十億分率をレートに変換する。
+		/// </summary>
+		/// <param name="ppb">十億分率</param>
+		/// <returns>レート</returns>
+		public static double PPBToRate(int ppb)
+		{
+			return SCommon.ToRange((double)ppb / SCommon.IMAX, 0.0, 1.0);
+		}
+
+		/// <summary>
+		/// レートをバイト値(0～255)に変換する。
+		/// </summary>
+		/// <param name="rate">レート</param>
+		/// <returns>バイト値</returns>
+		public static int RateToByte(double rate)
+		{
+			return SCommon.ToRange(SCommon.ToInt(rate * 255.0), 0, 255);
+		}
+
+		/// <summary>
+		/// バイト値(0～255)をレートに変換する。
+		/// </summary>
+		/// <param name="value">バイト値</param>
+		/// <returns>レート</returns>
+		public static double ByteToRate(int value)
+		{
+			return SCommon.ToRange((double)value / 255.0, 0.0, 1.0);
+		}
+
+		public static uint ToDXColor(I3Color color)
+		{
+			return DX.GetColor(color.R, color.G, color.B);
+		}
+
+		public static void Approach(ref double value, double target, double rate)
+		{
+			value -= target;
+			value *= rate;
+			value += target;
+		}
+
+		public static void Countdown(ref int counter)
+		{
+			if (0 < counter)
+				counter--;
+			else if (counter < 0)
+				counter++;
+		}
+
+		/// <summary>
+		/// タスクリストを実行する。
+		/// -- リスト内全てのタスクを実行する。
+		/// -- 終了したタスクはリストから削除する。
+		/// タスクが偽を返したら終了と見なす。
+		/// このメソッド自体もタスクにできるよ。
+		/// </summary>
+		/// <param name="tasks">タスクリスト</param>
+		/// <returns>タスクがあったか(タスクを実行したか)</returns>
+		public static bool ExecuteTasks(List<Func<bool>> tasks)
+		{
+			if (tasks.Count == 0)
+				return false;
+
+			for (int index = 0; index < tasks.Count; index++)
+				if (!tasks[index]())
+					tasks[index] = null;
+
+			tasks.RemoveAll(v => v == null);
+			return true;
+		}
+
+		/// <summary>
+		/// タスクシーケンスを実行する。
+		/// -- リストの先頭のタスクのみ実行する。
+		/// -- 終了したタスクはリストから削除する。
+		/// タスクが偽を返したら終了と見なす。
+		/// このメソッド自体もタスクにできるよ。
+		/// </summary>
+		/// <param name="tasks">タスクシーケンス</param>
+		/// <returns>タスクがあったか(タスクを実行したか)</returns>
+		public static bool ExecuteTaskSequence(LinkedList<Func<bool>> tasks)
+		{
+			if (tasks.Count == 0)
+				return false;
+
+			if (!tasks.First.Value())
+				tasks.RemoveFirst();
+
+			return true;
+		}
+
+		/// <summary>
+		/// 描画先スクリーンをぼかす。
+		/// </summary>
+		/// <param name="rate">ぼかしレート</param>
+		public static void Frosting(double rate)
+		{
+			DX.GraphFilter(
+				SubScreen.CurrentDrawScreen == null ? DX.DX_SCREEN_BACK : SubScreen.CurrentDrawScreen.GetHandle(),
+				DX.DX_GRAPH_FILTER_GAUSS,
+				16,
+				SCommon.ToInt(5000.0 * rate)
+				);
 		}
 	}
 }

@@ -6,16 +6,14 @@ using Charlotte.Commons;
 using Charlotte.Drawings;
 using Charlotte.GameCommons;
 
-namespace Charlotte.GameConfigs
+namespace Charlotte
 {
-	/// <summary>
-	/// リリース後に変更可能な設定
-	/// アプリケーション固有の項目を追加しても良い。
-	/// </summary>
 	public static class GameSetting
 	{
 		public static I2Size UserScreenSize;
 		public static bool FullScreen = false;
+		public static bool MouseCursorShow = true;
+		public static bool MouseEnabled = true;
 		public static double MusicVolume;
 		public static double SEVolume;
 
@@ -35,8 +33,10 @@ namespace Charlotte.GameConfigs
 			dest.Add(UserScreenSize.W);
 			dest.Add(UserScreenSize.H);
 			dest.Add(FullScreen);
-			dest.Add(DU.RateToPPB(MusicVolume));
-			dest.Add(DU.RateToPPB(SEVolume));
+			dest.Add(MouseCursorShow);
+			dest.Add(MouseEnabled);
+			dest.Add(DD.RateToPPB(MusicVolume));
+			dest.Add(DD.RateToPPB(SEVolume));
 
 			// ---- このクラス内の項目ここまで ----
 
@@ -68,8 +68,10 @@ namespace Charlotte.GameConfigs
 			UserScreenSize.W = SCommon.ToRange(int.Parse(src[c++]), 1, SCommon.IMAX);
 			UserScreenSize.H = SCommon.ToRange(int.Parse(src[c++]), 1, SCommon.IMAX);
 			FullScreen = bool.Parse(src[c++]);
-			MusicVolume = DU.PPBToRate(int.Parse(src[c++]));
-			SEVolume = DU.PPBToRate(int.Parse(src[c++]));
+			MouseCursorShow = bool.Parse(src[c++]);
+			MouseEnabled = bool.Parse(src[c++]);
+			MusicVolume = DD.PPBToRate(int.Parse(src[c++]));
+			SEVolume = DD.PPBToRate(int.Parse(src[c++]));
 
 			// ---- このクラス内の項目ここまで ----
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using DxLibDLL;
 using Charlotte.Commons;
-using Charlotte.GameConfigs;
+using Charlotte.Drawings;
 
 namespace Charlotte.GameCommons
 {
@@ -36,8 +36,25 @@ namespace Charlotte.GameCommons
 		public static Button R = new Button();
 		public static Button M = new Button();
 
-		public static int X = 0;
-		public static int Y = 0;
+		/// <summary>
+		/// 最後にクリックを行ってから経過したフレーム数
+		/// </summary>
+		public static int LastClickFrame;
+
+		private static I2Point P_Position = new I2Point(0, 0);
+
+		public static I2Point Position
+		{
+			get
+			{
+				return P_Position;
+			}
+
+			set
+			{
+				SetMousePosition(value);
+			}
+		}
 
 		public static void EachFrame()
 		{
@@ -60,26 +77,39 @@ namespace Charlotte.GameCommons
 			DU.UpdateButtonCounter(ref R.Status, (status & DX.MOUSE_INPUT_RIGHT) != 0);
 			DU.UpdateButtonCounter(ref M.Status, (status & DX.MOUSE_INPUT_MIDDLE) != 0);
 
-			if (DX.GetMousePoint(out X, out Y) != 0) // ? 失敗
+			if (status != 0)
+				LastClickFrame = 0;
+			else
+				LastClickFrame++;
+
+			int x;
+			int y;
+
+			if (DX.GetMousePoint(out x, out y) != 0) // ? 失敗
 				throw new Exception("GetMousePoint failed");
 
-			X -= DD.MainScreenDrawRect.L;
-			X *= GameConfig.ScreenSize.W;
-			X /= DD.MainScreenDrawRect.W;
-			Y -= DD.MainScreenDrawRect.T;
-			Y *= GameConfig.ScreenSize.H;
-			Y /= DD.MainScreenDrawRect.H;
-		}
+			x -= DD.MainScreenDrawRect.L;
+			x *= GameConfig.ScreenSize.W;
+			x /= DD.MainScreenDrawRect.W;
+			y -= DD.MainScreenDrawRect.T;
+			y *= GameConfig.ScreenSize.H;
+			y /= DD.MainScreenDrawRect.H;
 
-		/// <summary>
-		/// マウスカーソルの位置を強制的に移動する。
-		/// </summary>
-		/// <param name="x">X座標</param>
-		/// <param name="y">Y座標</param>
-		public static void SetMousePosition(int x, int y)
-		{
 			x = SCommon.ToRange(x, 0, GameConfig.ScreenSize.W - 1);
 			y = SCommon.ToRange(y, 0, GameConfig.ScreenSize.H - 1);
+
+			P_Position = new I2Point(x, y);
+		}
+
+		private static void SetMousePosition(I2Point pt)
+		{
+			int x = pt.X;
+			int y = pt.Y;
+
+			x = SCommon.ToRange(x, 0, GameConfig.ScreenSize.W - 1);
+			y = SCommon.ToRange(y, 0, GameConfig.ScreenSize.H - 1);
+
+			P_Position = new I2Point(x, y);
 
 			x *= DD.MainScreenDrawRect.W;
 			x /= GameConfig.ScreenSize.W;
@@ -87,6 +117,9 @@ namespace Charlotte.GameCommons
 			y *= DD.MainScreenDrawRect.H;
 			y /= GameConfig.ScreenSize.H;
 			y += DD.MainScreenDrawRect.T;
+
+			x = SCommon.ToRange(x, 0, DD.RealScreenSize.W - 1); // 2bs
+			y = SCommon.ToRange(y, 0, DD.RealScreenSize.H - 1); // 2bs
 
 			if (DX.SetMousePoint(x, y) != 0) // ? 失敗
 				throw new Exception("SetMousePoint failed");

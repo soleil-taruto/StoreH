@@ -3,21 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using DxLibDLL;
 using Charlotte.Commons;
 using Charlotte.Drawings;
+using System.Reflection;
 
 namespace Charlotte.GameCommons
 {
 	/// <summary>
-	/// この名前空間の配下から呼び出される機能をこのクラスに集約する。
+	/// この名前空間内で使用される共通機能・便利機能をこのクラスに集約する。
 	/// </summary>
-	public class DU
+	public static class DU
 	{
 		public class CoffeeBreak : Exception
 		{ }
+
+		private static WorkingDir _wd = null;
+
+		/// <summary>
+		/// 各機能自由に使ってよい作業フォルダ
+		/// </summary>
+		public static WorkingDir WD
+		{
+			get
+			{
+				if (_wd == null)
+					_wd = new WorkingDir();
+
+				return _wd;
+			}
+		}
+
+		/// <summary>
+		/// 各機能自由に使ってよいスクリーン
+		/// </summary>
+		public static SubScreen FreeScreen = new SubScreen(GameConfig.ScreenSize.W, GameConfig.ScreenSize.H);
 
 		public static void Pin<T>(T data)
 		{
@@ -203,7 +227,7 @@ namespace Charlotte.GameCommons
 
 		public static void AddFontFile(string resPath)
 		{
-			string file = new WorkingDir().GetPath(Path.GetFileName(resPath));
+			string file = DU.WD.GetPath(Path.GetFileName(resPath));
 			byte[] fileData = DD.GetResFileData(resPath);
 
 			File.WriteAllBytes(file, fileData);
@@ -330,7 +354,7 @@ namespace Charlotte.GameCommons
 
 		public static class Hasher
 		{
-			private static byte[] MAGIC_HEADER = Encoding.ASCII.GetBytes("Gattonero20230405_Hasher_MAGIC_HEADER_{59c1c8b8-f0db-4c11-8af6-1590b89342dc}_");
+			private static byte[] COUNTER_SHUFFLE = Encoding.ASCII.GetBytes("Gattonero-2023-04-05_COUNTER_SHUFFLE_{e43e01aa-ca4f-43d3-8be7-49cd60e9415e}_");
 			private const int HASH_SIZE = 20;
 
 			public static byte[] AddHash(byte[] data)
@@ -373,105 +397,91 @@ namespace Charlotte.GameCommons
 
 			private static byte[] GetHash(byte[] data)
 			{
-				return Encoding.ASCII.GetBytes(SCommon.Base64.I.Encode(SCommon.GetSHA512(new byte[][] { MAGIC_HEADER, data }).Take(15).ToArray()));
+				return Encoding.ASCII.GetBytes(SCommon.Base64.I.Encode(SCommon.GetSHA512(new byte[][] { COUNTER_SHUFFLE, data }).Take(15).ToArray()));
 			}
 		}
 
-		// TODO: 以下DDへ移動するかもしれない。
-
-		public static IEnumerable<T> Reverse<T>(IList<T> list)
+		public static void StoreAllSubScreen()
 		{
-			for (int index = list.Count - 1; 0 <= index; index--)
+			foreach (SubScreen screen in SubScreen.GetAllSubScreen())
 			{
-				yield return list[index];
-			}
-		}
-
-		/// <summary>
-		/// レートを十億分率に変換する。
-		/// </summary>
-		/// <param name="rate">レート</param>
-		/// <returns>十億分率</returns>
-		public static int RateToPPB(double rate)
-		{
-			return SCommon.ToRange(SCommon.ToInt(rate * SCommon.IMAX), 0, SCommon.IMAX);
-		}
-
-		/// <summary>
-		/// 十億分率をレートに変換する。
-		/// </summary>
-		/// <param name="ppb">十億分率</param>
-		/// <returns>レート</returns>
-		public static double PPBToRate(int ppb)
-		{
-			return SCommon.ToRange((double)ppb / SCommon.IMAX, 0.0, 1.0);
-		}
-
-		/// <summary>
-		/// レートをバイト値(0～255)に変換する。
-		/// </summary>
-		/// <param name="rate">レート</param>
-		/// <returns>バイト値</returns>
-		public static int RateToByte(double rate)
-		{
-			return SCommon.ToRange(SCommon.ToInt(rate * 255.0), 0, 255);
-		}
-
-		/// <summary>
-		/// バイト値(0～255)をレートに変換する。
-		/// </summary>
-		/// <param name="value">バイト値</param>
-		/// <returns>レート</returns>
-		public static double ByteToRate(int value)
-		{
-			return SCommon.ToRange((double)value / 255.0, 0.0, 1.0);
-		}
-
-		public static uint ToDXColor(I3Color color)
-		{
-			return DX.GetColor(color.R, color.G, color.B);
-		}
-
-		public static void Countdown(ref int counter)
-		{
-			if (0 < counter)
-				counter--;
-			else if (counter < 0)
-				counter++;
-		}
-
-		/// <summary>
-		/// タスクリストを実行する。
-		/// </summary>
-		/// <param name="tasks">タスクリスト</param>
-		public static void ExecuteTasks(List<Func<bool>> tasks)
-		{
-			for (int index = 0; index < tasks.Count; index++)
-			{
-				if (!tasks[index]())
+				if (screen.IsLoaded())
 				{
-					tasks[index] = null;
+					string bmpFile = WD.MakePath();
+
+					DX.SetDrawScreen(screen.GetHandle());
+					DX.SaveDrawScreenToBMP(0, 0, screen.W, screen.H, bmpFile);
+
+					screen.StoredObject = bmpFile;
 				}
 			}
-			tasks.RemoveAll(v => v == null);
+			DX.SetDrawScreen(DX.DX_SCREEN_BACK);
 		}
 
-		/// <summary>
-		/// タスクシーケンスを実行する。
-		/// </summary>
-		/// <param name="tasks">タスクシーケンス</param>
-		/// <returns>ビジー状態か(タスクを実行したか)</returns>
-		public static bool ExecuteTaskSequence(LinkedList<Func<bool>> tasks)
+		public static void RestoreAllSubScreen()
 		{
-			if (1 <= tasks.Count)
+			foreach (SubScreen screen in SubScreen.GetAllSubScreen())
 			{
-				if (!tasks.First.Value())
+				if (screen.StoredObject != null)
 				{
-					tasks.RemoveFirst();
+					string bmpFile = (string)screen.StoredObject;
+
+					screen.StoredObject = null;
+
+					int handle = DU.GetPictureData(File.ReadAllBytes(bmpFile)).Handle;
+					DX.SetDrawScreen(screen.GetHandle());
+					DX.DrawExtendGraph(0, 0, screen.W, screen.H, handle, 0);
+					DX.DeleteGraph(handle);
+
+					SCommon.DeletePath(bmpFile);
 				}
-				return true;
 			}
-			return false;
+			DX.SetDrawScreen(DX.DX_SCREEN_BACK);
+		}
+
+		public static string[] GetKeyboardKeyNames()
+		{
+			return KeyboardKeys.GetNames();
+		}
+
+		private static class KeyboardKeys
+		{
+			private static string[] P_Names = null;
+
+			public static string[] GetNames()
+			{
+				if (P_Names == null)
+					P_Names = P_GetNames();
+
+				return P_Names;
+			}
+
+			private static string[] P_GetNames()
+			{
+				string[] names = new string[Keyboard.KEY_MAX];
+
+				for (int index = 0; index < Keyboard.KEY_MAX; index++)
+					names[index] = "(" + index + ")";
+
+				foreach (KeyInfo info in GetKeys())
+					names[info.Value] = info.Name;
+
+				return names;
+			}
+
+			private class KeyInfo
+			{
+				public string Name;
+				public int Value;
+			}
+
+			private static KeyInfo[] GetKeys()
+			{
+				return typeof(DX).GetFields(BindingFlags.Public | BindingFlags.Static)
+					.Where(field => field.IsLiteral && !field.IsInitOnly && field.Name.StartsWith("KEY_INPUT_"))
+					.Select(field => new KeyInfo() { Name = field.Name.Substring(10), Value = (int)field.GetValue(null) })
+					.ToArray();
+			}
 		}
 	}
 }
