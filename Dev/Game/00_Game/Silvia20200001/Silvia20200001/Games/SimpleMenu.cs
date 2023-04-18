@@ -196,9 +196,11 @@ namespace Charlotte.Games
 			if (this.Title != null) // ? タイトル有り
 			{
 				DD.SetPrint(this.Item_L, this.FirstItem_T - this.Item_YStep, 0, FONT_NAME, this.FontSize);
+				DD.SetPrintColor(TEXT_COLOR);
 				DD.Print(this.Title);
 			}
 			DD.SetPrint(this.Item_L, this.FirstItem_T, this.Item_YStep, FONT_NAME, this.FontSize);
+			DD.SetPrintColor(TEXT_COLOR);
 
 			for (int index = 0; index < this.Items.Length; index++)
 			{
